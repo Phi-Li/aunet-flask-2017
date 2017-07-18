@@ -4,74 +4,68 @@
 """
 
 # build restful api for user modoul
-
-from datetime import datetime
-import json
-
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
-from flask_principal import RoleNeed, UserNeed, ActionNeed
-from flask_principal import Identity, AnonymousIdentity, \
-    identity_changed, Permission
+from flask_principal import ActionNeed
+from flask_principal import Permission
 from werkzeug.security import generate_password_hash
 from flask_login import current_user
-from flask import request, render_template
+from flask import render_template
 
 from aun.admin.models import User, Node, Role, LoginLog
 from aun import aun_db
-from .models import EditUserPermission, EditUserNeed, LoginLog
-from .email import send_email
+from aun.admin.email import send_email
 
-Node_fields = {
+node_fields = {
     "id": fields.Integer,
-    "nodeName": fields.String,
+    "node_name": fields.String,
     "status": fields.Boolean,
     "level": fields.Integer
 }
 
 # parser for Users
-User_parser = reqparse.RequestParser()
-User_parser.add_argument(
-    'userName', type=str, required=True, location="json", help="userName is needed")
-User_parser.add_argument(
-    'passWord', type=str, required=True, location="json", help="passWord is needed")
-User_parser.add_argument(
+user_parser = reqparse.RequestParser()
+user_parser.add_argument(
+    'user_name', type=str, required=True, location="json", help="user_name is needed")
+user_parser.add_argument(
+    'password', type=str, required=True, location="json", help="password is needed")
+user_parser.add_argument(
     'email', type=str, location="json", help="email is needed", required=True)
-User_parser.add_argument(
+user_parser.add_argument(
     'phone', type=str, location="json", help="phone is needed", required=True)
-User_parser.add_argument('roleName', type=str, required=True,
-                         location="json", action="append", help="roleName is needed")
+user_parser.add_argument('role_name', type=str, required=True,
+                         location="json", action="append", help="role_name is needed")
 
 # parser for UserSpec
-UserSpec_parser = reqparse.RequestParser()
-UserSpec_parser.add_argument('email', type=str, location="json")
-UserSpec_parser.add_argument('phone', type=str, location="json")
-UserSpec_parser.add_argument('passWord', type=str, location="json")
-UserSpec_parser.add_argument(
-    'roleName', type=str, location="json", action="append")
-UserSpec_parser.add_argument('userName', type=str, location="json")
-UserSpec_parser.add_argument('status', type=bool, location="json")
+user_spec_parser = reqparse.RequestParser()
+user_spec_parser.add_argument('email', type=str, location="json")
+user_spec_parser.add_argument('phone', type=str, location="json")
+user_spec_parser.add_argument('password', type=str, location="json")
+user_spec_parser.add_argument(
+    'role_name', type=str, location="json", action="append")
+user_spec_parser.add_argument('user_name', type=str, location="json")
+user_spec_parser.add_argument('status', type=bool, location="json")
 
 # parser for NodeSpec
-NodeSpec_parser = reqparse.RequestParser()
-NodeSpec_parser.add_argument('status', type=int, help="status type is int")
-NodeSpec_parser.add_argument('level', type=int, help="permission level")
+node_spec_parser = reqparse.RequestParser()
+node_spec_parser.add_argument('status', type=int, help="status type is int")
+node_spec_parser.add_argument('level', type=int, help="permission level")
 
 # parser for Role
-Role_parser = reqparse.RequestParser()
-Role_parser.add_argument(
-    'roleName', type=str, location="json", required=True, help="roleName is needed")
-Role_parser.add_argument("nodeName", type=str, location="json",
+role_parser = reqparse.RequestParser()
+role_parser.add_argument(
+    'role_name', type=str, location="json", required=True, help="role_name is needed")
+role_parser.add_argument("node_name", type=str, location="json",
                          action="append", required=True, help="remark is needed")
 # parser for RoleSpec
-RoleSpec_parser = reqparse.RequestParser()
-RoleSpec_parser.add_argument('roleName', type=str, location="json")
-RoleSpec_parser.add_argument(
-    'nodeName', action="append", type=str, location="json")
-RoleSpec_parser.add_argument('status', type=bool, location="json")
+role_spec_parser = reqparse.RequestParser()
+role_spec_parser.add_argument('role_name', type=str, location="json")
+role_spec_parser.add_argument(
+    'node_name', action="append", type=str, location="json")
+role_spec_parser.add_argument('status', type=bool, location="json")
 
 
-RequestMethod_parser = reqparse.RequestParser()
-RequestMethod_parser.add_argument('requestMethod', type=str, location='json')
+request_method_parser = reqparse.RequestParser()
+request_method_parser.add_argument('request_method', type=str, location='json')
 
 
 def abort_if_not_exist(data, message):
@@ -98,7 +92,7 @@ def abort_if_unauthorized(message):
 def build_user_data(user):
     """ function docstring
     """
-    log = LoginLog.query.filter(LoginLog.userName == user.userName).order_by(
+    log = LoginLog.query.filter(LoginLog.user_name == user.user_name).order_by(
         LoginLog.id.desc()).first()
     data = dict()
     if log != None:
@@ -107,8 +101,8 @@ def build_user_data(user):
     else:
         data['loginIp'] = None
         data['loginTime'] = None
-    data['id'] = user.id
-    data['userName'] = user.userName
+    data['id'] = user.user_id
+    data['user_name'] = user.user_name
     data['status'] = user.status
     data['email'] = user.email
     data['phone'] = user.phone
@@ -117,14 +111,14 @@ def build_user_data(user):
     for role in user.roles:
         for node in role.nodes:
             n = dict()
-            n['id'] = node.id
-            n['nodeName'] = node.nodeName
+            n['id'] = node.node_id
+            n['node_name'] = node.node_name
             n['status'] = node.status
             n['level'] = node.level
             data['nodes'].append(n)
         r = dict()
-        r['id'] = role.id
-        r['roleName'] = role.role_name
+        r['id'] = role.role_id
+        r['role_name'] = role.role_name
         r['status'] = role.status
         data['roles'].append(r)
 
@@ -135,14 +129,14 @@ def build_role_data(role):
     """ function docstring
     """
     data = dict()
-    data['id'] = role.id
-    data['roleName'] = role.role_name
+    data['id'] = role.role_id
+    data['role_name'] = role.role_name
     data['status'] = role.status
     data['nodes'] = list()
     for node in role.nodes:
         n = dict()
-        n['id'] = node.id
-        n['nodeName'] = node.nodeName
+        n['id'] = node.node_id
+        n['node_name'] = node.node_name
         n['status'] = node.status
         n['level'] = node.level
         data['nodes'].append(n)
@@ -170,24 +164,24 @@ class Users(Resource):
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "POST":
             permission = Permission(ActionNeed('添加用户'))
             if permission.can()is not True:
                 abort_if_unauthorized("添加用户")
-            args = User_parser.parse_args()
+            args = user_parser.parse_args()
             try:
-                args['roleName'] = list(eval(args['roleName'][0]))
+                args['role_name'] = list(eval(args['role_name'][0]))
             except:
                 pass
-            user_name = args['userName']
-            password = args['passWord']
+            user_name = args['user_name']
+            password = args['password']
             email = args['email']
             role_name = args['_n']
             phone = args['phone']
             user1 = User.query.filter(User.user_name == user_name).first()
-            abort_if_exist(user1, "userName")
+            abort_if_exist(user1, "user_name")
             try:
                 html = render_template(
                     "Admin/user_info.html", user_name=user_name, password=password, flag="创建账号")
@@ -225,7 +219,7 @@ class UserSpec(Resource):
     def get(self, user_id):
         """ method docstring
         """
-        user = User.query.filter(User.id == user_id).first()
+        user = User.query.filter(User.user_id == user_id).first()
         abort_if_not_exist(user, "user")
         data = build_user_data(user)
         return data
@@ -233,27 +227,27 @@ class UserSpec(Resource):
     def post(self, user_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             if current_user.is_anonymous is True:
                 abort_if_unauthorized("修改用户")
             permission = Permission(ActionNeed("修改用户"))
-            user = User.query.filter(User.id == user_id).first()
+            user = User.query.filter(User.user_id == user_id).first()
             abort_if_not_exist(user, "user")
             if user != current_user and permission.can() is not True:
                 abort_if_unauthorized("修改用户")  # 用户默认能修改自己的信息
-            args = UserSpec_parser.parse_args()
+            args = user_spec_parser.parse_args()
             # userId=args['userId']
             status = args['status']
             email = args['email']
             phone = args['phone']
-            password = args['passWord']
-            role_name = args['roleName']
-            user_name = args['userName']
+            password = args['password']
+            role_name = args['role_name']
+            user_name = args['user_name']
             if user_name != None and user_name != user.user_name:
                 user1 = User.query.filter(User.user_name == user_name).first()
-                abort_if_exist(user1, "userName")
+                abort_if_exist(user1, "user_name")
                 user.user_name = user_name
 
             if status != None and permission.can():
@@ -265,7 +259,7 @@ class UserSpec(Resource):
             if password != None:
                 try:
                     html = render_template(
-                        "Admin/user_info.html", user_name=user.userName, password=password, flag="修改密码")
+                        "Admin/user_info.html", user_name=user.user_name, password=password, flag="修改密码")
                     send_email("社团网账号信息", [user.email], html)
                     user.password = generate_password_hash(password)
                 except:
@@ -283,14 +277,14 @@ class UserSpec(Resource):
                     r.append(role)
                 user.roles = r
             if user_name != None:
-                user.userName = user_name
+                user.user_name = user_name
             aun_db.session.add(user)
             aun_db.session.commit()
         elif request_method == "DELETE":
             permission = Permission(ActionNeed("删除用户"))
             if permission.can()is not True:
                 abort_if_unauthorized("删除用户")
-            user = User.query.filter(User.id == id).first()
+            user = User.query.filter(User.user_id == user_id).first()
             abort_if_not_exist(user, "user")
             aun_db.session.delete(user)
             aun_db.session.commit()
@@ -302,7 +296,7 @@ class Nodes(Resource):
     """ class docstring
     """
 
-    @marshal_with(Node_fields)
+    @marshal_with(node_fields)
     def get(self):
         """ method docstring
         """
@@ -317,22 +311,22 @@ class NodeSpec(Resource):
     """ class docstring
     """
 
-    @marshal_with(Node_fields)
+    @marshal_with(node_fields)
     def get(self, node_id):
         """ method docstring
         """
         permission = Permission(ActionNeed(('查看权限节点')))
         if permission.can() is not True:
             abort_if_unauthorized("查看权限节点")
-        node = Node.query.filter(Node.id == node_id).first()
+        node = Node.query.filter(Node.node_id == node_id).first()
         abort_if_not_exist(node, "node")
         return node
 
     def post(self, node_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             permission = Permission(ActionNeed("修改节点"))
             if permission.can()is not True:
@@ -340,11 +334,11 @@ class NodeSpec(Resource):
 
             node = Node.query.filter(Node.id == node_id).first()
             abort_if_not_exist(node, "node")
-            args = NodeSpec_parser.parse_args()
+            args = node_spec_parser.parse_args()
             status = args['status']
             level = args['level']
             if status != None:
-                if node.nodeName != "修改节点":  # 不能禁用“修改节点”权限节点
+                if node.node_name != "修改节点":  # 不能禁用“修改节点”权限节点
                     node.status = status
             if level != None:
                 node.level = level
@@ -374,22 +368,22 @@ class Roles(Resource):
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         print(request_method)
         if request_method == "POST":
             permission = Permission(ActionNeed('添加角色'))
             if permission.can()is not True:
                 abort_if_unauthorized("添加角色")
-            args = Role_parser.parse_args()
-            role_name = args['roleName']
+            args = role_parser.parse_args()
+            role_name = args['role_name']
             try:
-                node_name = list(eval(args['nodeName'][0]))
+                node_name = list(eval(args['node_name'][0]))
             except:
-                node_name = args['nodeName']
+                node_name = args['node_name']
 
             role1 = Role.query.filter(Role.role_name == role_name).first()
-            abort_if_exist(role1, "roleName")
+            abort_if_exist(role1, "role_name")
             role = Role(role_name)
             aun_db.session.add(role)
             aun_db.session.commit()
@@ -413,7 +407,7 @@ class RoleSpec(Resource):
         permission = Permission(ActionNeed(('查看角色')))
         if permission.can() is not True:
             abort_if_unauthorized("查看角色")
-        role = Role.query.filter(Role.id == role_id).first()
+        role = Role.query.filter(Role.role_id == role_id).first()
         abort_if_not_exist(role, "role")
         data = build_role_data(role)
         return data
@@ -421,25 +415,25 @@ class RoleSpec(Resource):
     def post(self, role_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             permission = Permission(ActionNeed('修改角色'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改角色")
 
-            role = Role.query.filter(Role.id == role_id).first()
+            role = Role.query.filter(Role.role_id == role_id).first()
             abort_if_not_exist(role, "role")
-            args = RoleSpec_parser.parse_args()
-            role_name = args['roleName']
-            node_name = args['nodeName']
+            args = role_spec_parser.parse_args()
+            role_name = args['role_name']
+            node_name = args['node_name']
             status = args['status']
             if role_name != None and role_name != role.role_name:
-                r = Role.query.filter_by(roleName=role_name).first()
-                abort_if_exist(r, "rolename")
+                r = Role.query.filter_by(role_name=role_name).first()
+                abort_if_exist(r, "role_name")
                 role.role_name = role_name
             if status != None:
-                if role.rolename != "超管":  # 不能禁用超管角色
+                if role.role_name != "超管":  # 不能禁用超管角色
                     role.status = status
             if node_name != None:
                 try:
@@ -460,7 +454,7 @@ class RoleSpec(Resource):
             if permission.can()is not True:
                 abort_if_unauthorized("删除角色")
 
-            role = Role.query.filter(Role.id == id).first()
+            role = Role.query.filter(Role.role_id == role_id).first()
             abort_if_not_exist(role, "role")
             aun_db.session.delete(role)
             aun_db.session.commit()

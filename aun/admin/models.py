@@ -11,26 +11,29 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_principal import Permission
 
-from .. import aun_login, aun_db
+from aun import aun_db
 
 
 role_node = aun_db.Table('role_node',  # 角色权限关联表
                          aun_db.Column(
-                             'node_id', aun_db.Integer, aun_db.ForeignKey('node.id')),
+                             'node_id', aun_db.Integer, aun_db.ForeignKey('node.node_id')),
                          aun_db.Column(
-                             'role_id', aun_db.Integer, aun_db.ForeignKey('role.id')),
-                         aun_db.Column('created_at', aun_db.DateTime, default=datetime.now)
-                        )
+                             'role_id', aun_db.Integer, aun_db.ForeignKey('role.role_id')),
+                         aun_db.Column(
+                             'created_at', aun_db.DateTime, default=datetime.now)
+                         )
 
 user_role = aun_db.Table('user_role',  # 用户角色关联表
                          aun_db.Column(
-                             'user_id', aun_db.Integer, aun_db.ForeignKey('user.id')),
+                             'user_id', aun_db.Integer, aun_db.ForeignKey('user.user_id')),
                          aun_db.Column(
-                             'role_id', aun_db.Integer, aun_db.ForeignKey('role.id')),
-                         aun_db.Column('created_at', aun_db.DateTime, default=datetime.now)
-                        )
+                             'role_id', aun_db.Integer, aun_db.ForeignKey('role.role_id')),
+                         aun_db.Column(
+                             'created_at', aun_db.DateTime, default=datetime.now)
+                         )
 
 EditUserNeed = partial(namedtuple('User', ['method', 'value']), 'edit')
+
 
 class EditUserPermission(Permission):
     """ class docstring
@@ -43,7 +46,7 @@ class EditUserPermission(Permission):
 class LoginLog(aun_db.Model):
     """ class docstring
     """
-    user_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    log_id = aun_db.Column(aun_db.Integer, primary_key=True)
     user_name = aun_db.Column(aun_db.String(64))
     login_time = aun_db.Column(aun_db.DateTime)
     login_ip = aun_db.Column(aun_db.String(40))
@@ -62,7 +65,7 @@ class Node(aun_db.Model):
     """ class docstring
     """
     __tablename__ = "node"
-    user_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    node_id = aun_db.Column(aun_db.Integer, primary_key=True)
     node_name = aun_db.Column(aun_db.String(30), unique=True)
     remark = aun_db.Column(aun_db.String(30))
     status = aun_db.Column(aun_db.Boolean)
@@ -83,7 +86,7 @@ class Role(aun_db.Model):
     """ class docstring
     """
     __tablename__ = "role"
-    user_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    role_id = aun_db.Column(aun_db.Integer, primary_key=True)
     role_name = aun_db.Column(aun_db.String(30), unique=True)
     status = aun_db.Column(aun_db.Boolean)
     remark = aun_db.Column(aun_db.String(30))

@@ -17,7 +17,10 @@ SECRET_KEY = 'May AU forever'
 
 # flask-sqlalchemy 配置
 
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:abc201314@localhost/aunet_flask'  # mysql的配置
+SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
+# 'SQLALCHEMY_DATABASE_URI' = 'sqlite:////tmp/test.db'
+# SQLALCHEMY_DATABASE_URI =
+# 'mysql+pymysql://root:abc201314@localhost/aunet_flask'  # mysql的配置
 
 SQLALCHEMY_MIGRATE_REPO = os.path.join(BASEDIR, 'db_repository')
 

@@ -3,35 +3,31 @@
 """ module docstring
 """
 
-import json
 from datetime import datetime, timedelta
 
-from flask import render_template, flash, redirect, url_for, g, session, request, current_app
+from flask import render_template, request
 from flask import jsonify
-from flask_login import login_required, login_user, logout_user
 
 from aun import aun_app
+from aun.home import home
+from aun.home.models import News, Category, SlideShow, news_category
 
-from . import home
-from .models import News, Category, Tag, SilderShow, news_category
 
-
-# used in template to format time
-# usage : '|time'
 @aun_app.template_filter('time')
-def time_filter(s):
-    """ function docstring
+def time_filter(time):
+    """ used in template to format time
+        usage : '|time'
     """
-    if isinstance(s, datetime) is True:
+    if isinstance(time, datetime) is True:
         now = datetime.now()
         utc_now = datetime.utcnow()
-        return (s - (utc_now - now)).strftime('%Y %b %d %H:%M')
-    elif isinstance(s, str):
+        return (time - (utc_now - now)).strftime('%Y %b %d %H:%M')
+    elif isinstance(time, str):
         now = datetime.now()
         utc_now = datetime.utcnow()
-        s = datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-        s = s - (utc_now - now)
-        return s.strftime("%Y %b %d %H:%M")
+        time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+        time = time - (utc_now - now)
+        return time.strftime("%Y %b %d %H:%M")
 
 
 @home.route('/', methods=["POST", "GET"])
@@ -39,8 +35,8 @@ def time_filter(s):
 def index():
     """ function docstring
     """
-    slideshow = SilderShow.query.order_by(
-        SilderShow.post_time.desc()).limit(5).all()
+    slideshow = SlideShow.query.order_by(
+        SlideShow.post_time.desc()).limit(5).all()
     associations = get_news(1, "魅力社团")  # charm_association
     notifications = get_news(1, "通知")
     advance_notice = get_news(1, "预告")
@@ -48,7 +44,7 @@ def index():
     news_hust = get_news(1, "魅力华科")
     news_preview = get_news(2, "新闻")
     return render_template(
-        "Home/index/index.html", SilderShow=slideshow, CharmAssociation=associations, LatestNotice=notifications, LatestAdvanceNotice=advance_notice, NewsPinPai=news_featured,
+        "Home/index/index.html", SliderShow=slideshow, CharmAssociation=associations, LatestNotice=notifications, LatestAdvanceNotice=advance_notice, NewsPinPai=news_featured,
         NewsCharmHust=news_hust, NewsYuLan=news_preview)
 
 
@@ -56,7 +52,7 @@ def index():
 def show_news(news_id):
     """ function docstring
     """
-    news = News.query.filter(News.id == news_id).first()
+    news = News.query.filter(News.news_id == news_id).first()
     return render_template("Home/news/detail.html", news=news)
 
 
@@ -104,7 +100,7 @@ def news_to_json(news, length, page, news_number):
         news_json['img_url'].append(dict({i: new.img_url}))
         news_json['post_time'].append(
             dict({i: (new.post_time - (utc_now - now)).strftime('%Y %b %d %H:%M')}))
-        news_json['id'].append(dict({i: new.id}))
+        news_json['id'].append(dict({i: new.news_id}))
         i = i + 1
     return news_json
 

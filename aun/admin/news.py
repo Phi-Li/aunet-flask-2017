@@ -2,47 +2,44 @@
 
 """ manage news
 """
+import time
+import random
+from io import BytesIO
+from urllib import request
+import os
+import base64
+from bs4 import BeautifulSoup
+from PIL import Image
 
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
 from flask_principal import Permission, ActionNeed
 
-from datetime import datetime
-import time
-from bs4 import BeautifulSoup
-from io import BytesIO
-from urllib import request
-import random
-import os
-import base64
-import json
-from PIL import Image
-
 # import models needed
 from aun import aun_db, aun_app
-from aun.home.models import News, slideshow, Category, Tag
+from aun.home.models import News, SlideShow, Category, Tag
 
 # Request parser for slideshow
-sildeshow_parser = reqparse.RequestParser()
-sildeshow_parser.add_argument(
+slideshow_parser = reqparse.RequestParser()
+slideshow_parser.add_argument(
     'title', type=str, required=True, location="json", help="title is needed")
-sildeshow_parser.add_argument(
-    'imgUrl', type=str, required=True, location="json", help="imgUrl is needed")
-sildeshow_parser.add_argument(
+slideshow_parser.add_argument(
+    'img_url', type=str, required=True, location="json", help="imgUrl is needed")
+slideshow_parser.add_argument(
     "outline", type=str, required=True, location="json", help="outline is needed")
-sildeshow_parser.add_argument(
+slideshow_parser.add_argument(
     "link", type=str, required=True, location="json", help="the link that jump")
 
 
-slideshowSpec_parser = reqparse.RequestParser()
-slideshowSpec_parser.add_argument(
+slideshow_spec_parser = reqparse.RequestParser()
+slideshow_spec_parser.add_argument(
     'title', type=str, location="json", help="title")
-slideshowSpec_parser.add_argument(
-    'imgUrl', type=str, location="json", help="imgUrl")
-slideshowSpec_parser.add_argument(
+slideshow_spec_parser.add_argument(
+    'img_url', type=str, location="json", help="imgUrl")
+slideshow_spec_parser.add_argument(
     "outline", type=str, location="json", help="outline")
-slideshowSpec_parser.add_argument(
+slideshow_spec_parser.add_argument(
     "editable", type=int, location='json', help="status")
-slideshowSpec_parser.add_argument(
+slideshow_spec_parser.add_argument(
     "link", type=str, location="json", help="the link that jump")
 
 # Request parser for news
@@ -57,17 +54,17 @@ news_parser.add_argument("tags", type=str, location="json",
                          required=True, action='append', help="tags  is needed")
 
 
-NewsSpec_parser = reqparse.RequestParser()
-NewsSpec_parser.add_argument(
+news_spec_parser = reqparse.RequestParser()
+news_spec_parser.add_argument(
     "category", type=str, location="json", help="category")
-NewsSpec_parser.add_argument(
+news_spec_parser.add_argument(
     "detail", type=str, location="json", help="detail")
-NewsSpec_parser.add_argument("title", type=str, location="json", help="title")
-NewsSpec_parser.add_argument(
+news_spec_parser.add_argument("title", type=str, location="json", help="title")
+news_spec_parser.add_argument(
     "editable", type=int, location="json", help="edit status")
-NewsSpec_parser.add_argument(
+news_spec_parser.add_argument(
     "tags", type=str, location="json", action='append', help="tags id is needed")
-NewsSpec_parser.add_argument('detail', type=str, location="json")
+news_spec_parser.add_argument('detail', type=str, location="json")
 
 
 # Request parser for slideshow
@@ -79,8 +76,8 @@ parser_spec = reqparse.RequestParser()
 parser_spec.add_argument('name', type=str, location='json')
 
 # parser to judge DELETE or POST or PUT http method
-RequestMethod_parser = reqparse.RequestParser()
-RequestMethod_parser.add_argument('requestMethod', type=str, location='json')
+request_method_parser = reqparse.RequestParser()
+request_method_parser.add_argument('request_method', type=str, location='json')
 
 
 # defined as a new field
@@ -110,9 +107,9 @@ class PostTimeItem(fields.Raw):
     """ class docstring
     """
 
-    def format(self, postTime):
+    def format(self, post_time):
         # t=datetime.fromtimestamp(postTime)
-        a = postTime.strftime('%Y-%m-%d %H:%M:%S')
+        a = post_time.strftime('%Y-%m-%d %H:%M:%S')
         return time.mktime(time.strptime(a, '%Y-%m-%d %H:%M:%S'))
 
 
@@ -120,36 +117,26 @@ class ImgToDataurl(fields.Raw):
     """ class docstring
     """
 
-    def format(self, imgUrl):
-        try:
-            path = os.path.join(aun_app.config['BASEDIR'], 'aunet', imgUrl)
-            with open(path, "rb") as f:
-                data = f.read()
-            data = base64.b64encode(data)  #
-            data = str(data)
-            data = data[2:-1]
-            data = "data:image/jpg;base64,"+data
-            return data
-        except:
-            return imgUrl
+    def format(self, img_url):
+        return "/"+img_url
 
 
 # work with marshal_with() to change a class into json
-News_fields = {
-    "id": fields.Integer(attribute="id"),
+news_fields = {
+    "id": fields.Integer(attribute="news_id"),
     "category": CategoryItem,
     "tags": TagItem,
-    "postTime": PostTimeItem(attribute="post_time"),
+    "post_time": PostTimeItem(attribute="post_time"),
     "title": fields.String(attribute="title"),
     "outline": fields.String(attribute="outline"),
     "editable": fields.Integer(attribute="editable"),
     "author": fields.String
 }
-NewsSpec_fields = {
-    "id": fields.Integer(attribute="id"),
+news_spec_parser = {
+    "id": fields.Integer(attribute="news_id"),
     "category": CategoryItem,
     "tags": TagItem,
-    "postTime": PostTimeItem(attribute="post_time"),
+    "post_time": PostTimeItem(attribute="post_time"),
     "title": fields.String(attribute="title"),
     "outline": fields.String(attribute="outline"),
     "editable": fields.Integer(attribute="editable"),
@@ -158,8 +145,8 @@ NewsSpec_fields = {
 }
 slideshow_fields = {
     "id": fields.Integer,
-    "postTime": PostTimeItem(attribute="post_time"),
-    "imgUrl": ImgToDataurl(attribute="img_url"),
+    "post_time": PostTimeItem(attribute="post_time"),
+    "img_url": ImgToDataurl(attribute="img_url"),
     "outline": fields.String,
     "editable": fields.Integer,
     "link": fields.String,
@@ -203,7 +190,7 @@ def handle_html(html):
         filename = str(int(random.uniform(1, 1000)+time.time()))+".png"
         path = os.path.join(
             aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
-        i.save(path, quality="96")
+        i.save(path, quality="192")
         with open(path, "rb") as f:
             data = f.read()
         data = base64.b64encode(data)  #
@@ -251,30 +238,29 @@ class SlideshowClass(Resource):
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        silder_shows = slideshow.query.all()
-        return silder_shows
+        slide_shows = SlideShow.query.all()
+        return slide_shows
 
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "POST":
             permission = Permission(ActionNeed('添加新闻'))
             if permission.can() is not True:
                 abort_if_unauthorized("添加新闻")
-            slideshow_args = sildeshow_parser.parse_args()
-            print(slideshow_args)
+            slideshow_args = slideshow_parser.parse_args()
             title = slideshow_args['title']
-            img_url = slideshow_args['imgUrl']
+            img_url = slideshow_args['img_url']
             try:
                 img_url = dataurl_to_img(img_url)
             except:
                 pass
             outline = slideshow_args['outline']
             link = slideshow_args['link']
-            silder_show = slideshow(title, img_url, outline, link)
-            aun_db.session.add(silder_show)
+            slide_show = SlideShow(title, img_url, outline, link)
+            aun_db.session.add(slide_show)
             aun_db.session.commit()
         else:
             abort(404, message="api not found")
@@ -291,50 +277,53 @@ class SlideshowSpec(Resource):
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        silder_show = slideshow.query.filter(slideshow.id == slideshow_id).first()
-        abort_if_not_exist(silder_show, "silder_show")
-        return silder_show
+        slide_show = SlideShow.query.filter(
+            SlideShow.slide_id == slideshow_id).first()
+        abort_if_not_exist(slide_show, "slide_show")
+        return slide_show
 
     def post(self, slideshow_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             permission = Permission(ActionNeed('修改新闻'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改新闻")
-            silder_show = slideshow.query.filter(slideshow.id == slideshow_id).first()
-            abort_if_not_exist(silder_show, "silder_show")
-            args = slideshowSpec_parser.parse_args()
+            slide_show = SlideShow.query.filter(
+                SlideShow.slide_id == slideshow_id).first()
+            abort_if_not_exist(slide_show, "slide_show")
+            args = slideshow_spec_parser.parse_args()
             title = args['title']
-            img_url = args['imgUrl']
+            img_url = args['img_url']
             try:
                 img_url = dataurl_to_img(img_url)
             except:
-                img_url = args['imgUrl']
+                img_url = args['img_url']
             outline = args['outline']
             editable = args['editable']
             link = args['link']
             if title != None:
-                silder_show.title = title
+                slide_show.title = title
             if img_url != None:
-                silder_show.img_url = img_url
+                slide_show.img_url = img_url
             if outline != None:
-                silder_show.outline = outline
+                slide_show.outline = outline
             if editable != None:
-                silder_show.editable = editable
+                slide_show.editable = editable
             if link != None:
-                silder_show.link = link
-            aun_db.session.add(silder_show)
+                slide_show.link = link
+            aun_db.session.add(slide_show)
             aun_db.session.commit()
         elif request_method == "DELETE":
             permission = Permission(ActionNeed('删除新闻'))
             if permission.can()is not True:
                 abort_if_unauthorized("删除新闻")
-            silder_show = slideshow.query.filter(slideshow.id == id).first()
-            abort_if_not_exist(silder_show, "silder_show")
-            aun_db.session.delete(silder_show)
+            slide_show = SlideShow.query.filter(
+                SlideShow.slide_id == slideshow_id).first()
+            abort_if_not_exist(slide_show, "slide_show")
+            aun_db.session.delete(slide_show)
             aun_db.session.commit()
         else:
             abort(404, message="api not found")
@@ -344,7 +333,7 @@ class NewsClass(Resource):
     """ class docstring
     """
 
-    @marshal_with(News_fields)
+    @marshal_with(news_fields)
     def get(self):
         """ method docstring
         """
@@ -357,8 +346,8 @@ class NewsClass(Resource):
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "POST":
             permission = Permission(ActionNeed('添加新闻'))
             if permission.can()is not True:
@@ -392,29 +381,29 @@ class NewsSpec(Resource):
     """ class docstring
     """
 
-    @marshal_with(NewsSpec_fields)
+    @marshal_with(news_spec_parser)
     def get(self, news_id):
         """ method docstring
         """
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        news = News.query.filter(News.id == news_id).first()
+        news = News.query.filter(News.news_id == news_id).first()
         abort_if_not_exist(news, "news")
         return news
 
     def post(self, news_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             permission = Permission(ActionNeed('修改新闻'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改新闻")
-            news = News.query.filter(News.id == id).first()
+            news = News.query.filter(News.news_id == news_id).first()
             abort_if_not_exist(news, "news")
-            args = NewsSpec_parser.parse_args()
+            args = news_spec_parser.parse_args()
             category = args['category']
             detail = args['detail']
             title = args['title']
@@ -450,7 +439,7 @@ class NewsSpec(Resource):
             if permission.can()is not True:
                 abort_if_unauthorized("删除新闻")
 
-            news = News.query.filter(News.id == id).first()
+            news = News.query.filter(News.news_id == news_id).first()
             abort_if_not_exist(news, "news")
             aun_db.session.delete(news)
             aun_db.session.commit()
@@ -466,7 +455,7 @@ class NewsSpecDetail(Resource):
         """ method docstring
         """
         # id=int(id)
-        news = News.query.filter(News.id == news_id).first()
+        news = News.query.filter(News.news_id == news_id).first()
         abort_if_not_exist(news, "news")
         data = dict()
         data['detail'] = news.detail
@@ -488,15 +477,15 @@ class Categorys(Resource):
         for category in categorys:
             data = dict()
             data['name'] = category.name
-            data['id'] = category.id
+            data['id'] = category.cat_id
             datas.append(data)
         return datas
 
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "POST":
             permission = Permission(ActionNeed("添加新闻属性"))
             if permission.can()is not True:
@@ -526,20 +515,20 @@ class CategoryClass(Resource):
         abort_if_not_exist(category, "category")
         data = dict()
         data['name'] = category.name
-        data['id'] = category.id
+        data['id'] = category.cat_id
         return data
 
     def post(self, cat_id):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "PUT":
             permission = Permission(ActionNeed('修改新闻属性'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改新闻属性")
 
-            category = Category.query.filter(Category.id == cat_id).first()
+            category = Category.query.filter(Category.cat_id == cat_id).first()
             abort_if_not_exist(category, "category")
             args = parser_spec.parse_args()
             name = args['name']
@@ -554,7 +543,7 @@ class CategoryClass(Resource):
             if permission.can()is not True:
                 abort_if_unauthorized("删除新闻属性")
             cat_id = int(cat_id)
-            category = Category.query.filter(Category.id == cat_id).first()
+            category = Category.query.filter(Category.cat_id == cat_id).first()
             abort_if_not_exist(category, "category")
             aun_db.session.delete(category)
             aun_db.session.commit()
@@ -577,15 +566,15 @@ class Tags(Resource):
         for tag in tags:
             data = dict()
             data['name'] = tag.name
-            data['id'] = tag.id
+            data['id'] = tag.tag_id
             datas.append(data)
         return datas
 
     def post(self):
         """ method docstring
         """
-        request_arg = RequestMethod_parser.parse_args()
-        request_method = request_arg['requestMethod']
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
         if request_method == "POST":
             permission = Permission(ActionNeed('修改新闻标签'))
             if permission.can()is not True:
@@ -607,21 +596,21 @@ class TagClass(Resource):
         permission = Permission(ActionNeed(('查看新闻标签')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻标签")
-        tag = Tag.query.filter_by(id=id).first()
+        tag = Tag.query.filter_by(tag_id=id).first()
         abort_if_not_exist(tag, "tag")
         data = dict()
         data['name'] = tag.name
-        data['id'] = tag.id
+        data['id'] = tag.tag_id
         return data
 
     def post(self, id):
-        request_arg = RequestMethod_parser.parse_args()
-        requestMethod = request_arg['requestMethod']
-        if requestMethod == "PUT":
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg['request_method']
+        if request_method == "PUT":
             permission = Permission(ActionNeed('修改新闻标签'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改新闻标签")
-            tag = Tag.query.filter(Tag.id == id).first()
+            tag = Tag.query.filter(Tag.tag_id == id).first()
             abort_if_not_exist(tag, "tag")
             args = parser_spec.parse_args()
             name = args['name']
@@ -631,11 +620,11 @@ class TagClass(Resource):
                 tag.name = name
             aun_db.session.add(tag)
             aun_db.session.commit()
-        elif requestMethod == "DELETE":
+        elif request_method == "DELETE":
             permission = Permission(ActionNeed('删除新闻标签'))
             if permission.can()is not True:
                 abort_if_unauthorized("删除新闻标签")
-            tag = Tag.query.filter(Tag.id == id).first()
+            tag = Tag.query.filter(Tag.tag_id == id).first()
             abort_if_not_exist(tag, "tag")
             aun_db.session.delete(tag)
             aun_db.session.commit()

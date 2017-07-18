@@ -4,7 +4,6 @@
 """
 
 from flask import render_template
-
 from aun import aun_app
 
 

@@ -6,19 +6,17 @@
 from flask import request, current_app, session
 from flask_login import login_user, current_user, logout_user
 from flask_principal import identity_loaded, RoleNeed, UserNeed, ActionNeed
-from flask_principal import Identity, AnonymousIdentity, \
-    identity_changed, Permission
-from flask_restful import reqparse, abort, Resource, fields, marshal_with
+from flask_principal import Identity, identity_changed
+from flask_restful import reqparse, abort, Resource
 
 from aun import aun_app, aun_db
 
-from .models import User, LoginLog
-from .models import EditUserPermission, EditUserNeed
-from .users import build_user_data
+from aun.admin.models import User, LoginLog
+from aun.admin.models import EditUserPermission
+from aun.admin.users import build_user_data
 
 
 # Request parsers
-
 login_parser = reqparse.RequestParser()
 login_parser.add_argument('userName', type=str, location="json", required=True)
 login_parser.add_argument('password', type=str, location="json", required=True)
@@ -83,26 +81,26 @@ class Login(Resource):
         """ method docstring
         """
         request_args = request_method_parser.parse_args()
-        requestMethod = request_args['requestMethod']
-        if requestMethod == "POST":
+        request_method = request_args['request_method']
+        if request_method == "POST":
             login_args = login_parser.parse_args()
-            userName = login_args['userName']
+            user_name = login_args['user_name']
             password = login_args['password']
-            user = User.query.filter(User.userName == userName).first()
-            if user == None:
-                abort(401, message="userName error")
+            user = User.query.filter(User.user_name == user_name).first()
+            if user:
+                abort(401, message="user_name error")
             elif user.verify_password(password) is not True:
                 abort(401, message="password error")
             else:
                 session.permanent = True
                 login_user(user)
                 ip = str(request.remote_addr)
-                log = LoginLog(current_user.userName, ip)
+                log = LoginLog(current_user.user_name, ip)
                 aun_db.session.add(log)
                 aun_db.session.commit()
                 identity_changed.send(
                     current_app._get_current_object(), identity=Identity(user.id))
-        elif requestMethod == "DELETE":
+        elif request_method == "DELETE":
             # Remove the user information from the session
             logout_user()
             for key in ('identity.name', 'identity.auth_type'):

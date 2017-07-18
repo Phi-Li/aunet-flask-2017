@@ -7,7 +7,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from aun import aun_app, aun_db
-from aun.home.models import News, news_category, news_tag, Category, Tag,	SilderShow
+from aun.home.models import News, news_category, news_tag, Category, Tag, SlideShow
 from aun.admin.models import User, Node, Role, user_role, role_node
 
 

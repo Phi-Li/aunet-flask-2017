@@ -5,26 +5,26 @@
 
 from datetime import datetime
 from flask_login import current_user
-from .. import aun_db
+from aun import aun_db
 
 
 news_category = aun_db.Table("news_category",
                              aun_db.Column(
-                                 'news_id', aun_db.Integer, aun_db.ForeignKey("news.id")),
+                                 'news_id', aun_db.Integer, aun_db.ForeignKey("news.news_id")),
                              aun_db.Column(
-                                 'category_id', aun_db.Integer, aun_db.ForeignKey("category.id")),
+                                 'category_id', aun_db.Integer, aun_db.ForeignKey("category.cat_id")),
                              aun_db.Column(
                                  "created_at", aun_db.DateTime, default=datetime.now)
-                            )
+                             )
 
 news_tag = aun_db.Table("news_tag",
                         aun_db.Column(
-                            "news_id", aun_db.Integer, aun_db.ForeignKey("news.id")),
+                            "news_id", aun_db.Integer, aun_db.ForeignKey("news.news_id")),
                         aun_db.Column(
-                            "tag_id", aun_db.Integer, aun_db.ForeignKey("tag.id")),
+                            "tag_id", aun_db.Integer, aun_db.ForeignKey("tag.tag_id")),
                         aun_db.Column(
                             "created_at", aun_db.DateTime, default=datetime.now),
-                       )
+                        )
 
 
 class News(aun_db.Model):
@@ -50,7 +50,8 @@ class News(aun_db.Model):
     def add_category(self, category_name):
         """ method docstring
         """
-        category = Category.query.filter(Category.name == category_name).first()
+        category = Category.query.filter(
+            Category.name == category_name).first()
         self.category.append(category)
 
     def add_tag(self, tag_name):
@@ -118,7 +119,7 @@ class Tag(aun_db.Model):
     __repr__ = __str__
 
 
-class SilderShow(aun_db.Model):
+class SlideShow(aun_db.Model):
     """ class docstring
     """
     slide_id = aun_db.Column(aun_db.Integer, primary_key=True)

@@ -2,22 +2,21 @@
 """ module docstring
 """
 from datetime import datetime
-from flask_restful import reqparse, abort, Resource, fields, marshal_with
+from flask_restful import reqparse, Resource,  marshal_with
 
 from aun.home.models import News
-from aun import aun_db
-from .news import News_fields
+from aun.admin.news import news_fields
 
 
-News_parser = reqparse.RequestParser()
-News_parser.add_argument(
+news_parser = reqparse.RequestParser()
+news_parser.add_argument(
     "category", type=str, required=True, help="category is needed")
-News_parser.add_argument(
+news_parser.add_argument(
     'sort', type=str, required=True, help="sort is needed")
-News_parser.add_argument(
+news_parser.add_argument(
     'start', type=int, required=True, help="start is needed")
-News_parser.add_argument('end', type=int, required=True, help="end is needed")
-News_parser.add_argument(
+news_parser.add_argument('end', type=int, required=True, help="end is needed")
+news_parser.add_argument(
     'tags', type=str, required=True, action="append", help="tags is needed")
 
 
@@ -25,13 +24,12 @@ class SearchNews(Resource):
     """ class docstring
     """
 
-    @marshal_with(News_fields)
+    @marshal_with(news_fields)
     def get(self):
         """ method docstring
         """
         data = list()
-        # data1=dict()
-        args = News_parser.parse_args()
+        args = news_parser.parse_args()
         category = args['category']
         sort = args['sort']
         start = args['start']

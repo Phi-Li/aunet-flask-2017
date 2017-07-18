@@ -8,24 +8,24 @@ requestMethod:POST/PUT/DELETE作为区分
     status 404 Not founded
     status 401 Unauthorized
 ##3.用户模块
-GET  /api/User/Users
+GET  /api/user/users
 
     [{
     id:int                  
-    userName:str,
-    loginTime:,（上一次登陆时间）
-    loginIp:str,(上一次登陆ip)
+    user_name:str,
+    login_time:,（上一次登陆时间）
+    login_ip:str,(上一次登陆ip)
     status:bool(该用户状态True正常，false被禁),
     email:str,
     nodes:[
     {   id:int,             
-        nodeName:str,
+        node_name:str,
         status:bool,
         level:int
     }]
     roles:[{                是roles不是role
     id:int ,                
-    roleName:str,
+    role_name:str,
     status:bool,
     }
     ]
@@ -34,150 +34,150 @@ GET  /api/User/Users
     ]
 
 
-POST /api/User/Users
+POST /api/user/users
 
     {
-    userName:str,
-    passWord:str
+    user_name:str,
+    password:str
     email:str
-    roleName:list(str)        注意是list
+    role_name:list(str)        注意是list
     }
 
-GET /api/User/Users/id
+GET /api/user/users/id
 
     {
     int: int   ,               新添加的，其实也可以不要，因为与路由的id一致,格式统一一下加上吧
-     userName:str,
-    loginTime:,（上一次登陆时间）
-    loginIp:str,(上一次登陆ip)
+     user_name:str,
+    login_time:,（上一次登陆时间）
+    login_ip:str,(上一次登陆ip)
     status:bool(该用户状态True正常，false被禁),
     email:str,
     nodes:[
     {    id:int,                
-         nodeName:str,
+         node_name:str,
         status:bool,
         level:int
     }]
     roles:[{                    是roles不是role
     id:int ,                    
-    roleName:str,
+    role_name:str,
     status:bool,
     }
     ]
     }
 
-PUT /api/User/Users/id
+PUT /api/user/users/id
 
     {
-    userName:str,
-    passWord:str
+    user_name:str,
+    password:str
     email:str
-    roleName:list(str)             注意是list 
+    role_name:list(str)             注意是list 
     status:bool,
 
 
     } optional
 
-DELETE /api/User/Users/id
+DELETE /api/user/users/id
 
-GET /api/User/CurrentUser           
+GET /api/user/current-user           
 
     {
-        和 Get/api/User/Users/id 返回的数据一样
+        和 Get/api/user/users/id 返回的数据一样
     }
 
-GET /api/User/Nodes
+GET /api/user/nodes
 
     [
     {
     id: int             
-    nodeName:str,
+    node_name:str,
     status:bool,
     level:int
     }
     ]
 
-GET /api/User/Nodes/id
+GET /api/user/nodes/id
 
     {
     id: int             
-    nodeName:str,
+    node_name:str,
     status:bool,
     level:int
     }
-PUT /api/User/Nodes/id
+PUT /api/user/nodes/id
 
     {
     status :bool
     } optional
 
-GET /api/User/Roles
+GET /api/user/roles
 
     [{
     id:int,             
-    roleName:str,
+    role_name:str,
     status:bool,
     nodes:[
         {
         id:int,          
-         nodeName:str,
+         node_name:str,
         status:bool,
         level:int
     }
     ]
     }]
 
-POST /api/User/Roles(新建一角色)
+POST /api/user/roles(新建一角色)
 
     {
-    roleName:str
-    nodeName:list(要添加的节点名)
+    role_name:str
+    node_name:list(要添加的节点名)
     }
 
-GET /api/User/Roles/id
+GET /api/user/roles/id
 
     {
     id:int ,             
-     roleName:str,
+     role_name:str,
     status:bool,
     nodes:[
         {
         id: int,        
-         nodeName:str,
+         node_name:str,
         status:bool,
         level:int
     }
     ]
     }
-PUT /api/User/Roles/id
+PUT /api/user/roles/id
 
     {
-    roleName:list(str),             注意是list
+    role_name:list(str),             注意是list
     status:bool,
-    nodeName:list
+    node_name:list
     }
     optional
 
-DELETE /api/User/Roles/id
+DELETE /api/user/roles/id
 
 
 ##4.搜索模块
 
-GET /api/Search/News?category=&tags=&start=&end=&sort
+GET /api/Search/news?category=&tags=&start=&end=&sort
 
     {
-        和 GET/api/News/News返回的数据格式一样
+        和 GET/api/news/news返回的数据格式一样
     }注:tags可以多个,start-end为搜索的时间范围,为时间戳  sort=latest/oldest 反向或正向排序
 
 
 
-##5. html
+##5. template
 
-GET /api/modules/fp:path
+GET /api/templates/fp:path 
+> ("api/templates/admin/app.html" .eg)
+##6. news
 
-##6. News
-
-GET /api/News/News/id application/json
+GET /api/news/news/id application/json
     
     ->
 
@@ -187,14 +187,14 @@ GET /api/News/News/id application/json
             author: str,
             category: str,
             tags: [str],
-            postTime: UTC timestamp seconds,
+            post_time: UTC timestamp seconds,
             title: str,
             outline: str,
             editable: boolean,
         }
     ]
 
-POST /api/News/News application/json
+POST /api/news/news application/json
     
     {
         category: str,
@@ -210,7 +210,7 @@ POST /api/News/News application/json
     200 success
 
 
-GET /api/News/News/id:str
+GET /api/news/news/id:str
 
     
     ->
@@ -219,7 +219,7 @@ GET /api/News/News/id:str
         id: int,
         category: str,
         tags: [str],
-        postTime: UTC timestamp seconds,
+        post_time: UTC timestamp seconds,
         title: str,
         outline: str,
         editable: boolean,
@@ -231,7 +231,7 @@ GET /api/News/News/id:str
 
     404
 
-PUT /api/News/News/id:str
+PUT /api/news/news/id:str
     
     {
         category: str,
@@ -252,7 +252,7 @@ PUT /api/News/News/id:str
     200 OK
 
 
-DELETE /api/News/News/id:str
+DELETE /api/news/news/id:str
 
     ->
 
@@ -261,36 +261,36 @@ DELETE /api/News/News/id:str
 
     # slideshow
 
-GET /api/News/SliderShow
+GET /api/news/slider-show
 
     ->
 
     [
         {
             id: int,
-            postTime: UTC timestamp sec,
+            post_time: UTC timestamp sec,
             title: str,
-            imgUrl: str,               
+            img_url: str,               
             outline: str,
             editable: bool,
             link: str,
         }
     ]
 
-POST /api/News/SliderShow
+POST /api/news/slider-show
 
     {
         title: str,
-        imgUrl: str,               
+        img_url: str,               
         outline: str,
         link: str,
     }
 
-PUT /api/News/SliderShow/id:str
+PUT /api/news/slider-show/id:str
 
     {
         title: str,
-        imgUrl: str,                
+        img_url: str,                
         outline: str,
         link: str,
         #editable: bool,
@@ -298,57 +298,57 @@ PUT /api/News/SliderShow/id:str
 
     #optional keys
 
-DELETE /api/News/SliderShow/id:str
+DELETE /api/news/slider-show/id:str
 
     ->
 
     200 OK
 
-GET /api/News/Tags
+GET /api/news/tags
 
     [{
         id:int,
         name:str
     }]
-POST /api/News/Tags
+POST /api/news/tags
 
     {
         name:str
     }
-GET /api/News/Tags/id
+GET /api/news/tags/id
 
      {
         id:int,
         name:str
     }
-PUT /api/News/Tags/id
+PUT /api/news/tags/id
 
     {
         name：str
     }
-DELETE /api/News/Tags/id
+DELETE /api/news/tags/id
 
-GET /api/News/Categorys
+GET /api/news/categorys
 
     [{
         id:int,
         name:str
     }]
-POST /api/News/Categorys
+POST /api/news/categorys
 
     {
         name:str
     }
-GET /api/News/Categorys/id
+GET /api/news/categorys/id
 
      {
         id:int,
         name:str
     }
-PUT /api/News/Categorys/id
+PUT /api/news/categorys/id
 
     {
         name
     }
 
-DELETE /api/News/Categorys/id
+DELETE /api/news/categorys/id
