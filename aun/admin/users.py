@@ -1,6 +1,6 @@
 # -*-coding:utf-8 -*-
 
-""" module docstring
+""" rest api for user related
 """
 
 # build restful api for user modoul
@@ -14,6 +14,7 @@ from flask import render_template
 from aun.admin.models import User, Node, Role, LoginLog
 from aun import aun_db
 from aun.admin.email import send_email
+from aun.common import abort_if_exist, abort_if_not_exist, abort_if_unauthorized
 
 node_fields = {
     "id": fields.Integer,
@@ -66,27 +67,6 @@ role_spec_parser.add_argument('status', type=bool, location="json")
 
 request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
-
-
-def abort_if_not_exist(data, message):
-    """ function docstring
-    """
-    if data is None:
-        abort(404, message="{}  Found".format(message))
-
-
-def abort_if_exist(data, message):
-    """ function docstring
-    """
-    if data != None:
-        abort(
-            400, message="{} has existed ,please try another".format(message))
-
-
-def abort_if_unauthorized(message):
-    """ function docstring
-    """
-    abort(401, message="{} permission Unauthorized".format(message))
 
 
 def build_user_data(user):
@@ -144,7 +124,7 @@ def build_role_data(role):
     return data
 
 
-class Users(Resource):
+class UsersApi(Resource):
     """ class docstring
     """
 
@@ -199,7 +179,7 @@ class Users(Resource):
             abort(404, message="api not found")
 
 
-class CurrentUser(Resource):
+class CurrentUserApi(Resource):
     """ class docstring
     """
 
@@ -212,7 +192,7 @@ class CurrentUser(Resource):
         return data
 
 
-class UserSpec(Resource):
+class UserApi(Resource):
     """ class docstring
     """
 
@@ -292,7 +272,7 @@ class UserSpec(Resource):
             abort(404, message="api not found")
 
 
-class Nodes(Resource):
+class NodesApi(Resource):
     """ class docstring
     """
 
@@ -307,7 +287,7 @@ class Nodes(Resource):
         return nodes
 
 
-class NodeSpec(Resource):
+class NodeApi(Resource):
     """ class docstring
     """
 
@@ -348,7 +328,7 @@ class NodeSpec(Resource):
             abort(404, message="api not found")
 
 
-class Roles(Resource):
+class RolesApi(Resource):
     """ class docstring
     """
 
@@ -397,7 +377,7 @@ class Roles(Resource):
             abort(404, message="api not found")
 
 
-class RoleSpec(Resource):
+class RoleApi(Resource):
     """ method docstring
     """
 

@@ -1,6 +1,6 @@
 # -*-coding:utf-8 -*-
 
-""" manage news
+""" manage article
 """
 import time
 import random
@@ -10,13 +10,17 @@ import os
 import base64
 from bs4 import BeautifulSoup
 from PIL import Image
+import json
 
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
 from flask_principal import Permission, ActionNeed
+from flask_login import current_user
 
 # import models needed
 from aun import aun_db, aun_app
-from aun.home.models import News, SlideShow, Category, Tag
+from aun.home.models import Article, SlideShow, Category, Tag
+from aun.association.models import Association
+from aun.common import abort_if_exist, abort_if_not_exist, abort_if_unauthorized, handle_html, dataurl_to_img
 
 # Request parser for slideshow
 slideshow_parser = reqparse.RequestParser()
@@ -38,33 +42,33 @@ slideshow_spec_parser.add_argument(
 slideshow_spec_parser.add_argument(
     "outline", type=str, location="json", help="outline")
 slideshow_spec_parser.add_argument(
-    "editable", type=int, location='json', help="status")
+    "status", type=int, location='json', help="status")
 slideshow_spec_parser.add_argument(
     "link", type=str, location="json", help="the link that jump")
 
-# Request parser for news
-news_parser = reqparse.RequestParser()
-news_parser.add_argument(
+# Request parser for article
+article_parser = reqparse.RequestParser()
+article_parser.add_argument(
     "category", type=str, location="json", required=True, help="category  is needed")
-news_parser.add_argument(
+article_parser.add_argument(
     "detail", type=str, location="json", required=True, help="detail is needed")
-news_parser.add_argument(
+article_parser.add_argument(
     "title", type=str, location="json", required=True, help="title is needed")
-news_parser.add_argument("tags", type=str, location="json",
-                         required=True, action='append', help="tags  is needed")
+article_parser.add_argument("tags", type=str, location="json",
+                            required=True, action='append', help="tags  is needed")
 
-
-news_spec_parser = reqparse.RequestParser()
-news_spec_parser.add_argument(
+article_spec_parser = reqparse.RequestParser()
+article_spec_parser.add_argument(
     "category", type=str, location="json", help="category")
-news_spec_parser.add_argument(
+article_spec_parser.add_argument(
     "detail", type=str, location="json", help="detail")
-news_spec_parser.add_argument("title", type=str, location="json", help="title")
-news_spec_parser.add_argument(
-    "editable", type=int, location="json", help="edit status")
-news_spec_parser.add_argument(
+article_spec_parser.add_argument(
+    "title", type=str, location="json", help="title")
+article_spec_parser.add_argument(
+    "status", type=int, location="json", help="edit status")
+article_spec_parser.add_argument(
     "tags", type=str, location="json", action='append', help="tags id is needed")
-news_spec_parser.add_argument('detail', type=str, location="json")
+article_spec_parser.add_argument('detail', type=str, location="json")
 
 
 # Request parser for slideshow
@@ -79,10 +83,14 @@ parser_spec.add_argument('name', type=str, location='json')
 request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
 
+# paging
+paging_parser = reqparse.RequestParser()
+paging_parser.add_argument("limit", type=int, location="args", required=True)
+paging_parser.add_argument("offset", type=int, location="args", required=True)
 
-# defined as a new field
+
 class CategoryItem(fields.Raw):
-    """ class docstring
+    """ return the first category's name
     """
 
     def format(self, category):
@@ -93,28 +101,33 @@ class CategoryItem(fields.Raw):
 
 
 class TagItem(fields.Raw):
-    """ class docstring
+    """ 
+    Return :
+        return all the tags
     """
 
-    def format(self, news_tag):
+    def format(self, article_tag):
         tags = list()
-        for tag in news_tag:
+        for tag in article_tag:
             tags.append(tag.name)
         return tags
 
 
 class PostTimeItem(fields.Raw):
-    """ class docstring
+    """ 
+    return the timestamp 
     """
 
     def format(self, post_time):
+        return post_time.timestamp()
         # t=datetime.fromtimestamp(postTime)
-        a = post_time.strftime('%Y-%m-%d %H:%M:%S')
-        return time.mktime(time.strptime(a, '%Y-%m-%d %H:%M:%S'))
+        # a = post_time.strftime('%Y-%m-%d %H:%M:%S')
+        # return time.mktime(time.strptime(a, '%Y-%m-%d %H:%M:%S'))
 
 
 class ImgToDataurl(fields.Raw):
-    """ class docstring
+    """ 
+    return the image url
     """
 
     def format(self, img_url):
@@ -122,112 +135,58 @@ class ImgToDataurl(fields.Raw):
 
 
 # work with marshal_with() to change a class into json
-news_fields = {
-    "id": fields.Integer(attribute="news_id"),
+#used in pagnation
+paging: {
+    "limit": fields.Integer,
+    "offset": fields.Integer,
+    "total": fields.Integer
+}
+
+article_data = {
+    "id": fields.Integer(attribute="article_id"),
     "category": CategoryItem,
     "tags": TagItem,
     "post_time": PostTimeItem(attribute="post_time"),
     "title": fields.String(attribute="title"),
     "outline": fields.String(attribute="outline"),
-    "editable": fields.Integer(attribute="editable"),
+    "status": fields.Integer(attribute="status"),
     "author": fields.String
 }
-news_spec_parser = {
-    "id": fields.Integer(attribute="news_id"),
+# Multiple articles' return fields
+article_fields = {
+    "paging": fields.Nested(paging),
+    "data": fields.Nested(article_data)
+}
+# single article's return field
+article_spec_parser = {
+    "id": fields.Integer(attribute="article_id"),
     "category": CategoryItem,
     "tags": TagItem,
     "post_time": PostTimeItem(attribute="post_time"),
     "title": fields.String(attribute="title"),
     "outline": fields.String(attribute="outline"),
-    "editable": fields.Integer(attribute="editable"),
+    "status": fields.Integer(attribute="status"),
     "author": fields.String,
     "detail": fields.String
 }
-slideshow_fields = {
+
+slideshow_data = {
     "id": fields.Integer,
     "post_time": PostTimeItem(attribute="post_time"),
     "img_url": ImgToDataurl(attribute="img_url"),
     "outline": fields.String,
-    "editable": fields.Integer,
+    "status": fields.Integer,
     "link": fields.String,
     "title": fields.String
 }
+# multiple slideshows' return fields
+slideshow_fields = {
+    "paging": fields.Nested(paging),
+    "data": fields.Nested(slideshow_data)
+}
 
 
-# manage error message
-def abort_if_not_exist(data, message):
-    """ function docstring
-    """
-    if data is None:
-        abort(404, message="{} Not Found".format(message))
-
-
-def abort_if_exist(data, message):
-    """ function docstring
-    """
-    if data != None:
-        abort(
-            400, message="{} has existed ,please try another".format(message))
-
-
-def abort_if_unauthorized(message):
-    """ function docstring
-    """
-    abort(401, message="{} permission Unauthorized".format(message))
-
-
-# change the img url into dataurl ,and return the first image
-def handle_html(html):
-    """ function docstring
-    """
-    soup = BeautifulSoup(html, "html.parser")
-    image_num = 0  # judge if  these
-    for img in soup.find_all('img'):
-        imgurl = img.get('src')
-        data = request.urlopen(imgurl).read()
-        img_buf = BytesIO(data)  # change image in ram to batesIo
-        i = Image.open(img_buf)
-        filename = str(int(random.uniform(1, 1000)+time.time()))+".png"
-        path = os.path.join(
-            aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
-        i.save(path, quality="192")
-        with open(path, "rb") as f:
-            data = f.read()
-        data = base64.b64encode(data)  #
-        data = str(data)
-        data = data[2:-1]
-        data = "data:image/jpg;base64,"+data
-        img['src'] = data
-        # return img
-        image_num = image_num+1
-        if image_num > 1:
-            # remove extra images, only save the first image
-            os.remove(path)
-        else:
-            img_url_first = "static/Uploads/News/"+filename
-    if image_num == 0:
-        # the default image file
-        img_url_first = "static/Uploads/News/default.jpg"
-    return soup, img_url_first
-
-# change imgurl into img and save it ,and save the path to the mysql
-
-
-def dataurl_to_img(img_url):
-    """ function docstring
-    """
-
-    data = request.urlopen(img_url).read()
-    img_buf = BytesIO(data)
-    img = Image.open(img_buf)
-    filename = str(int(random.uniform(1, 1000)+time.time()))+".png"
-    path = os.path.join(
-        aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
-    img.save(path, quality="192")
-    return 'static/Uploads/News/'+filename
-
-
-class SlideshowClass(Resource):
+class SlideshowsApi(Resource):
     """ class docstring
     """
 
@@ -238,8 +197,24 @@ class SlideshowClass(Resource):
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        slide_shows = SlideShow.query.all()
-        return slide_shows
+
+        paging_args = paging_parser.parse_args()
+        limit = paging_args["limit"]
+        offset = paging_args["offset"]
+
+        slideshows = SlideShow.query.all()
+        total = len(slide_shows)
+        slideshows_data = slide_shows[offset * limit: (offset+1) * limit]
+
+        data = {
+            "paging": {
+                "offset": offset,
+                "limit": limit,
+                "total": total
+            },
+            "data": slideshows_data
+        }
+        return data
 
     def post(self):
         """ method docstring
@@ -266,7 +241,7 @@ class SlideshowClass(Resource):
             abort(404, message="api not found")
 
 
-class SlideshowSpec(Resource):
+class SlideshowApi(Resource):
     """ class docstring
     """
 
@@ -302,7 +277,7 @@ class SlideshowSpec(Resource):
             except:
                 img_url = args['img_url']
             outline = args['outline']
-            editable = args['editable']
+            status = args['status']
             link = args['link']
             if title != None:
                 slide_show.title = title
@@ -310,8 +285,8 @@ class SlideshowSpec(Resource):
                 slide_show.img_url = img_url
             if outline != None:
                 slide_show.outline = outline
-            if editable != None:
-                slide_show.editable = editable
+            if status != None:
+                slide_show.status = status
             if link != None:
                 slide_show.link = link
             aun_db.session.add(slide_show)
@@ -329,140 +304,217 @@ class SlideshowSpec(Resource):
             abort(404, message="api not found")
 
 
-class NewsClass(Resource):
+class ArticlesApi(Resource):
     """ class docstring
     """
 
-    @marshal_with(news_fields)
-    def get(self):
-        """ method docstring
+    @marshal_with(article_fields)
+    def get(self, association_id=0):
+        """ 
+            Return:
+                if association_id !=0 then return this association's atrical 
         """
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        news = News.query.all()
-        return news
+        if association_id != 0:
+            association = Association.query.filter(
+                Association.association_id == association_id).first()
+            abort_if_not_exist(association)
+            article = association.articles
+        else:
+            article_temp = Article.query.all()
+            article = []  # only show article that doesn't belong to association
+            for n in article_temp:
+                if n.associations == []:
+                    article.append(n)
 
-    def post(self):
-        """ method docstring
+        paging_args = paging_parser.parse_args()
+        limit = paging_args["limit"]
+        offset = paging_args["offset"]
+
+        total = len(article)
+        article_data = [offset * limit: (offset+1) * limit]
+        data = {
+            "paging": {
+                "offset": offset,
+                "limit": limit,
+                "total": total
+            },
+            "data": article_data
+        }
+        return data
+
+    def post(self, association_id=0):
+        """ 
         """
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
+
         if request_method == "POST":
-            permission = Permission(ActionNeed('添加新闻'))
-            if permission.can()is not True:
-                abort_if_unauthorized("添加新闻")
-            news_args = news_parser.parse_args()
-            category = news_args['category']
-            detail = news_args['detail']
-            title = news_args['title']
-            tags = news_args['tags']
+            if association_id != 0:
+                association = Association.query.filter(
+                    Association.association_id == association_id).first()
+                abort_if_not_exist(association)
+
+                permission = Permission(ActionNeed('添加社团文章'))
+                if permission.can()is not True and current_user.associations[0] != association:
+                    abort_if_unauthorized("添加社团文章")
+            else:
+                permission = Permission(ActionNeed('添加新闻'))
+                if permission.can() != True:
+                    abort_if_unauthorized("添加新闻")
+
+            article_args = article_parser.parse_args()
+            category = article_args['category']
+            detail = article_args['detail']
+            title = article_args['title']
+            tags = article_args['tags']
             try:
                 tags = list(eval(tags[0]))
             except:
                 pass
+            # tags = json.loads(tags)
             soup, img_url_first = handle_html(detail)
             outline = soup.get_text()[:80]
-            news = News(soup.prettify(), title, outline, img_url_first)
-            aun_db.session.add(news)
+
+            article = Article(soup.prettify(), title, outline, img_url_first)
+            aun_db.session.add(article)
             aun_db.session.commit()
-            news.addCategory(category)
+
+            article.addCategory(category)
             for tag in tags:
                 t = Tag.query.filter_by(name=tag).first()
                 abort_if_not_exist(t, "tag")
-                news.tags.append(t)
-            aun_db.session.add(news)
+                article.tags.append(t)
+
+            aun_db.session.add(article)
             aun_db.session.commit()
+            if association_id != 0:
+                association.add_article(article)
+                aun_db.session.add(association)
+                aun_db.session.commit()
+
         else:
             abort(404, message="api not found")
 
 
-class NewsSpec(Resource):
+class ArticleApi(Resource):
     """ class docstring
     """
 
-    @marshal_with(news_spec_parser)
-    def get(self, news_id):
-        """ method docstring
+    @marshal_with(article_spec_parser)
+    def get(self, article_id, association_id=0):
+        """ 
+        Return :
+            if association_id !=0 then return this association' some article
         """
         permission = Permission(ActionNeed(('查看新闻')))
         if permission.can() is not True:
             abort_if_unauthorized("查看新闻")
-        news = News.query.filter(News.news_id == news_id).first()
-        abort_if_not_exist(news, "news")
-        return news
+        if association_id != 0:
+            association = Association.query.filter(
+                Association.association_id == association_id).first()
+            abort_if_not_exist(association)
+            articles = association.articles
+            article = Article.query.filter(
+                Article.article_id == article_id).first()
+            if article in articles:
+                return article
+            else:
+                abort_if_not_exist(article, "this article")
+        else:
+            article = Article.query.filter(
+                Article.article_id == article_id).first()
+            return article
 
-    def post(self, news_id):
-        """ method docstring
+    def post(self, article_id, association_id=0):
+        """ 
+        if association_id != 0 then handle some association' s some article
         """
+        article = Article.query.filter(
+            Article.article_id == article_id).first()
+        abort_if_not_exist(article, "article")
+
+        if association_id != 0:
+            association = Association.query.filter(
+                Association.association_id == association_id).first()
+            abort_if_not_exist(association, "association")
+
+            articles = association.articles
+            if article not in articles:  # this association doesn't have this article
+                abort_if_not_exist(article, "this article")
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
+
             permission = Permission(ActionNeed('修改新闻'))
             if permission.can()is not True:
                 abort_if_unauthorized("修改新闻")
-            news = News.query.filter(News.news_id == news_id).first()
-            abort_if_not_exist(news, "news")
-            args = news_spec_parser.parse_args()
+
+            args = article_spec_parser.parse_args()
             category = args['category']
             detail = args['detail']
             title = args['title']
-            editable = args['editable']
+            status = args['status']
             tags = args['tags']
             try:
                 tags = list(eval(tags[0]))
             except:
                 pass
+            # tags = json.dumps(tags)
             if category != None:
-                news.category = []
-                news.addCategory(category)
+                article.category = []
+                article.addCategory(category)
             if detail != None:
-                news.detail = detail
+                article.detail = detail
                 soup, img_url_first = handle_html(detail)
-                news.img_url = img_url_first
+                article.img_url = img_url_first
                 outline = soup.get_text()[:80]
-                news.outline = outline
+                article.outline = outline
 
             if title != None:
-                news.title = title
+                article.title = title
 
-            if editable != None:
-                news.editable = editable
+            if status != None:
+                article.status = status
             if tags != None:
-                news.tags = []
+                article.tags = []
                 for tag in tags:
-                    news.addTag(tag)
-            aun_db.session.add(news)
+                    article.addTag(tag)
+
+            aun_db.session.add(article)
             aun_db.session.commit()
+
         elif request_method == "DELETE":
             permission = Permission(ActionNeed('删除新闻'))
             if permission.can()is not True:
                 abort_if_unauthorized("删除新闻")
 
-            news = News.query.filter(News.news_id == news_id).first()
-            abort_if_not_exist(news, "news")
-            aun_db.session.delete(news)
+            aun_db.session.delete(article)
             aun_db.session.commit()
         else:
             abort(404, message="api not found")
 
 
-class NewsSpecDetail(Resource):
+class ArticleDetailApi(Resource):
     """ class docstring
     """
 
-    def get(self, news_id):
+    def get(self, article_id):
         """ method docstring
         """
         # id=int(id)
-        news = News.query.filter(News.news_id == news_id).first()
-        abort_if_not_exist(news, "news")
+        article = Article.query.filter(
+            Article.article_id == article_id).first()
+        abort_if_not_exist(article, "article")
         data = dict()
-        data['detail'] = news.detail
+        data['detail'] = article.detail
         return data
 
 
-class Categorys(Resource):
+class CategorysApi(Resource):
     """ class docstring
     """
 
@@ -501,7 +553,7 @@ class Categorys(Resource):
             abort(404, message="api not found")
 
 
-class CategoryClass(Resource):
+class CategoryApi(Resource):
     """ class docstring
     """
 
@@ -551,7 +603,7 @@ class CategoryClass(Resource):
             abort(404, message="api not found")
 
 
-class Tags(Resource):
+class TagsApi(Resource):
     """ class docstring
     """
 
@@ -590,7 +642,7 @@ class Tags(Resource):
             abort(404, message="api not found")
 
 
-class TagClass(Resource):
+class TagApi(Resource):
 
     def get(self, id):
         permission = Permission(ActionNeed(('查看新闻标签')))

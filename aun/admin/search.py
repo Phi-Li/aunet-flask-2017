@@ -4,32 +4,33 @@
 from datetime import datetime
 from flask_restful import reqparse, Resource,  marshal_with
 
-from aun.home.models import News
-from aun.admin.news import news_fields
+from aun.home.models import Article
+from aun.admin.news import article_fields
 
 
-news_parser = reqparse.RequestParser()
-news_parser.add_argument(
+article_parser = reqparse.RequestParser()
+article_parser.add_argument(
     "category", type=str, required=True, help="category is needed")
-news_parser.add_argument(
+article_parser.add_argument(
     'sort', type=str, required=True, help="sort is needed")
-news_parser.add_argument(
+article_parser.add_argument(
     'start', type=int, required=True, help="start is needed")
-news_parser.add_argument('end', type=int, required=True, help="end is needed")
-news_parser.add_argument(
+article_parser.add_argument(
+    'end', type=int, required=True, help="end is needed")
+article_parser.add_argument(
     'tags', type=str, required=True, action="append", help="tags is needed")
 
 
-class SearchNews(Resource):
+class SearchArticleApi(Resource):
     """ class docstring
     """
 
-    @marshal_with(news_fields)
+    @marshal_with(article_fields)
     def get(self):
         """ method docstring
         """
         data = list()
-        args = news_parser.parse_args()
+        args = article_parser.parse_args()
         category = args['category']
         sort = args['sort']
         start = args['start']
@@ -43,9 +44,9 @@ class SearchNews(Resource):
         end = float(end)
         start = datetime.fromtimestamp(start)
         end = datetime.fromtimestamp(end)
-        news = News.query.filter(
-            News.post_time < end, News.post_time >= start).all()
-        for new in news:
+        article = Article.query.filter(
+            Article.post_time < end, Article.post_time >= start).all()
+        for new in article:
             new_tags = list()
             for tag in new.tags:
                 new_tags.append(tag.name)

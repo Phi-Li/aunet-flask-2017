@@ -12,7 +12,6 @@ from flask_restful import reqparse, abort, Resource
 from aun import aun_app, aun_db
 
 from aun.admin.models import User, LoginLog
-from aun.admin.models import EditUserPermission
 from aun.admin.users import build_user_data
 
 
@@ -22,7 +21,7 @@ login_parser.add_argument('userName', type=str, location="json", required=True)
 login_parser.add_argument('password', type=str, location="json", required=True)
 
 request_method_parser = reqparse.RequestParser()
-request_method_parser.add_argument('requestMethod', type=str, location='json')
+request_method_parser.add_argument('request_method', type=str, location='json')
 
 
 @identity_loaded.connect_via(aun_app)
@@ -60,7 +59,7 @@ def abort_if_unauthorized(message):
     abort(401, message="{} permission Unauthorized".format(message))
 
 
-class Login(Resource):
+class LoginApi(Resource):
     """ class docstring
     """
 

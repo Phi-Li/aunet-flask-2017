@@ -11,12 +11,11 @@ from flask_login import logout_user
 
 # import models
 from aun import aun_login, aun_app, aun_api
-from aun.admin.news import SlideshowClass, SlideshowSpec, NewsClass, NewsSpec, NewsSpecDetail, Tags, TagClass, Categorys, CategoryClass
-from aun.admin.users import Users, UserSpec, Roles, RoleSpec, Nodes, NodeSpec, CurrentUser
-from aun.admin.search import SearchNews
-from aun.admin.login import Login
+from aun.admin.news import SlideshowApi, SlideshowsApi,  ArticlesApi, ArticleApi, ArticleDetailApi, TagsApi, TagApi, CategorysApi, CategoryApi
+from aun.admin.users import UsersApi, UserApi, RolesApi, RoleApi, NodesApi, NodeApi, CurrentUserApi
+from aun.admin.search import SearchArticleApi
+from aun.admin.login import LoginApi
 from aun.admin.models import User
-from aun.admin.models import EditUserPermission
 
 from aun.admin import aun_admin
 
@@ -38,9 +37,6 @@ def on_identity_loaded(sender, identity):
     try:
         # Set the identity user object
         identity.user = current_user
-        # user has the permission of edit himself
-
-        identity.provides.add(EditUserPermission(current_user.id))
 
         # Add the UserNeed to the identity
         if hasattr(current_user, 'id'):
@@ -111,26 +107,27 @@ def get_template(path):
         return "not found", 404
 
 # User 模块
-aun_api.add_resource(CurrentUser, "/api/user/current-user")
-aun_api.add_resource(Users, '/api/user/users')
-aun_api.add_resource(UserSpec, "/api/user/users/<string:id>")
-aun_api.add_resource(Nodes, "/api/user/nodes")
-aun_api.add_resource(NodeSpec, "/api/user/nodes/<string:id>")
-aun_api.add_resource(Roles, "/api/user/roles")
-aun_api.add_resource(RoleSpec, "/api/user/roles/<string:id>")
+aun_api.add_resource(CurrentUserApi, "/api/user/current-user")
+aun_api.add_resource(UsersApi, '/api/user/users')
+aun_api.add_resource(UserApi, "/api/user/users/<string:id>")
+aun_api.add_resource(NodesApi, "/api/user/nodes")
+aun_api.add_resource(NodeApi, "/api/user/nodes/<string:id>")
+aun_api.add_resource(RolesApi, "/api/user/roles")
+aun_api.add_resource(RoleApi, "/api/user/roles/<string:id>")
 
 
-# News 模块
-aun_api.add_resource(SlideshowClass, "/api/sews/slide-show")
-aun_api.add_resource(SlideshowSpec, "/api/news/slider-show/<string:id>")
-aun_api.add_resource(NewsClass, "/api/news/news")
-aun_api.add_resource(NewsSpec, "/api/news/news/<string:id>")  # gai
-aun_api.add_resource(NewsSpecDetail, "/api/news/news/<string:id>/Detail")
-aun_api.add_resource(Tags, "/api/news/tags")
-aun_api.add_resource(TagClass, "/api/news/tags/<string:id>")
-aun_api.add_resource(Categorys, "/api/news/categorys")
-aun_api.add_resource(CategoryClass, "/api/news/categorys/<string:id>")
+# Article 模块
+aun_api.add_resource(SlideshowsApi, "/api/news/slide-shows")
+aun_api.add_resource(SlideshowApi, "/api/news/slider-shows/<string:id>")
+aun_api.add_resource(ArticlesApi, "/api/news/news")
+aun_api.add_resource(ArticleApi, "/api/news/news/<string:id>")  # gai
+aun_api.add_resource(
+    ArticleDetailApi, "/api/news/news/<string:id>/detail")
+aun_api.add_resource(TagsApi, "/api/article/tags")
+aun_api.add_resource(TagApi, "/api/article/tags/<string:id>")
+aun_api.add_resource(CategorysApi, "/api/article/categorys")
+aun_api.add_resource(CategoryApi, "/api/article/categorys/<string:id>")
 
 # Search 模块
-aun_api.add_resource(SearchNews, "/api/search/news")
-aun_api.add_resource(Login, "/api/login")
+aun_api.add_resource(SearchArticleApi, "/api/search/article")
+aun_api.add_resource(LoginApi, "/api/login")

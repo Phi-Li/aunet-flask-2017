@@ -8,30 +8,30 @@ from flask_login import current_user
 from aun import aun_db
 
 
-news_category = aun_db.Table("news_category",
-                             aun_db.Column(
-                                 'news_id', aun_db.Integer, aun_db.ForeignKey("news.news_id")),
-                             aun_db.Column(
-                                 'category_id', aun_db.Integer, aun_db.ForeignKey("category.cat_id")),
-                             aun_db.Column(
-                                 "created_at", aun_db.DateTime, default=datetime.now)
-                             )
+article_category = aun_db.Table("article_category",
+                                aun_db.Column(
+                                    'article_id', aun_db.Integer, aun_db.ForeignKey("article.article_id")),
+                                aun_db.Column(
+                                    'category_id', aun_db.Integer, aun_db.ForeignKey("category.cat_id")),
+                                aun_db.Column(
+                                    "created_at", aun_db.DateTime, default=datetime.now)
+                                )
 
-news_tag = aun_db.Table("news_tag",
-                        aun_db.Column(
-                            "news_id", aun_db.Integer, aun_db.ForeignKey("news.news_id")),
-                        aun_db.Column(
-                            "tag_id", aun_db.Integer, aun_db.ForeignKey("tag.tag_id")),
-                        aun_db.Column(
-                            "created_at", aun_db.DateTime, default=datetime.now),
-                        )
+article_tag = aun_db.Table("article_tag",
+                           aun_db.Column(
+                               "article_id", aun_db.Integer, aun_db.ForeignKey("article.article_id")),
+                           aun_db.Column(
+                               "tag_id", aun_db.Integer, aun_db.ForeignKey("tag.tag_id")),
+                           aun_db.Column(
+                               "created_at", aun_db.DateTime, default=datetime.now),
+                           )
 
 
-class News(aun_db.Model):
+class Article(aun_db.Model):
     """ class docstring
     """
-    __tablename__ = "news"
-    news_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    __tablename__ = "article"
+    article_id = aun_db.Column(aun_db.Integer, primary_key=True)
     year = aun_db.Column(aun_db.Integer)
     month = aun_db.Column(aun_db.Integer)
     day = aun_db.Column(aun_db.Integer)
@@ -40,12 +40,12 @@ class News(aun_db.Model):
     title = aun_db.Column(aun_db.String(80))
     outline = aun_db.Column(aun_db.Text)
     img_url = aun_db.Column(aun_db.String(50))
-    editable = aun_db.Column(aun_db.Boolean)
+    status = aun_db.Column(aun_db.Boolean)
     author = aun_db.Column(aun_db.String(40))
     category = aun_db.relationship(
-        "Category", secondary=news_category, backref=aun_db.backref('news', lazy="dynamic"))
+        "Category", secondary=article_category, backref=aun_db.backref('article', lazy="dynamic"))
     tags = aun_db.relationship(
-        "Tag", secondary=news_tag, backref=aun_db.backref('news', lazy="dynamic"))
+        "Tag", secondary=article_tag, backref=aun_db.backref('article', lazy="dynamic"))
 
     def add_category(self, category_name):
         """ method docstring
@@ -66,17 +66,17 @@ class News(aun_db.Model):
         """
         return self.category[0].name
 
-    def __init__(self, news_detail, news_title, news_outline, news_img_url):
+    def __init__(self, article_detail, article_title, article_outline, article_img_url):
         time = datetime.utcnow()
         self.post_time = time
         self.year = time.year
         self.month = time.month
         self.day = time.day
-        self.detail = news_detail
-        self.title = news_title
-        self.outline = news_outline
-        self.img_url = news_img_url
-        self.editable = True
+        self.detail = article_detail
+        self.title = article_title
+        self.outline = article_outline
+        self.img_url = article_img_url
+        self.status = True
         if current_user is None:
             self.author = "匿名"
         else:
@@ -128,14 +128,14 @@ class SlideShow(aun_db.Model):
     outline = aun_db.Column(aun_db.Text)
     post_time = aun_db.Column(aun_db.DateTime)
     link = aun_db.Column(aun_db.String(80))
-    editable = aun_db.Column(aun_db.Boolean)
+    status = aun_db.Column(aun_db.Boolean)
 
     def __init__(self, title, url, outline, link):
         self.title = title
         self.img_url = url
         self.outline = outline
         self.link = link
-        self.editable = 1
+        self.status = 1
         self.post_time = datetime.utcnow()
 
     def __str__(self):

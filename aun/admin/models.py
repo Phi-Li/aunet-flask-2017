@@ -1,6 +1,6 @@
 # -*-coding:utf-8 -*-
 
-""" module docstring
+""" user related table
 """
 
 from collections import namedtuple
@@ -12,7 +12,7 @@ from flask_login import UserMixin
 from flask_principal import Permission
 
 from aun import aun_db
-
+from aun.association.models import Association
 
 role_node = aun_db.Table('role_node',  # 角色权限关联表
                          aun_db.Column(
@@ -32,19 +32,20 @@ user_role = aun_db.Table('user_role',  # 用户角色关联表
                              'created_at', aun_db.DateTime, default=datetime.now)
                          )
 
+user_association = aun_db.Table('user_association',
+                                aun_db.Column(
+                                    'user_id', aun_db.Integer, aun_db.ForeignKey('user.user_id')),
+                                aun_db.Column('association_id', aun_db.Integer,
+                                              aun_db.ForeignKey('association.association_id')),
+                                aun_db.Column(
+                                    "created_at", aun_db.DateTime, default=datetime.now)
+                                )
+
 EditUserNeed = partial(namedtuple('User', ['method', 'value']), 'edit')
 
 
-class EditUserPermission(Permission):
-    """ class docstring
-    """
-
-    def __init__(self, user_id):
-        super(EditUserPermission, self).__init__(EditUserNeed(user_id))
-
-
 class LoginLog(aun_db.Model):
-    """ class docstring
+    """ login log 
     """
     log_id = aun_db.Column(aun_db.Integer, primary_key=True)
     user_name = aun_db.Column(aun_db.String(64))
@@ -62,7 +63,7 @@ class LoginLog(aun_db.Model):
 
 
 class Node(aun_db.Model):
-    """ class docstring
+    """ node table
     """
     __tablename__ = "node"
     node_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -111,7 +112,7 @@ class Role(aun_db.Model):
 
 
 class User(aun_db.Model, UserMixin):
-    """ class docstring
+    """ User table
     """
     __tablename__ = "user"
     user_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -122,11 +123,13 @@ class User(aun_db.Model, UserMixin):
     remark = aun_db.Column(aun_db.String(20))
     phone = aun_db.Column(aun_db.String(20))
 
+    associations = aun_db.relationship(
+        "Association", secondary=user_association, backref=aun_db.backref("users", lazy="dynamic"))
     roles = aun_db.relationship(
         "Role", secondary=user_role, backref=aun_db.backref('users', lazy="dynamic"))
 
     def verify_password(self, password):
-        """ method docstring
+        """ verify password
         """
         return check_password_hash(self.password, password)
 
@@ -135,7 +138,9 @@ class User(aun_db.Model, UserMixin):
 
     @property
     def nodes(self):
-        """ method docstring
+        """ 
+        Return
+            user's all permission node
         """
         node = []
         for r in self.role:
@@ -143,10 +148,19 @@ class User(aun_db.Model, UserMixin):
         return node
 
     def add_role(self, role_name):
-        """ method docstring
+        """ add a role for user
         """
         r = Role.query.filter(Role.role_name == role_name).first()
         self.roles.append(r)
+
+    def add_association(self, name):
+        """
+        each user can handle many association
+        add a association to user accocount 
+        """
+        association = Association.query.filter(
+            Association.name == name).first()
+        self.associations.append(association)
 
     def __init__(self, user_name, password, email, phone):
         self.user_name = user_name

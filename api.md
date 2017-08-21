@@ -1,7 +1,7 @@
 
 ##1. 注意
 由于学校服务器不支持PUT 和DELETE操作，所以PUT 和DELETE并入POST ,请求时以
-requestMethod:POST/PUT/DELETE作为区分
+request_method:POST/PUT/DELETE作为区分
 ##2.错误信息汇总:
     status 400，已存在(比如：用户名，角色名，节点名称，新闻属性和标签唯一，重复时返回此错误)
 
@@ -175,14 +175,20 @@ GET /api/Search/news?category=&tags=&start=&end=&sort
 
 GET /api/templates/fp:path 
 > ("api/templates/admin/app.html" .eg)
-##6. news
+##6. 文章
 
-GET /api/news/news/id application/json
-    
+GET /api/news/news?limit=&offset=
+GET /api/associations/<string:association_id>/articles
+   
     ->
 
-    [
-        {
+    {
+        paging: {
+            limit: int
+            offset: int
+            total: int
+        }
+        data:[{
             id: int,
             author: str,
             category: str,
@@ -190,11 +196,12 @@ GET /api/news/news/id application/json
             post_time: UTC timestamp seconds,
             title: str,
             outline: str,
-            editable: boolean,
-        }
-    ]
+            status: boolean,(审核是否成功)
+        }]
+    }
 
-POST /api/news/news application/json
+POST /api/news/news # 新闻文章
+POST /api/associations/<string:association_id>/articles 　#社团空间文章
     
     {
         category: str,
@@ -211,8 +218,7 @@ POST /api/news/news application/json
 
 
 GET /api/news/news/id:str
-
-    
+GET /api/associations/<string:association_id>/articles/<string:article_id>
     ->
 
     {
@@ -222,8 +228,7 @@ GET /api/news/news/id:str
         post_time: UTC timestamp seconds,
         title: str,
         outline: str,
-        editable: boolean,
-
+        status: boolean,
         detail: str
     }
 
@@ -232,14 +237,14 @@ GET /api/news/news/id:str
     404
 
 PUT /api/news/news/id:str
-    
+PUT /api/associations/<string:association_id>/articles/<string:article_id>
+ 
     {
         category: str,
         tags: [str],
         title: str,
         outline: str,
-        editable: boolean,
-
+        status: boolean,
         detail: str
     }
 
@@ -253,6 +258,7 @@ PUT /api/news/news/id:str
 
 
 DELETE /api/news/news/id:str
+DELETE /api/associations/<string:association_id>/articles/<string:article_id> 
 
     ->
 
@@ -261,23 +267,28 @@ DELETE /api/news/news/id:str
 
     # slideshow
 
-GET /api/news/slider-show
+GET /api/news/slider-shows
 
     ->
 
-    [
-        {
+    {
+        paging: {
+            limit: int
+            offset: int
+            total: int
+        }
+        data: [{
             id: int,
             post_time: UTC timestamp sec,
             title: str,
             img_url: str,               
             outline: str,
-            editable: bool,
+            status: bool,
             link: str,
-        }
-    ]
+        }]
+    }
 
-POST /api/news/slider-show
+POST /api/news/slider-shows
 
     {
         title: str,
@@ -286,69 +297,208 @@ POST /api/news/slider-show
         link: str,
     }
 
-PUT /api/news/slider-show/id:str
+PUT /api/news/slider-shows/id:str
 
     {
         title: str,
         img_url: str,                
         outline: str,
         link: str,
-        #editable: bool,
+        #status: bool,
     }
 
     #optional keys
 
-DELETE /api/news/slider-show/id:str
+DELETE /api/news/slider-shows/id:str
 
     ->
 
     200 OK
 
-GET /api/news/tags
+GET /api/article/tags
 
     [{
         id:int,
         name:str
     }]
-POST /api/news/tags
+POST /api/article/tags
 
     {
         name:str
     }
-GET /api/news/tags/id
+GET /api/article/tags/id
 
      {
         id:int,
         name:str
     }
-PUT /api/news/tags/id
+PUT /api/article/tags/id
 
     {
         name：str
     }
-DELETE /api/news/tags/id
+DELETE /api/article/tags/id
 
-GET /api/news/categorys
+GET /api/article/categorys
 
     [{
         id:int,
         name:str
     }]
-POST /api/news/categorys
+POST /api/article/categorys
 
     {
         name:str
     }
-GET /api/news/categorys/id
+GET /api/article/categorys/id
 
      {
         id:int,
         name:str
     }
-PUT /api/news/categorys/id
+PUT /api/article/categorys/id
 
     {
         name
     }
 
-DELETE /api/news/categorys/id
+DELETE /api/article/categorys/id
+#社团
+POST /api/associations  
+
+    {
+        name: str
+        brief_introduction: str
+        category: str
+        picture: (data url)
+    }
+
+GET /api/associations
+
+    [{
+        id: int
+        name: str
+        brief_introduction: str
+        category: str
+        picture: str(picture link)
+        }]
+GET /api/associations/id
+
+    {
+        id: int
+        name: str
+        brief_introduction: str
+        category: str
+        picture: str(picture link)
+    }
+
+DELETE /api/associations/id
+
+POST /api/associations/id/introduction #用于社联页面每个社团的介绍
+
+    {
+        content: (富文本)
+    }
+
+PUT /api/associations/id/introduction
+    
+    {
+        content
+    }
+
+GET /api/associations/id/introduction
+    
+    {
+        content
+    }
+
+#报名
+POST /api/sign-up
+
+    {
+    name: str
+    gender: str
+    major: str
+    phone: str
+    first_choice: str
+    second_choice: str
+    is_adjust: bool
+    self_introduction: str
+    }
+
+GET /api/sign-up
+
+    [{
+    id: int
+    name: str
+    gender: str
+    major: str
+    phone: str
+    first_choice: str
+    second_choice: str
+    is_adjust: bool
+    self_introduction: str
+    }]
+
+GET /api/sign-up/id
+    
+    {
+    id: int
+    name: str
+    gender: str
+    major: str
+    phone: str
+    first_choice: str
+    second_choice: str
+    is_adjust: bool
+    self_introduction: str
+    }
+
+GET /api/sign-up/download(为一个包含所有报名者的docx文件)
+
+DELETE /api/sign-up/id
+
+#资料站
+POST /api/data-station
+
+    {
+    file_name: str
+    attribute: str
+    content
+    }   
+
+GET /api/data-station?status=&is_important(status:0为未审核，１为通过，－１为未通过,2为全部, is_important:0为一般，　１为重要，２为所有)
+eg. status=2&is_important=1 用于首页重要文件展示
+    [{
+    id: int
+    file_name: str
+    attribute: str
+    uploader: str
+    upload_time: int(time stamp)
+    downlowd_times: int
+    }]
+
+PUT /api/data-station/id
+
+    {
+    file_name: str
+    attribute: str
+    content
+    status(审核状态，0为未审核，１为通过，－１为未通过)
+    is_important: bool(0为一般，　１为重要文件)
+    }
+
+GET /api/data-station/id
+
+    {
+    id: int
+    file_name: str
+    attribute: str
+    uploader: str
+    upload_time: int(time stamp)
+    downlowd_times: int
+    }
+
+GET /api/data-station/id/download
+
+DELETE /api/data-station/id
