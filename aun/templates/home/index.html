@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html id="app">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/js/page.js"></script>
+		<script type="text/javascript" src="/js/vue.min.js"></script>
+	</head>
+	<body>
+		<!-- 导航栏 -->
+		<nav>
+
+		</nav>
+
+		<!-- 首页 -->
+		<main v-if="currentView === 'home'">
+
+		</main>
+
+		<!-- 新闻列表 -->
+		<main v-if="currentView === 'news'">
+
+		</main>
+
+		<!-- 具体的新闻 -->
+		<main v-if="currentView === 'news-post'">
+
+		</main>
+
+		<!-- 社团列表 -->
+		<main v-if="currentView === 'clubs'">
+
+		</main>
+
+		<!-- 具体的社团 -->
+		<main v-if="currentView === 'clubs-club'">
+
+		</main>
+
+		<!-- 关于 -->
+		<main v-if="currentView === 'about'">
+
+		</main>
+
+		<!-- 报名 -->
+		<main v-if="currentView === 'signup'">
+
+		</main>
+
+		<!-- 底栏 -->
+		<footer>
+
+		</footer>
+
+		<script type="text/javascript">
+			app = new Vue({
+				el: "#app",
+				data: {
+					currentView: "",
+					news: [], // 新闻列表
+					post: {}, // 当前新闻
+					clubs: [], // 社团列表
+					club: {}, // 当前社团
+				},
+				methods: {
+					getNews: function() { // 取得所有新闻列表
+						return($.ajax({
+							url: "/api/news/news",
+							dataType: "text",
+						}).done(function(data) {
+							app.news = JSON.parse(data);
+						}));
+					},
+					getPost: function(postId) { // 取得具体一篇新闻
+						return($.ajax({
+							url: "/api/news/news/" + postId,
+							dataType: "text",
+						}).done(function(data) {
+							app.post = JSON.parse(data);
+						}));
+					},
+				}
+			});
+
+			page("/", function(ctx, next) { // 首页
+				app.currentView = "";
+			});
+
+			page("/news", function(ctx, next) { // 新闻
+				app.currentView = "news";
+			});
+
+			page("/news/:postId", function(ctx, next) { // 具体新闻
+				app.currentView = "news-post";
+			});
+
+			page("/@:club", function(ctx, next) { // 社团空间
+				app.currentView = "clubs-club";
+				app.club = ctx.params.club;
+			});
+
+			page("/clubs", function(ctx, next) { // 所有社团
+				app.currentView = "clubs";
+			})
+
+			page("/about", function(ctx, next) { // 社联介绍
+				app.currentView = "about";
+			});
+
+			page("/signup", function(ctx, next) { // 报名
+				app.currentView = "signup";
+			});
+
+			page("*", function(ctx, next) { // 404
+				if(app.currentView === "") { // 地址栏url错误
+
+				} else { // 页面上url错误
+
+				}
+			});
+
+			$(document).ready(function() {
+				page.start();
+			});
+		</script>
+	</body>
+</html>
