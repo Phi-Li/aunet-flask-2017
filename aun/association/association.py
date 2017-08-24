@@ -90,9 +90,9 @@ class AssociationApi(Resource)
                 Association.association_id == association_id).first()
             abort_if_not_exist(association, "association")
 
-            permission = Permission(ActionNeed("修改社团信息"))
+            permission = Permission(ActionNeed("编辑社团空间"))
             if permission.can() is not True　or current.associations[0] != association:
-                abort_if_unauthorized("修改社团信息")
+                abort_if_unauthorized("编辑社团空间")
 
             association_args = association_parser.parse_args()
             name = association_args["name"]
@@ -121,9 +121,9 @@ class AssociationApi(Resource)
                 Association.association_id == association_id).first()
             abort_if_not_exist(association, "association")
 
-            permission = Permission(ActionNeed("删除社团文章"))
+            permission = Permission(ActionNeed("删除社团"))
             if permission.can()is not True or current.associations[0] != association:
-                abort_if_unauthorized("删除社团文章")
+                abort_if_unauthorized("删除社团")
 
             aun_db.session.delete(association)
             aun_db.session.commit()

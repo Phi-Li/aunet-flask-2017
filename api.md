@@ -28,6 +28,11 @@ GET  /api/user/users
     role_name:str,
     status:bool,
     }
+    clubs:[
+    {
+    id: int,
+    club_name: str
+        }]
     ]
 
     }
@@ -41,6 +46,7 @@ POST /api/user/users
     password:str
     email:str
     role_name:list(str)        注意是list
+    clubs: list(str)
     }
 
 GET /api/user/users/id
@@ -64,6 +70,12 @@ GET /api/user/users/id
     status:bool,
     }
     ]
+    clubs:[
+    {
+    id: int,
+    club_name: str
+        }]
+
     }
 
 PUT /api/user/users/id
@@ -74,6 +86,8 @@ PUT /api/user/users/id
     email:str
     role_name:list(str)             注意是list 
     status:bool,
+    clubs: list(str)
+    
 
 
     } optional
@@ -178,7 +192,7 @@ GET /api/templates/fp:path
 ##6. 文章
 
 GET /api/news/news?limit=&offset=
-GET /api/associations/<string:association_id>/articles
+GET /api/clubs/<string:club_id>/articles
    
     ->
 
@@ -201,7 +215,7 @@ GET /api/associations/<string:association_id>/articles
     }
 
 POST /api/news/news # 新闻文章
-POST /api/associations/<string:association_id>/articles 　#社团空间文章
+POST /api/clubs/<string:club_id>/articles 　#社团空间文章
     
     {
         category: str,
@@ -218,7 +232,7 @@ POST /api/associations/<string:association_id>/articles 　#社团空间文章
 
 
 GET /api/news/news/id:str
-GET /api/associations/<string:association_id>/articles/<string:article_id>
+GET /api/clubs/<string:club_id>/articles/<string:article_id>
     ->
 
     {
@@ -237,7 +251,7 @@ GET /api/associations/<string:association_id>/articles/<string:article_id>
     404
 
 PUT /api/news/news/id:str
-PUT /api/associations/<string:association_id>/articles/<string:article_id>
+PUT /api/clubs/<string:club_id>/articles/<string:article_id>
  
     {
         category: str,
@@ -258,7 +272,7 @@ PUT /api/associations/<string:association_id>/articles/<string:article_id>
 
 
 DELETE /api/news/news/id:str
-DELETE /api/associations/<string:association_id>/articles/<string:article_id> 
+DELETE /api/clubs/<string:club_id>/articles/<string:article_id> 
 
     ->
 
@@ -364,7 +378,7 @@ PUT /api/article/categorys/id
 
 DELETE /api/article/categorys/id
 #社团
-POST /api/associations  
+POST /api/clubs  
 
     {
         name: str
@@ -373,7 +387,7 @@ POST /api/associations
         picture: (data url)
     }
 
-GET /api/associations
+GET /api/clubs
 
     [{
         id: int
@@ -382,7 +396,7 @@ GET /api/associations
         category: str
         picture: str(picture link)
         }]
-GET /api/associations/id
+GET /api/clubs/id
 
     {
         id: int
@@ -392,21 +406,21 @@ GET /api/associations/id
         picture: str(picture link)
     }
 
-DELETE /api/associations/id
+DELETE /api/clubs/id
 
-POST /api/associations/id/introduction #用于社联页面每个社团的介绍
+POST /api/clubs/id/introduction #用于社联页面每个社团的介绍
 
     {
         content: (富文本)
     }
 
-PUT /api/associations/id/introduction
+PUT /api/clubs/id/introduction
     
     {
         content
     }
 
-GET /api/associations/id/introduction
+GET /api/clubs/id/introduction
     
     {
         content
@@ -438,6 +452,7 @@ GET /api/sign-up
     second_choice: str
     is_adjust: bool
     self_introduction: str
+    apply_time: time stamp
     }]
 
 GET /api/sign-up/id
@@ -452,6 +467,7 @@ GET /api/sign-up/id
     second_choice: str
     is_adjust: bool
     self_introduction: str
+    apply_time: time stamp
     }
 
 GET /api/sign-up/download(为一个包含所有报名者的docx文件)

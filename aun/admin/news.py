@@ -194,9 +194,6 @@ class SlideshowsApi(Resource):
     def get(self):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看新闻')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻")
 
         paging_args = paging_parser.parse_args()
         limit = paging_args["limit"]
@@ -222,9 +219,9 @@ class SlideshowsApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
-            permission = Permission(ActionNeed('添加新闻'))
+            permission = Permission(ActionNeed('添加文章'))
             if permission.can() is not True:
-                abort_if_unauthorized("添加新闻")
+                abort_if_unauthorized("添加文章")
             slideshow_args = slideshow_parser.parse_args()
             title = slideshow_args['title']
             img_url = slideshow_args['img_url']
@@ -249,9 +246,6 @@ class SlideshowApi(Resource):
     def get(self, slideshow_id):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看新闻')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻")
         slide_show = SlideShow.query.filter(
             SlideShow.slide_id == slideshow_id).first()
         abort_if_not_exist(slide_show, "slide_show")
@@ -263,9 +257,9 @@ class SlideshowApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
-            permission = Permission(ActionNeed('修改新闻'))
+            permission = Permission(ActionNeed('修改文章'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改新闻")
+                abort_if_unauthorized("修改文章")
             slide_show = SlideShow.query.filter(
                 SlideShow.slide_id == slideshow_id).first()
             abort_if_not_exist(slide_show, "slide_show")
@@ -292,9 +286,9 @@ class SlideshowApi(Resource):
             aun_db.session.add(slide_show)
             aun_db.session.commit()
         elif request_method == "DELETE":
-            permission = Permission(ActionNeed('删除新闻'))
+            permission = Permission(ActionNeed('删除文章'))
             if permission.can()is not True:
-                abort_if_unauthorized("删除新闻")
+                abort_if_unauthorized("删除文章")
             slide_show = SlideShow.query.filter(
                 SlideShow.slide_id == slideshow_id).first()
             abort_if_not_exist(slide_show, "slide_show")
@@ -314,9 +308,6 @@ class ArticlesApi(Resource):
             Return:
                 if association_id !=0 then return this association's atrical 
         """
-        permission = Permission(ActionNeed(('查看新闻')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻")
         if association_id != 0:
             association = Association.query.filter(
                 Association.association_id == association_id).first()
@@ -357,13 +348,13 @@ class ArticlesApi(Resource):
                     Association.association_id == association_id).first()
                 abort_if_not_exist(association)
 
-                permission = Permission(ActionNeed('添加社团文章'))
+                permission = Permission(ActionNeed('添加文章'))
                 if permission.can()is not True and current_user.associations[0] != association:
-                    abort_if_unauthorized("添加社团文章")
+                    abort_if_unauthorized("添加文章")
             else:
-                permission = Permission(ActionNeed('添加新闻'))
+                permission = Permission(ActionNeed('添加文章'))
                 if permission.can() != True:
-                    abort_if_unauthorized("添加新闻")
+                    abort_if_unauthorized("添加文章")
 
             article_args = article_parser.parse_args()
             category = article_args['category']
@@ -409,9 +400,6 @@ class ArticleApi(Resource):
         Return :
             if association_id !=0 then return this association' some article
         """
-        permission = Permission(ActionNeed(('查看新闻')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻")
         if association_id != 0:
             association = Association.query.filter(
                 Association.association_id == association_id).first()
@@ -449,9 +437,9 @@ class ArticleApi(Resource):
         request_method = request_arg['request_method']
         if request_method == "PUT":
 
-            permission = Permission(ActionNeed('修改新闻'))
+            permission = Permission(ActionNeed('修改文章'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改新闻")
+                abort_if_unauthorized("修改文章")
 
             args = article_spec_parser.parse_args()
             category = args['category']
@@ -488,9 +476,9 @@ class ArticleApi(Resource):
             aun_db.session.commit()
 
         elif request_method == "DELETE":
-            permission = Permission(ActionNeed('删除新闻'))
+            permission = Permission(ActionNeed('删除文章'))
             if permission.can()is not True:
-                abort_if_unauthorized("删除新闻")
+                abort_if_unauthorized("删除文章")
 
             aun_db.session.delete(article)
             aun_db.session.commit()
@@ -521,9 +509,6 @@ class CategorysApi(Resource):
     def get(self):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看新闻栏目')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻栏目")
         categorys = Category.query.all()
         datas = list()
         for category in categorys:
@@ -539,9 +524,9 @@ class CategorysApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
-            permission = Permission(ActionNeed("添加新闻属性"))
+            permission = Permission(ActionNeed("添加文章栏目"))
             if permission.can()is not True:
-                abort_if_unauthorized("添加新闻属性")
+                abort_if_unauthorized("添加文章栏目")
             args = parser.parse_args()
             name = args['name']
             c = Category.query.filter(Category.name == name).first()
@@ -560,9 +545,6 @@ class CategoryApi(Resource):
     def get(self, cat_id):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看新闻栏目')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻栏目")
         category = Category.query.filter_by(id=cat_id).first()
         abort_if_not_exist(category, "category")
         data = dict()
@@ -576,9 +558,9 @@ class CategoryApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
-            permission = Permission(ActionNeed('修改新闻属性'))
+            permission = Permission(ActionNeed('修改文章栏目'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改新闻属性")
+                abort_if_unauthorized("修改文章栏目")
 
             category = Category.query.filter(Category.cat_id == cat_id).first()
             abort_if_not_exist(category, "category")
@@ -591,9 +573,9 @@ class CategoryApi(Resource):
             aun_db.session.add(category)
             aun_db.session.commit()
         elif request_method == "DELETE":
-            permission = Permission(ActionNeed('删除新闻属性'))
+            permission = Permission(ActionNeed('删除文章栏目'))
             if permission.can()is not True:
-                abort_if_unauthorized("删除新闻属性")
+                abort_if_unauthorized("删除文章栏目")
             cat_id = int(cat_id)
             category = Category.query.filter(Category.cat_id == cat_id).first()
             abort_if_not_exist(category, "category")
@@ -610,9 +592,6 @@ class TagsApi(Resource):
     def get(self):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看新闻标签')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻标签")
         tags = Tag.query.all()
         datas = list()
         for tag in tags:
@@ -628,9 +607,9 @@ class TagsApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
-            permission = Permission(ActionNeed('修改新闻标签'))
+            permission = Permission(ActionNeed('修改文章标签'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改新闻标签")
+                abort_if_unauthorized("修改文章标签")
             args = parser.parse_args()
             name = args['name']
             t = Tag.query.filter(Tag.name == name).first()
@@ -645,9 +624,7 @@ class TagsApi(Resource):
 class TagApi(Resource):
 
     def get(self, id):
-        permission = Permission(ActionNeed(('查看新闻标签')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看新闻标签")
+
         tag = Tag.query.filter_by(tag_id=id).first()
         abort_if_not_exist(tag, "tag")
         data = dict()
@@ -659,9 +636,9 @@ class TagApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
-            permission = Permission(ActionNeed('修改新闻标签'))
+            permission = Permission(ActionNeed('修改文章标签'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改新闻标签")
+                abort_if_unauthorized("修改文章标签")
             tag = Tag.query.filter(Tag.tag_id == id).first()
             abort_if_not_exist(tag, "tag")
             args = parser_spec.parse_args()
@@ -673,9 +650,9 @@ class TagApi(Resource):
             aun_db.session.add(tag)
             aun_db.session.commit()
         elif request_method == "DELETE":
-            permission = Permission(ActionNeed('删除新闻标签'))
+            permission = Permission(ActionNeed('删除文章标签'))
             if permission.can()is not True:
-                abort_if_unauthorized("删除新闻标签")
+                abort_if_unauthorized("删除文章标签")
             tag = Tag.query.filter(Tag.tag_id == id).first()
             abort_if_not_exist(tag, "tag")
             aun_db.session.delete(tag)
