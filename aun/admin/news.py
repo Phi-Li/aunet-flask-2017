@@ -19,7 +19,7 @@ from flask_login import current_user
 # import models needed
 from aun import aun_db, aun_app
 from aun.home.models import Article, SlideShow, Category, Tag
-from aun.association.models import Association
+from aun.association.models import Club
 from aun.common import abort_if_exist, abort_if_not_exist, abort_if_unauthorized, handle_html, dataurl_to_img
 
 # Request parser for slideshow
@@ -135,12 +135,13 @@ class ImgToDataurl(fields.Raw):
 
 
 # work with marshal_with() to change a class into json
-#used in pagnation
-paging: {
+# used in pagnation
+paging = {
     "limit": fields.Integer,
     "offset": fields.Integer,
     "total": fields.Integer
 }
+
 
 article_data = {
     "id": fields.Integer(attribute="article_id"),
@@ -303,21 +304,21 @@ class ArticlesApi(Resource):
     """
 
     @marshal_with(article_fields)
-    def get(self, association_id=0):
+    def get(self, club_id=0):
         """ 
             Return:
-                if association_id !=0 then return this association's atrical 
+                if club_id !=0 then return this club's atrical 
         """
-        if association_id != 0:
-            association = Association.query.filter(
-                Association.association_id == association_id).first()
-            abort_if_not_exist(association)
-            article = association.articles
+        if club_id != 0:
+            club = Club.query.filter(
+                Club.club_id == club_id).first()
+            abort_if_not_exist(club)
+            article = club.articles
         else:
             article_temp = Article.query.all()
-            article = []  # only show article that doesn't belong to association
+            article = []  # only show article that doesn't belong to club
             for n in article_temp:
-                if n.associations == []:
+                if n.clubs == []:
                     article.append(n)
 
         paging_args = paging_parser.parse_args()
@@ -325,7 +326,7 @@ class ArticlesApi(Resource):
         offset = paging_args["offset"]
 
         total = len(article)
-        article_data = [offset * limit: (offset+1) * limit]
+        article_data = article[offset * limit: (offset+1) * limit]
         data = {
             "paging": {
                 "offset": offset,
@@ -336,20 +337,20 @@ class ArticlesApi(Resource):
         }
         return data
 
-    def post(self, association_id=0):
+    def post(self, club_id=0):
         """ 
         """
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
 
         if request_method == "POST":
-            if association_id != 0:
-                association = Association.query.filter(
-                    Association.association_id == association_id).first()
-                abort_if_not_exist(association)
+            if club_id != 0:
+                club = Club.query.filter(
+                    Club.club_id == club_id).first()
+                abort_if_not_exist(club)
 
                 permission = Permission(ActionNeed('添加文章'))
-                if permission.can()is not True and current_user.associations[0] != association:
+                if permission.can()is not True and current_user.clubs[0] != club:
                     abort_if_unauthorized("添加文章")
             else:
                 permission = Permission(ActionNeed('添加文章'))
@@ -381,9 +382,9 @@ class ArticlesApi(Resource):
 
             aun_db.session.add(article)
             aun_db.session.commit()
-            if association_id != 0:
-                association.add_article(article)
-                aun_db.session.add(association)
+            if club_id != 0:
+                club.add_article(article)
+                aun_db.session.add(club)
                 aun_db.session.commit()
 
         else:
@@ -395,16 +396,16 @@ class ArticleApi(Resource):
     """
 
     @marshal_with(article_spec_parser)
-    def get(self, article_id, association_id=0):
+    def get(self, article_id, club_id=0):
         """ 
         Return :
-            if association_id !=0 then return this association' some article
+            if club_id !=0 then return this club' some article
         """
-        if association_id != 0:
-            association = Association.query.filter(
-                Association.association_id == association_id).first()
-            abort_if_not_exist(association)
-            articles = association.articles
+        if club_id != 0:
+            club = Club.query.filter(
+                Club.club_id == club_id).first()
+            abort_if_not_exist(club)
+            articles = club.articles
             article = Article.query.filter(
                 Article.article_id == article_id).first()
             if article in articles:
@@ -416,21 +417,21 @@ class ArticleApi(Resource):
                 Article.article_id == article_id).first()
             return article
 
-    def post(self, article_id, association_id=0):
+    def post(self, article_id, club_id=0):
         """ 
-        if association_id != 0 then handle some association' s some article
+        if club_id != 0 then handle some club' s some article
         """
         article = Article.query.filter(
             Article.article_id == article_id).first()
         abort_if_not_exist(article, "article")
 
-        if association_id != 0:
-            association = Association.query.filter(
-                Association.association_id == association_id).first()
-            abort_if_not_exist(association, "association")
+        if club_id != 0:
+            club = Club.query.filter(
+                Club.club_id == club_id).first()
+            abort_if_not_exist(club, "club")
 
-            articles = association.articles
-            if article not in articles:  # this association doesn't have this article
+            articles = club.articles
+            if article not in articles:  # this club doesn't have this article
                 abort_if_not_exist(article, "this article")
 
         request_arg = request_method_parser.parse_args()

@@ -94,3 +94,9 @@ class ApplicantApi(Resource):
 
 		aun_db.session.delete(applicant)
 		aun_db.session.commit()
+
+
+class ApplicantsDownloadApi(Resource):
+
+	def get(self):
+		pass

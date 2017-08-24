@@ -1,37 +1,37 @@
 # -*- coding: utf-8 -*-
 
-""" association related table
+""" club related table
 """
 from datetime import datetime
 from aun import aun_db
 from aun.home.models import Article
 
-association_article = aun_db.Table('association_article',  # 角色权限关联表
-                                   aun_db.Column(
-                                       'association_id', aun_db.Integer, aun_db.ForeignKey('Association.association_id')),
-                                   aun_db.Column(
-                                       'article_id', aun_db.Integer, aun_db.ForeignKey('Article.article_id')),
-                                   aun_db.Column(
-                                       'created_at', aun_db.DateTime, default=datetime.now)
-                                   )
+club_article = aun_db.Table('club_article',  # 角色权限关联表
+                            aun_db.Column(
+                                'club_id', aun_db.Integer, aun_db.ForeignKey('Club.club_id')),
+                            aun_db.Column(
+                                'article_id', aun_db.Integer, aun_db.ForeignKey('Article.article_id')),
+                            aun_db.Column(
+                                'created_at', aun_db.DateTime, default=datetime.now)
+                            )
 
 
-class Association(aun_db.Model):
+class Club(aun_db.Model):
     """
-    association table
+    club table
     """
-    __tablename__ = "association"
-    association_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    __tablename__ = "club"
+    club_id = aun_db.Column(aun_db.Integer, primary_key=True)
     name = aun_db.Column(aun_db.String(30), unique=True)
     brief_introduction = aun_db.Column(
-        aun_db.Text)  # used in association space
+        aun_db.Text)  # used in club space
     detailed_introduction = aun_db.Column(
-        aun_db.Text)  # used in association union page
+        aun_db.Text)  # used in club union page
     category = aun_db.Column(aun_db.String(20))
     picture = aun_db.Column(aun_db.String(30))
     articles = aun_db.relationship(
-        "Article", secondary=association_article, backref=aun_db.backref('association', lazy="dynamic"))
-    # if Article.association == [] then this article is Association article
+        "Article", secondary=club_article, backref=aun_db.backref('club', lazy="dynamic"))
+    # if Article.club == [] then this article is Club article
 
     def __init__(self, name, instrodiction, category, picture):
         self.name = name,
@@ -47,5 +47,5 @@ class Association(aun_db.Model):
         self.articles.append(article)
 
     def __str__(self):
-        return "association name:%s" % self.name
+        return "club name:%s" % self.name
     __repr__ = __str__

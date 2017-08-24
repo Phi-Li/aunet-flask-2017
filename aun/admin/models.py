@@ -12,7 +12,7 @@ from flask_login import UserMixin
 from flask_principal import Permission
 
 from aun import aun_db
-from aun.association.models import Association
+from aun.association.models import Club
 
 role_node = aun_db.Table('role_node',  # 角色权限关联表
                          aun_db.Column(
@@ -32,14 +32,14 @@ user_role = aun_db.Table('user_role',  # 用户角色关联表
                              'created_at', aun_db.DateTime, default=datetime.now)
                          )
 
-user_association = aun_db.Table('user_association',
-                                aun_db.Column(
-                                    'user_id', aun_db.Integer, aun_db.ForeignKey('user.user_id')),
-                                aun_db.Column('association_id', aun_db.Integer,
-                                              aun_db.ForeignKey('association.association_id')),
-                                aun_db.Column(
-                                    "created_at", aun_db.DateTime, default=datetime.now)
-                                )
+user_club = aun_db.Table('user_club',
+                         aun_db.Column(
+                             'user_id', aun_db.Integer, aun_db.ForeignKey('user.user_id')),
+                         aun_db.Column('club_id', aun_db.Integer,
+                                       aun_db.ForeignKey('club.club_id')),
+                         aun_db.Column(
+                             "created_at", aun_db.DateTime, default=datetime.now)
+                         )
 
 EditUserNeed = partial(namedtuple('User', ['method', 'value']), 'edit')
 
@@ -123,8 +123,8 @@ class User(aun_db.Model, UserMixin):
     remark = aun_db.Column(aun_db.String(20))
     phone = aun_db.Column(aun_db.String(20))
 
-    associations = aun_db.relationship(
-        "Association", secondary=user_association, backref=aun_db.backref("users", lazy="dynamic"))
+    clubs = aun_db.relationship(
+        "club", secondary=user_club, backref=aun_db.backref("users", lazy="dynamic"))
     roles = aun_db.relationship(
         "Role", secondary=user_role, backref=aun_db.backref('users', lazy="dynamic"))
 
@@ -153,14 +153,14 @@ class User(aun_db.Model, UserMixin):
         r = Role.query.filter(Role.role_name == role_name).first()
         self.roles.append(r)
 
-    def add_association(self, name):
+    def add_club(self, name):
         """
-        each user can handle many association
-        add a association to user accocount 
+        each user can handle many club
+        add a club to user accocount 
         """
-        association = Association.query.filter(
-            Association.name == name).first()
-        self.associations.append(association)
+        club = club.query.filter(
+            club.name == name).first()
+        self.clubs.append(club)
 
     def __init__(self, user_name, password, email, phone):
         self.user_name = user_name

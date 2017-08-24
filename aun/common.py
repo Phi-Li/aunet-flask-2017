@@ -8,7 +8,7 @@ import base64
 from bs4 import BeautifulSoup
 from PIL import Image
 
-from flask_restful import abort
+from flask_restful import abort, reqparse
 
 
 def abort_if_not_exist(data, message):
@@ -83,3 +83,8 @@ def dataurl_to_img(img_url):
         aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
     img.save(path, quality="192")
     return 'static/Uploads/News/'+filename
+
+
+# parser to judge DELETE or POST or PUT http method
+request_method_parser = reqparse.RequestParser()
+request_method_parser.add_argument('request_method', type=str, location='json')
