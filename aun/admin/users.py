@@ -15,6 +15,7 @@ from aun.admin.models import User, Node, Role, LoginLog
 from aun import aun_db
 from aun.admin.email import send_email
 from aun.common import abort_if_exist, abort_if_not_exist, abort_if_unauthorized
+from aun.association.models import Club
 
 node_fields = {
     "id": fields.Integer,
@@ -35,6 +36,8 @@ user_parser.add_argument(
     'phone', type=str, location="json", help="phone is needed", required=True)
 user_parser.add_argument('role_name', type=str, required=True,
                          location="json", action="append", help="role_name is needed")
+user_parser.add_argument('clubs', type=str, required=True,
+                         location="json", action="append", help="clubs that user manage")
 
 # parser for UserSpec
 user_spec_parser = reqparse.RequestParser()
@@ -45,6 +48,8 @@ user_spec_parser.add_argument(
     'role_name', type=str, location="json", action="append")
 user_spec_parser.add_argument('user_name', type=str, location="json")
 user_spec_parser.add_argument('status', type=bool, location="json")
+user_parser.add_argument('clubs', type=str,
+                         location="json", action="append", help="clubs that user manage")
 
 # parser for NodeSpec
 node_spec_parser = reqparse.RequestParser()
@@ -88,6 +93,8 @@ def build_user_data(user):
     data['phone'] = user.phone
     data['roles'] = list()
     data['nodes'] = list()
+    data["clubs"] = list()
+
     for role in user.roles:
         for node in role.nodes:
             n = dict()
@@ -101,6 +108,12 @@ def build_user_data(user):
         r['role_name'] = role.role_name
         r['status'] = role.status
         data['roles'].append(r)
+
+    for club in user.clubs:
+        c = dict()
+        c["id"] = club.club_id
+        c["name"] = club.name
+        data["clubs"].append(c)
 
     return data
 
@@ -151,26 +164,38 @@ class UsersApi(Resource):
             if permission.can()is not True:
                 abort_if_unauthorized("添加用户")
             args = user_parser.parse_args()
+
             try:
                 args['role_name'] = list(eval(args['role_name'][0]))
+                args["clubs"] = list(eval(args["clubs"][0]))
             except:
                 pass
             user_name = args['user_name']
             password = args['password']
             email = args['email']
-            role_name = args['_n']
+            role_name = args['role_name']
+            club_name = args["clubs"]
             phone = args['phone']
+
             user1 = User.query.filter(User.user_name == user_name).first()
             abort_if_exist(user1, "user_name")
+
             try:
                 html = render_template(
                     "Admin/user_info.html", user_name=user_name, password=password, flag="创建账号")
                 send_email("社团网账号信息", [email], html)
                 user = User(user_name, password, email, phone)
+
                 for name in role_name:
                     role = Role.query.filter(Role.role_name == name).first()
                     abort_if_not_exist(role, "role")
                     user.roles.append(role)
+
+                for name in club_name:
+                    club = Club.query.filter(Club.name == name).first()
+                    abort_if_not_exist(role, "role")
+                    user.clubs.append(club)
+
                 aun_db.session.add(user)
                 aun_db.session.commit()
             except:
@@ -225,6 +250,7 @@ class UserApi(Resource):
             password = args['password']
             role_name = args['role_name']
             user_name = args['user_name']
+            club_name = args["clubs"]
             if user_name != None and user_name != user.user_name:
                 user1 = User.query.filter(User.user_name == user_name).first()
                 abort_if_exist(user1, "user_name")
@@ -256,16 +282,33 @@ class UserApi(Resource):
                     abort_if_not_exist(role, "role")
                     r.append(role)
                 user.roles = r
+            if club_name != None and permission.can():
+                try:
+                    club_name = list(eval(club_name[0]))
+                except:
+                    pass
+                c = list()
+                for name in club_name:
+                    club = Club.query.filter(Club.name == name).first()
+                    abort_if_not_exist(club, "club")
+                    c.append(club)
+                user.clubs = c
+
             if user_name != None:
                 user.user_name = user_name
+
             aun_db.session.add(user)
             aun_db.session.commit()
         elif request_method == "DELETE":
+
             permission = Permission(ActionNeed("删除用户"))
             if permission.can()is not True:
                 abort_if_unauthorized("删除用户")
+
             user = User.query.filter(User.user_id == user_id).first()
+
             abort_if_not_exist(user, "user")
+
             aun_db.session.delete(user)
             aun_db.session.commit()
         else:
