@@ -478,17 +478,15 @@ DELETE /api/sign-up/id
 POST /api/data-station
 
     {
-    file_name: str
-    attribute: str
-    content
+        file: (html中的file类型)
     }   
 
 GET /api/data-station?status=&is_important(status:0为未审核，１为通过，－１为未通过,2为全部, is_important:0为一般，　１为重要，２为所有)
 eg. status=2&is_important=1 用于首页重要文件展示
+
     [{
     id: int
     file_name: str
-    attribute: str
     uploader: str
     upload_time: int(time stamp)
     downlowd_times: int
@@ -498,8 +496,7 @@ PUT /api/data-station/id
 
     {
     file_name: str
-    attribute: str
-    content
+    file
     status(审核状态，0为未审核，１为通过，－１为未通过)
     is_important: bool(0为一般，　１为重要文件)
     }
@@ -509,10 +506,9 @@ GET /api/data-station/id
     {
     id: int
     file_name: str
-    attribute: str
     uploader: str
     upload_time: int(time stamp)
-    downlowd_times: int
+    download_times: int
     }
 
 GET /api/data-station/id/download

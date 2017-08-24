@@ -77,6 +77,10 @@ def create_super_role():
 
         node25 = Node("删除报名人员")
 
+        node26 = Node("上传文件")
+        node27 = Node("修改文件属性")　  # 包括审核文件，设置红头文件
+        node28 = Node("删除文件")
+
         aun_db.session.add(node1)
         aun_db.session.add(node2)
         aun_db.session.add(node3)
@@ -101,6 +105,10 @@ def create_super_role():
         aun_db.session.add(node22)
         aun_db.session.add(node23)
         aun_db.session.add(node24)
+        aun_db.session.add(node25)
+        aun_db.session.add(node26)
+        aun_db.session.add(node27)
+        aun_db.session.add(node28)
         aun_db.session.add(role)
         aun_db.session.commit()
 
@@ -136,6 +144,12 @@ def create_super_role():
         role.add_node("添加社团")
         role.add_node("编辑社团空间")
         role.add_node("删除社团")
+
+        role.add_node("删除报名人员")
+
+        role.add_node("上传文件")
+        role.add_node("修改文件属性")
+        role.add_node("删除文件")
 
         aun_db.session.add(role)
         aun_db.session.commit()
