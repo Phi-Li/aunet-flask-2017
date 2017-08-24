@@ -3,13 +3,14 @@
 """ login module docstring
 """
 
-from flask import request, current_app, session
+from flask import request, current_app, session, current_app
 from flask_login import login_user, current_user, logout_user
 from flask_principal import identity_loaded, RoleNeed, UserNeed, ActionNeed
 from flask_principal import Identity, identity_changed
 from flask_restful import reqparse, abort, Resource
 
-from aun import aun_app, aun_db
+from aun import aun_db
+from aun.home import home
 
 from aun.admin.models import User, LoginLog
 from aun.admin.users import build_user_data
@@ -24,7 +25,7 @@ request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
 
 
-@identity_loaded.connect_via(aun_app)
+@identity_loaded.connect_via(home)
 def on_identity_loaded(sender, identity):
     """ function docstring
     """

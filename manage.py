@@ -6,11 +6,17 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from aun import aun_app, aun_db
-from aun.home.models import News, news_category, news_tag, Category, Tag, SlideShow
-from aun.admin.models import User, Node, Role, user_role, role_node
+from aun import aun_db
+from aun.home.models import Article, Category, Tag, article_category, article_tag, SlideShow
+from aun.association.models import Club
+from aun.admin.models import User, Node, Role, user_role, role_node, user_club ,\
+    LoginLog
+from aun.data_station.models import DataStation
+from aun.sign_up.models import Applicant
+from aun import create_app
+from config import DevelopmentConfig, ProductionConfig
 
-
+aun_app = create_app(DevelopmentConfig)
 manager = Manager(aun_app)
 migrate = Migrate(aun_app, aun_db)
 
@@ -78,7 +84,7 @@ def create_super_role():
         node25 = Node("删除报名人员")
 
         node26 = Node("上传文件")
-        node27 = Node("修改文件属性")　  # 包括审核文件，设置红头文件
+        node27 = Node("修改文件属性")  # 包括审核文件，设置红头文件
         node28 = Node("删除文件")
 
         aun_db.session.add(node1)

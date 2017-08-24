@@ -15,12 +15,13 @@ import json
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
 from flask_principal import Permission, ActionNeed
 from flask_login import current_user
-
+from flask import current_app
 # import models needed
-from aun import aun_db, aun_app
+from aun import aun_db
 from aun.home.models import Article, SlideShow, Category, Tag
 from aun.association.models import Club
 from aun.common import abort_if_exist, abort_if_not_exist, abort_if_unauthorized, handle_html, dataurl_to_img
+
 
 # Request parser for slideshow
 slideshow_parser = reqparse.RequestParser()

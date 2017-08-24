@@ -5,12 +5,12 @@
 
 # import extensions and python library
 import os
-from flask import redirect, request, session
+from flask import redirect, request, session, current_app
 from flask_principal import identity_loaded, RoleNeed, UserNeed, ActionNeed
 from flask_login import logout_user
 
 # import models
-from aun import aun_login, aun_app, aun_api
+from aun import aun_login, aun_api
 from aun.admin.news import SlideshowApi, SlideshowsApi,  ArticlesApi, ArticleApi, ArticleDetailApi, TagsApi, TagApi, CategorysApi, CategoryApi
 from aun.admin.users import UsersApi, UserApi, RolesApi, RoleApi, NodesApi, NodeApi, CurrentUserApi
 from aun.admin.search import SearchArticleApi
@@ -18,9 +18,7 @@ from aun.admin.login import LoginApi
 from aun.admin.models import User
 
 from aun.admin import aun_admin
-
-
-basedir = aun_app.config['BASEDIR']
+from aun.home import home
 
 
 @aun_login.user_loader
@@ -30,7 +28,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@identity_loaded.connect_via(aun_app)
+@identity_loaded.connect_via(home)
 def on_identity_loaded(sender, identity):
     """ flask-principal load user's permission into session
     """
@@ -68,10 +66,11 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-@aun_app.route("/templates/Admin/<string:path>", methods=['GET', "POST"])
+@home.route("/templates/Admin/<string:path>", methods=['GET', "POST"])
 def get_admin_html(path):
     """ function docstring
     """
+    basedir = current_app.config['BASEDIR']
     path = os.path.join(basedir, 'aunet/templates/admin/', path)
     try:
         with open(path, 'r', encoding='utf-8') as response:
@@ -80,17 +79,18 @@ def get_admin_html(path):
         return "not found", 404
 
 
-@aun_app.route("/dashboard", methods=["GET"])
-@aun_app.route("/dashboard/<path:path>", methods=["GET"])
+@home.route("/dashboard", methods=["GET"])
+@home.route("/dashboard/<path:path>", methods=["GET"])
 def get_app(path=None):
     """ function docstring
     """
+    basedir = current_app.config['BASEDIR']
     path = os.path.join(basedir, 'aunet/templates/admin/app.html')
     with open(path, 'r', encoding='utf-8') as response:
         return response.read()
 
 
-@aun_app.route("/api/templates/<path:path>", methods=["GET"])
+@home.route("/api/templates/<path:path>", methods=["GET"])
 def get_template(path):
     """
     Args: 

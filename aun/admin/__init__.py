@@ -3,8 +3,7 @@
 """ admin for aun
 """
 
-from flask import Blueprint
-from aun import aun_app
+from flask import Blueprint, current_app
 
 aun_admin = Blueprint('admin', __name__,)
 

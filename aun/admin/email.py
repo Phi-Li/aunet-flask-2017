@@ -5,9 +5,8 @@
 
 from threading import Thread
 from flask_mail import Message
-from aun import aun_mail, aun_app
-
-MAIL = aun_app.config['MAIL']
+from aun import aun_mail
+from flask import current_app
 
 
 def send_async_email(msg):
@@ -25,6 +24,9 @@ def send_email(subject, recipients, text_body):
         text_body： 内容
         sender: 发件人，默认为配置中的发件人
     """
+    aun_app = current_app._get_current_object()
+    MAIL = aun_app.config['MAIL']
+
     message = Message(subject, sender=MAIL, recipients=recipients)
     message.html = text_body
     thread = Thread(target=send_async_email, args=[message])

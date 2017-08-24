@@ -11,32 +11,45 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_principal import Principal
 from flask_restful import Api
+from config import DevelopmentConfig, ProductionConfig
 
-aun_app = Flask(__name__)  # 创建应用
-aun_app.config.from_object('config')  # 导入配置
-try:
-    aun_app.config.from_object('secret_config')  # 导入secret配置
-except:
-    pass
+#     aun_app.config.from_object('secret_config')  # 导入secret配置
+# except:
+#     pass
 
-# 实例化各扩展
-aun_db = SQLAlchemy(aun_app)
-aun_mail = Mail(aun_app)
-
+aun_db = SQLAlchemy()
+aun_mail = Mail()
 aun_login = LoginManager()
-aun_login.init_app(aun_app)
+aun_principals = Principal()
+aun_api = Api()
+
+
+def create_app(config):
+    """
+    create flask create_app
+    """
+    app = Flask(__name__)  # 创建应用
+    app.config.from_object(config)
+
+    aun_db.init_app(app)
+    aun_mail.init_app(app)
+    aun_login.init_app(app)
+    aun_principals.init_app(app)
+    aun_api.init_app(app)
+
+    from aun.home import home
+    from aun.admin import aun_admin
+    # 注册蓝图
+    app.register_blueprint(home)
+    app.register_blueprint(aun_admin, url_prefix='/admin')
+
+    return app
+
+
+aun_app = create_app('config.DevelopmentConfig')
+# 实例化各扩展
+
 aun_login.login_view = ''  # TODO not determined
-
-aun_principals = Principal(aun_app)
-
-aun_api = Api(aun_app)
-
-from aun.home import home
-from aun.admin import aun_admin
-
-# 注册蓝图
-aun_app.register_blueprint(home)
-aun_app.register_blueprint(aun_admin, url_prefix='/admin')
 
 
 # 设置session和cookie的过期时间

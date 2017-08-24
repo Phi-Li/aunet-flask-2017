@@ -5,29 +5,30 @@
 
 from datetime import datetime, timedelta
 
-from flask import render_template, request
+from flask import render_template, request, current_app
 from flask import jsonify
 
-from aun import aun_app
+# from aun import aun_app
 from aun.home import home
 from aun.home.models import Article, Category, SlideShow, article_category
 
 
-@aun_app.template_filter('time')
-def time_filter(time):
-    """ used in template to format time
-        usage : '|time'
-    """
-    if isinstance(time, datetime) is True:
-        now = datetime.now()
-        utc_now = datetime.utcnow()
-        return (time - (utc_now - now)).strftime('%Y %b %d %H:%M')
-    elif isinstance(time, str):
-        now = datetime.now()
-        utc_now = datetime.utcnow()
-        time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
-        time = time - (utc_now - now)
-        return time.strftime("%Y %b %d %H:%M")
+# @aun_app.template_filter('time')
+# def time_filter(time):
+#     """ used in template to format time
+#         usage : '|time'
+#     """
+#     with app.app_context():
+#         if isinstance(time, datetime) is True:
+#             now = datetime.now()
+#             utc_now = datetime.utcnow()
+#             return (time - (utc_now - now)).strftime('%Y %b %d %H:%M')
+#         elif isinstance(time, str):
+#             now = datetime.now()
+#             utc_now = datetime.utcnow()
+#             time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+#             time = time - (utc_now - now)
+#             return time.strftime("%Y %b %d %H:%M")
 
 
 @home.route('/', methods=["POST", "GET"])

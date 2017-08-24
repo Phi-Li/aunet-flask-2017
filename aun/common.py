@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 
 from flask_restful import abort, reqparse
+from flask import current_app
 
 
 def abort_if_not_exist(data, message):
@@ -39,6 +40,7 @@ def handle_html(html):
     """ 
     change the img url into dataurl ,and return the first image
     """
+    aun_app = current_app._get_current_object()
     soup = BeautifulSoup(html, "html.parser")
     image_num = 0  # judge if  these
     for img in soup.find_all('img'):
@@ -74,7 +76,7 @@ def dataurl_to_img(img_url):
     """ 
     change imgurl into img and save it ,and save the path to the database
     """
-
+    aun_app = current_app._get_current_object()
     data = request.urlopen(img_url).read()
     img_buf = BytesIO(data)
     img = Image.open(img_buf)

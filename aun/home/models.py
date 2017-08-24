@@ -6,6 +6,7 @@
 from datetime import datetime
 from flask_login import current_user
 from aun import aun_db
+# from aun.association.models import club_article
 
 
 article_category = aun_db.Table("article_category",

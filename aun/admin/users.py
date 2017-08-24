@@ -112,7 +112,7 @@ def build_user_data(user):
     for club in user.clubs:
         c = dict()
         c["id"] = club.club_id
-        c["name"] = club.name
+        c["club_name"] = club.name
         data["clubs"].append(c)
 
     return data

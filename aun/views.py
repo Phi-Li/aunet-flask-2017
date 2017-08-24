@@ -4,10 +4,10 @@
 """
 
 from flask import render_template
-from aun import aun_app
+from aun.home import home
 
 
-@aun_app.route('/developing')
+@home.route('/developing')
 def develop_next():
     """ page developing
     """

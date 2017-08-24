@@ -10,7 +10,7 @@ class Applicant(aun_db.Model):
     """
     applicant that want to join in AU
     """
-    __tablename__ =　"applicant"
+    __tablename__ = "applicant"
     id = aun_db.Column(aun_db.Integer, primary_key=True)
     name = aun_db.Column(aun_db.String(20))
     gender = aun_db.Column(aun_db.String(20))

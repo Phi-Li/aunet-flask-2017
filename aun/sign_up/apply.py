@@ -34,12 +34,12 @@ applicant_fields = {
     "name": fields.String,
     "gender": fields.String,
     "major": fields.String,
-    "phone": fields.String
+    "phone": fields.String,
     "first_choice": fields.String,
     "second_choice": fields.String,
     "is_adjust": fields.Boolean,
     "self_introduction": fields.String,
-    "apply_time": fields.ApplyTimeItem(attribute="apply_time")
+    "apply_time": ApplyTimeItem(attribute="apply_time")
 }
 
 
@@ -51,52 +51,52 @@ class ApplicantsApi(Resource):
         return applicants
 
     def post(self):
-    request_arg = request_method_parser.parse_args()
-    request_method = request_arg["request_method"]
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg["request_method"]
 
-    if request_method == "POST":
-        applicant_args = applicant_parser.parse_args()
-        name = applicant_args["name"]
-        gender = applicant_args["gender"]
-        major = applicant_args["major"]
-        phone = applicant_args["phone"]
-        first_choice = applicant_args["first_choice"]
-        second_choice = applicant_args["second_choice"]
-        is_adjust = applicant_args["is_adjust"]
-        self_introduction = applicant_args["self_introduction"]
+        if request_method == "POST":
+            applicant_args = applicant_parser.parse_args()
+            name = applicant_args["name"]
+            gender = applicant_args["gender"]
+            major = applicant_args["major"]
+            phone = applicant_args["phone"]
+            first_choice = applicant_args["first_choice"]
+            second_choice = applicant_args["second_choice"]
+            is_adjust = applicant_args["is_adjust"]
+            self_introduction = applicant_args["self_introduction"]
 
-        applicant = Applicant(name, gender, major, phone, first_choice, second_choice,
-                              is_adjust, self_introduction)
+            applicant = Applicant(name, gender, major, phone, first_choice, second_choice,
+                                  is_adjust, self_introduction)
 
-        aun_db.session.add(applicant)
-        aun_db.session.commit()
+            aun_db.session.add(applicant)
+            aun_db.session.commit()
 
 
 class ApplicantApi(Resource):
 
-	@marshal_with(applicant_fields)
-	def get(self, id):
+    @marshal_with(applicant_fields)
+    def get(self, id):
 
-		applicant = Applicant.query.fliter(Applicant.id=id).first()
-		return applicant
+        applicant = Applicant.query.fliter(Applicant.id == id).first()
+        return applicant
 
-	def post(self, id):
-	request_arg = request_method_parser.parse_args()
-    request_method = request_arg["request_method"]
+    def post(self, id):
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg["request_method"]
 
-    if request_method == "DELETE":
-    	permission = Permission(ActionNeed("删除报名人员"))
-    	if !permission.can():
-    		abort_if_unauthorized("删除报名人员")
+        if request_method == "DELETE":
+            permission = Permission(ActionNeed("删除报名人员"))
+            if permission.can() != True:
+                abort_if_unauthorized("删除报名人员")
 
-		applicant = Applicant.query.fliter(Applicant.id = id).first()
-		abort_if_not_exist(applicant, "this applicant")
+            applicant = Applicant.query.fliter(Applicant.id == id).first()
+            abort_if_not_exist(applicant, "this applicant")
 
-		aun_db.session.delete(applicant)
-		aun_db.session.commit()
+            aun_db.session.delete(applicant)
+            aun_db.session.commit()
 
 
 class ApplicantsDownloadApi(Resource):
 
-	def get(self):
-		pass
+    def get(self):
+        pass
