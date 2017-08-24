@@ -2,3 +2,4 @@
 
 """ association for aun
 """
+from aun.association import views, association, models

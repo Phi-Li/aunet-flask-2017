@@ -7,7 +7,7 @@ from flask_restful import reqparse, Resource, fields, marshal_with, abort
 from flask_principal import Permission, ActionNeed
 from flask_login import current_user
 
-from aun.admin.article import abort_if_unauthorized, dataurl_to_img, abort_if_exist
+from aun.common import abort_if_unauthorized, dataurl_to_img, abort_if_exist
 from aun.association.models import Club
 
 request_method_parser = reqparse.RequestParser()
@@ -28,14 +28,14 @@ club_fields = {
     "name": fields.String,
     "introduction": fields.String,
     "category": fields.String,
-    "picture", fields.String
+    "picture": fields.String
 }
 
 
-class ClubsApi(Resource)
-"""
-rest api for club space related, request method: get, post
-"""
+class ClubsApi(Resource):
+    """
+    rest api for club space related, request method: get, post
+    """
     @marshal_with(club_fields)
     def get(self):
         clubs = Club.query.all()
@@ -65,7 +65,7 @@ rest api for club space related, request method: get, post
             abort(404, message="api not found")
 
 
-class ClubApi(Resource)
+class ClubApi(Resource):
     """
     request method: get, put, delete
     """
@@ -81,9 +81,9 @@ class ClubApi(Resource)
         return club
 
     def post(self, club_id):
-    """
-    request method: put , delete
-    """
+        """
+        request method: put , delete
+        """
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
@@ -92,7 +92,7 @@ class ClubApi(Resource)
             abort_if_not_exist(club, "club")
 
             permission = Permission(ActionNeed("编辑社团空间"))
-            if permission.can() is not True　or current.clubs[0] != club:
+            if permission.can() != True or current_user.clubs[0] != club:
                 abort_if_unauthorized("编辑社团空间")
 
             club_args = club_parser.parse_args()
