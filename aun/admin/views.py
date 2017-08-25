@@ -119,20 +119,17 @@ aun_api.add_resource(RoleApi, "/api/user/roles/<string:id>")
 # Article 模块
 aun_api.add_resource(SlideshowsApi, "/api/news/slide-shows")
 aun_api.add_resource(SlideshowApi, "/api/news/slider-shows/<string:id>")
-aun_api.add_resource(ArticlesApi, "/api/news/news", endpoint="newses")
+aun_api.add_resource(ArticlesApi, "/api/news/news",
+                     "/api/clubs/<string:club_id>/articles")
 # gai
-aun_api.add_resource(ArticleApi, "/api/news/news/<string:id>", endpoint="news")
+aun_api.add_resource(ArticleApi, "/api/news/news/<string:id>",
+                     "/api/clubs/<string:club_id>/articles/<string:article_id>")
 aun_api.add_resource(
     ArticleDetailApi, "/api/news/news/<string:id>/detail")
 aun_api.add_resource(TagsApi, "/api/article/tags")
 aun_api.add_resource(TagApi, "/api/article/tags/<string:id>")
 aun_api.add_resource(CategorysApi, "/api/article/categorys")
 aun_api.add_resource(CategoryApi, "/api/article/categorys/<string:id>")
-
-aun_api.add_resource(
-    ArticlesApi, "/api/clubs/<string:club_id>/articles", endpoint="culb_articles")
-aun_api.add_resource(
-    ArticleApi, "/api/clubs/<string:club_id>/articles/<string:article_id>", endpoint="culb_article")
 
 
 # Search 模块

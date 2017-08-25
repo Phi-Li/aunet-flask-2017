@@ -5,7 +5,7 @@
 
 from datetime import timedelta
 import pymysql
-from flask import Flask, session
+from flask import Flask, session, current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_login import LoginManager
@@ -52,8 +52,12 @@ aun_app = create_app('config.DevelopmentConfig')
 aun_login.login_view = ''  # TODO not determined
 
 
-# 设置session和cookie的过期时间
-aun_app.permanent_session_lifetime = timedelta(hours=6)
+# 设置cookie的过期时间
 aun_login.remember_cookie_duration = timedelta(hours=6)
 
 from aun import views
+from aun.sign_up import views
+from aun.admin import views
+from aun.association import views
+from aun.data_station import views
+from aun.home import views

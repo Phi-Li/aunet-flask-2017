@@ -4,6 +4,7 @@
 """
 
 import os
+from datetime import timedelta
 
 
 class Config(object):
@@ -31,6 +32,8 @@ class Config(object):
     MAIL_PASSWORD = '@4W<tS5.m]gQ'  # 客户端密码
     # 发件人如('sicun','1412511544@qq.com')
     MAIL = ('华中大社联社团网', 'aunet@auhust.net')
+    # 设置session的过期时间
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=6)
 
 
 class ProductionConfig(Config):

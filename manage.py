@@ -77,15 +77,15 @@ def create_super_role():
         node20 = Node("materialAdmin", 1)
         node21 = Node("materialAction", 1)
 
-        node22 = Node("添加社团")
-        node23 = Node("编辑社团空间")
-        node24 = Node("删除社团")
+        node22 = Node("添加社团", 1)
+        node23 = Node("编辑社团空间", 1)
+        node24 = Node("删除社团", 1)
 
-        node25 = Node("删除报名人员")
+        node25 = Node("删除报名人员", 1)
 
-        node26 = Node("上传文件")
-        node27 = Node("修改文件属性")  # 包括审核文件，设置红头文件
-        node28 = Node("删除文件")
+        node26 = Node("上传文件", 1)
+        node27 = Node("修改文件属性", 1)  # 包括审核文件，设置红头文件
+        node28 = Node("删除文件", 1)
 
         aun_db.session.add(node1)
         aun_db.session.add(node2)
@@ -161,7 +161,7 @@ def create_super_role():
         aun_db.session.commit()
         print("successfully create a super role name:超管")
     except:
-        print("you can only run it once")
+        print("you can only run it once or something wrong")
 
 
 @manager.command

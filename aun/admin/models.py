@@ -124,7 +124,7 @@ class User(aun_db.Model, UserMixin):
     phone = aun_db.Column(aun_db.String(20))
 
     clubs = aun_db.relationship(
-        "club", secondary=user_club, backref=aun_db.backref("users", lazy="dynamic"))
+        "Club", secondary=user_club, backref=aun_db.backref("users", lazy="dynamic"))
     roles = aun_db.relationship(
         "Role", secondary=user_role, backref=aun_db.backref('users', lazy="dynamic"))
 

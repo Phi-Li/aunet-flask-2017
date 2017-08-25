@@ -77,7 +77,7 @@ class DataStationsApi(Resource):
             file_name = file.file_name
             uploader = current_user.user_nam
             file_dir = os.path.join(
-                aun_app.config["BASEDIR"], "aun/static/upload/data_station")
+                current_app.config["BASEDIR"], "aun/static/upload/data_station")
 
             file_path = os.path.join(file_dir, file_name)
             file.save(file_path)
@@ -124,7 +124,7 @@ class DataStationApi(Resource):
             if file_content != None:
                 file.file_name = file_content.file_name
                 file_dir = os.path.join(
-                    aun_app.config["BASEDIR"], "aun/static/upload/data_station")
+                    current_app.config["BASEDIR"], "aun/static/upload/data_station")
 
                 file_path = os.path.join(file_dir, file_name)
                 file.save(file_path)
@@ -137,8 +137,9 @@ class DataStationApi(Resource):
             permission = Permission(ActionNeed("删除文件"))
 
             if permission.can() != True:
-                aun_db.session.delete(file)
-                aun_db.session.commit()
+                abort_if_unauthorized("删除文件")
+            aun_db.session.delete(file)
+            aun_db.session.commit()
 
 
 class DataDownloadApi(Resource):
@@ -150,6 +151,6 @@ class DataDownloadApi(Resource):
         file.download_times = file.download_times+1
 
         file_dir = os.path.join(
-            aun_app.config["BASEDIR"], "aun/static/upload/data_station")
+            current_app.config["BASEDIR"], "aun/static/upload/data_station")
 
         return send_from_directory(file_dir, file.file_name, as_attachment=True)

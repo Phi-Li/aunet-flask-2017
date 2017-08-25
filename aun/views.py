@@ -11,4 +11,4 @@ from aun.home import home
 def develop_next():
     """ page developing
     """
-    return render_template('Public/fixed.html')
+    return render_template('public/fixed.html')

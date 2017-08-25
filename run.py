@@ -3,6 +3,8 @@
 """ launch script of AUN
 """
 
-from aun import aun_app
+from aun import create_app
+
+aun_app = create_app('config.DevelopmentConfig')
 
 aun_app.run(debug=True)
