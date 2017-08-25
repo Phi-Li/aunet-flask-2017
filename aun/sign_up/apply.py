@@ -17,7 +17,7 @@ applicant_parser.add_argument("phone", type=str)
 applicant_parser.add_argument("first_choice", type=str)
 applicant_parser.add_argument("second_choice", type=str)
 applicant_parser.add_argument("is_adjust", type=bool)
-applicant_parser.add_argument("self_introductionf", type=str)
+applicant_parser.add_argument("self_introduction", type=str)
 
 
 class ApplyTimeItem(fields.Raw):
@@ -77,7 +77,10 @@ class ApplicantApi(Resource):
     @marshal_with(applicant_fields)
     def get(self, id):
 
-        applicant = Applicant.query.fliter(Applicant.id == id).first()
+        applicant = Applicant.query.filter(Applicant.id == id).first()
+
+        abort_if_not_exist(applicant, "applicant")
+
         return applicant
 
     def post(self, id):

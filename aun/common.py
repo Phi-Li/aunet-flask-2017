@@ -65,10 +65,10 @@ def handle_html(html):
             # remove extra images, only save the first image
             os.remove(path)
         else:
-            img_url_first = "static/Uploads/News/"+filename
+            img_url_first = "static/upload/article/"+filename
     if image_num == 0:
         # the default image file
-        img_url_first = "static/Uploads/News/default.jpg"
+        img_url_first = "static/upload/article/default.jpg"
     return soup, img_url_first
 
 
@@ -82,9 +82,9 @@ def dataurl_to_img(img_url):
     img = Image.open(img_buf)
     filename = str(int(random.uniform(1, 1000)+time.time()))+".png"
     path = os.path.join(
-        aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
+        aun_app.config['BASEDIR'], 'aunet/static/upload/article', filename)
     img.save(path, quality="192")
-    return 'static/Uploads/News/'+filename
+    return 'static/upload/article/'+filename
 
 
 # parser to judge DELETE or POST or PUT http method

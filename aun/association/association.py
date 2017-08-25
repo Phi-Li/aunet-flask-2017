@@ -9,6 +9,7 @@ from flask_login import current_user
 
 from aun.common import abort_if_unauthorized, dataurl_to_img, abort_if_exist
 from aun.association.models import Club
+from aun import aun_db
 
 request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
@@ -17,7 +18,7 @@ club_parser = reqparse.RequestParser()
 club_parser.add_argument(
     "name", type=str, location="json", help="club name")
 club_parser.add_argument(
-    "introduction", type=str, location="json", help="brief introduction")
+    "brief_introduction", type=str, location="json", help="brief introduction")
 club_parser.add_argument(
     "category", type=str, location="json", help="club category")
 club_parser.add_argument(
@@ -26,7 +27,7 @@ club_parser.add_argument(
 club_fields = {
     "id": fields.Integer(attribute="club_id"),
     "name": fields.String,
-    "introduction": fields.String,
+    "brief_introduction": fields.String,
     "category": fields.String,
     "picture": fields.String
 }
@@ -50,7 +51,7 @@ class ClubsApi(Resource):
                 abort_if_unauthorized("添加社团")
             club_args = club_parser.parse_args()
             name = club_args["name"]
-            introduction = club_args["introduction"]
+            brief_introduction = club_args["brief_introduction"]
             category = club_args["category"]
             picture = club_args["picture"]
             try:
@@ -58,7 +59,7 @@ class ClubsApi(Resource):
                 picture = dataurl_to_img(picture)
             except:
                 pass
-            club = Club(name, introduction, category, picture)
+            club = Club(name, brief_introduction, category, picture)
             aun_db.session.add(club)
             aun_db.session.commit()
         else:
@@ -97,14 +98,14 @@ class ClubApi(Resource):
 
             club_args = club_parser.parse_args()
             name = club_args["name"]
-            introduction = club_args["introduction"]
+            brief_introduction = club_args["brief_introduction"]
             category = club_args["category"]
             picture = club_args["picture"]
 
             if name != None:
                 club.name = name
-            if introduction != None:
-                club.introduction = introduction
+            if brief_introduction != None:
+                club.brief_introduction = brief_introduction
             if category != None:
                 club.category = category
             if picture != None:
