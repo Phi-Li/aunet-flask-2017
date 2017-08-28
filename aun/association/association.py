@@ -26,12 +26,20 @@ club_parser.add_argument(
 club_parser.add_argument(
     "picture", type=str, location="json", help="club picture ")
 
+club_introduction_parser = reqparse.RequestParser()
+club_introduction_parser.add_argument(
+    "content", type=str, location="json", help="detailed introduction")
+
 club_fields = {
     "id": fields.Integer(attribute="club_id"),
     "name": fields.String,
     "brief_introduction": fields.String,
     "category": fields.String,
     "picture": fields.String
+}
+
+club_introduction_fields = {
+    "content": fields.String(attribute="detailed_introduction")
 }
 
 
@@ -135,3 +143,39 @@ class ClubApi(Resource):
             aun_db.session.commit()
         else:
             abort(404, message="api not found")
+
+
+class ClubIntorduction(Resource):
+    """
+    rest resource used in 社联 page
+    """
+    @marshal_with(club_introduction_fields)
+    def get(self, club_id):
+        club = Club.query.filter(
+            Club.club_id == club_id).first()
+        abort_if_not_exist(club, "club")
+
+        return club
+
+    def post(self, club_id):
+        club = Club.query.filter(
+            Club.club_id == club_id).first()
+        abort_if_not_exist(club, "club")
+
+        request_arg = request_method_parser.parse_args()
+        request_method = request_arg["request_method"]
+
+        # permission = Permission(ActionNeed("编辑社团介绍"))
+        if permission.can() is not True:
+            abort_if_unauthorized("编辑社团介绍")
+
+        if request_method == "PUT":
+            args = club_introduction_parser.parse_args()
+
+            content = args["content"]
+
+            if content != None:
+                club.detailed_introduction = content
+
+            aun_db.session.add(club)
+            aun_db.session.commit()
