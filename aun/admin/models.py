@@ -84,7 +84,8 @@ class Node(aun_db.Model):
 
 
 class Role(aun_db.Model):
-    """ class docstring
+    """ 
+    role table
     """
     __tablename__ = "role"
     role_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -96,7 +97,8 @@ class Role(aun_db.Model):
         "Node", secondary=role_node, backref=aun_db.backref('roles', lazy="dynamic"))
 
     def add_node(self, node_name):
-        """ method docstring
+        """ 
+        add node for a role
         """
         n = Node.query.filter(Node.node_name == node_name).first()
         self.nodes.append(n)

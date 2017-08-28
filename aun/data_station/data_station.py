@@ -50,7 +50,9 @@ file_field = {
 
 
 class DataStationsApi(Resource):
-
+    """
+    rest resource for '/api/data-station'
+    """
     @marshal_with(file_field)
     def get(self):
         file_filter = file_filter_parser.parse_args()
@@ -92,7 +94,9 @@ class DataStationsApi(Resource):
 
 
 class DataStationApi(Resource):
-
+    """
+    /api/data-station/<file_id>
+    """
     @marshal_with(file_field)
     def get(self, file_id):
         file = DataStation.query.filter(DataStation.file_id == file_id).first()
@@ -154,6 +158,9 @@ class DataStationApi(Resource):
 
 
 class DataDownloadApi(Resource):
+    """
+    rest resource for /api/data-station/<file_id>/download
+    """
 
     def get(self, file_id):
         file = DataStation.query.filter(DataStation.file_id == file_id).first()

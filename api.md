@@ -324,7 +324,7 @@ PUT /api/news/slide-shows/id:str
 
     #optional keys
 
-DELETE /api/news/slider-shows/id:str
+DELETE /api/news/slide-shows/id:str
 
     ->
 
@@ -413,12 +413,6 @@ POST /api/clubs/id/introduction #用于社联页面每个社团的介绍
 
     {
         content: (富文本)
-    }
-
-PUT /api/clubs/id/introduction
-    
-    {
-        content
     }
 
 GET /api/clubs/id/introduction

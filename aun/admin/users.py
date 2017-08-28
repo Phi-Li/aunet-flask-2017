@@ -75,7 +75,8 @@ request_method_parser.add_argument('request_method', type=str, location='json')
 
 
 def build_user_data(user):
-    """ function docstring
+    """ 
+    build user data that return as json
     """
     log = LoginLog.query.filter(LoginLog.user_name == user.user_name).order_by(
         LoginLog.log_id.desc()).first()
@@ -119,7 +120,8 @@ def build_user_data(user):
 
 
 def build_role_data(role):
-    """ function docstring
+    """ 
+    build role data that return as json
     """
     data = dict()
     data['id'] = role.role_id
@@ -138,12 +140,12 @@ def build_role_data(role):
 
 
 class UsersApi(Resource):
-    """ class docstring
+    """
+    rest resource for /api/user/users
     """
 
     def get(self):
-        """ method docstring
-        """
+
         permission = Permission(ActionNeed(('查看用户')))
         if permission.can() is not True:
             abort_if_unauthorized("查看用户")
@@ -155,8 +157,7 @@ class UsersApi(Resource):
         return datas
 
     def post(self):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
@@ -206,12 +207,12 @@ class UsersApi(Resource):
 
 
 class CurrentUserApi(Resource):
-    """ class docstring
+    """ 
+    rest resource for /api/user/current-user
     """
 
     def get(self):
-        """ method docstring
-        """
+
         user = current_user
         abort_if_not_exist(user, "user")
         data = build_user_data(user)
@@ -219,20 +220,18 @@ class CurrentUserApi(Resource):
 
 
 class UserApi(Resource):
-    """ class docstring
+    """
+    rest resource for /api/user/users/id 
     """
 
     def get(self, user_id):
-        """ method docstring
-        """
+
         user = User.query.filter(User.user_id == user_id).first()
         abort_if_not_exist(user, "user")
         data = build_user_data(user)
         return data
 
     def post(self, user_id):
-        """ method docstring
-        """
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
@@ -318,13 +317,13 @@ class UserApi(Resource):
 
 
 class NodesApi(Resource):
-    """ class docstring
+    """ 
+    rest resource for '/api/user/nodes'
     """
 
     @marshal_with(node_fields)
     def get(self):
-        """ method docstring
-        """
+
         permission = Permission(ActionNeed(('查看权限节点')))
         if permission.can() is not True:
             abort_if_unauthorized("查看权限节点")
@@ -333,23 +332,22 @@ class NodesApi(Resource):
 
 
 class NodeApi(Resource):
-    """ class docstring
+    """
+    rest resource for /api/user/nodes/id
     """
 
     @marshal_with(node_fields)
     def get(self, node_id):
-        """ method docstring
-        """
-        # permission = Permission(ActionNeed(('查看权限节点')))
-        # if permission.can() is not True:
-        #     abort_if_unauthorized("查看权限节点")
+
+        permission = Permission(ActionNeed(('查看权限节点')))
+        if permission.can() is not True:
+            abort_if_unauthorized("查看权限节点")
         node = Node.query.filter(Node.node_id == node_id).first()
         abort_if_not_exist(node, "node")
         return node
 
     def post(self, node_id):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
@@ -374,12 +372,12 @@ class NodeApi(Resource):
 
 
 class RolesApi(Resource):
-    """ class docstring
+    """ 
+    rest resource for /api/user/roles
     """
 
     def get(self):
-        """ method docstring
-        """
+
         permission = Permission(ActionNeed(('查看角色')))
         if permission.can() is not True:
             abort_if_unauthorized("查看角色")
@@ -391,8 +389,7 @@ class RolesApi(Resource):
         return datas
 
     def post(self):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         print(request_method)
@@ -423,12 +420,13 @@ class RolesApi(Resource):
 
 
 class RoleApi(Resource):
-    """ method docstring
+    """ 
+    rest resource for /api/user/roles/id
+
     """
 
     def get(self, role_id):
-        """ method docstring
-        """
+
         permission = Permission(ActionNeed(('查看角色')))
         if permission.can() is not True:
             abort_if_unauthorized("查看角色")
@@ -438,8 +436,7 @@ class RoleApi(Resource):
         return data
 
     def post(self, role_id):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":

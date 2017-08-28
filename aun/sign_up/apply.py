@@ -44,7 +44,9 @@ applicant_fields = {
 
 
 class ApplicantsApi(Resource):
-
+    """
+    rest resource for  '/api/sign-up'
+    """
     @marshal_with(applicant_fields)
     def get(self):
         applicants = Applicant.query.all()
@@ -73,7 +75,9 @@ class ApplicantsApi(Resource):
 
 
 class ApplicantApi(Resource):
-
+    """
+    rest resource for '/api/sign-up/id'
+    """
     @marshal_with(applicant_fields)
     def get(self, id):
 
@@ -100,6 +104,13 @@ class ApplicantApi(Resource):
 
 
 class ApplicantsDownloadApi(Resource):
+    """
+    rest resource for /api/sign-up/download
+    """
 
     def get(self):
+        """
+        Return 
+            a docx that including all applicants
+        """
         pass

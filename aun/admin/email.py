@@ -10,8 +10,6 @@ from flask import current_app
 
 
 def send_async_email(msg):
-    """ function docstring
-    """
     with aun_app.app_context():
         aun_mail.send(msg)
 

@@ -87,6 +87,8 @@ def create_super_role():
         node27 = Node("修改文件属性", 1)  # 包括审核文件，设置红头文件
         node28 = Node("删除文件", 1)
 
+        node29 = Node("编辑社团介绍", 1)  # 用于社联页面，各社团介绍
+
         aun_db.session.add(node1)
         aun_db.session.add(node2)
         aun_db.session.add(node3)
@@ -115,6 +117,7 @@ def create_super_role():
         aun_db.session.add(node26)
         aun_db.session.add(node27)
         aun_db.session.add(node28)
+        aun_db.session.add(node29)
         aun_db.session.add(role)
         aun_db.session.commit()
 
@@ -156,6 +159,8 @@ def create_super_role():
         role.add_node("上传文件")
         role.add_node("修改文件属性")
         role.add_node("删除文件")
+
+        role.add_node("编辑社团介绍")
 
         aun_db.session.add(role)
         aun_db.session.commit()

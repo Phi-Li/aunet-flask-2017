@@ -22,13 +22,13 @@ article_parser.add_argument(
 
 
 class SearchArticleApi(Resource):
-    """ class docstring
+    """ 
+    rest resource for /api/search/article
     """
 
     @marshal_with(article_fields)
     def get(self):
-        """ method docstring
-        """
+
         data = list()
         args = article_parser.parse_args()
         category = args['category']

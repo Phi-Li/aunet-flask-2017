@@ -29,7 +29,8 @@ article_tag = aun_db.Table("article_tag",
 
 
 class Article(aun_db.Model):
-    """ class docstring
+    """ 
+    article table including news and club article
     """
     __tablename__ = "article"
     article_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -89,7 +90,8 @@ class Article(aun_db.Model):
 
 
 class Category(aun_db.Model):
-    """ class docstring
+    """ 
+    article category table
     """
     __tablename__ = "category"
     cat_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -105,7 +107,8 @@ class Category(aun_db.Model):
 
 
 class Tag(aun_db.Model):
-    """ class docstring
+    """ 
+    article tag table
     """
     __tablename__ = "tag"
     tag_id = aun_db.Column(aun_db.Integer, primary_key=True)
@@ -121,7 +124,8 @@ class Tag(aun_db.Model):
 
 
 class SlideShow(aun_db.Model):
-    """ class docstring
+    """ 
+    slideshow table used in index 
     """
     slide_id = aun_db.Column(aun_db.Integer, primary_key=True)
     title = aun_db.Column(aun_db.String(80))

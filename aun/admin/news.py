@@ -190,13 +190,12 @@ slideshow_fields = {
 
 
 class SlideshowsApi(Resource):
-    """ class docstring
+    """ 
+    Resource for '/api/news/slide-shows'
     """
 
     @marshal_with(slideshow_fields)
     def get(self):
-        """ method docstring
-        """
 
         paging_args = paging_parser.parse_args()
         limit = paging_args["limit"]
@@ -217,8 +216,7 @@ class SlideshowsApi(Resource):
         return data
 
     def post(self):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
@@ -242,21 +240,20 @@ class SlideshowsApi(Resource):
 
 
 class SlideshowApi(Resource):
-    """ class docstring
+    """ 
+    Resource for '/api/news/slide-shows/id'
     """
 
     @marshal_with(slideshow_data)
     def get(self, slideshow_id):
-        """ method docstring
-        """
+
         slide_show = SlideShow.query.filter(
             SlideShow.slide_id == slideshow_id).first()
         abort_if_not_exist(slide_show, "slide_show")
         return slide_show
 
     def post(self, slideshow_id):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
@@ -302,7 +299,9 @@ class SlideshowApi(Resource):
 
 
 class ArticlesApi(Resource):
-    """ class docstring
+    """ 
+    Resource for /api/news/news,
+             /api/clubs/<string:club_id>/articles)
     """
 
     @marshal_with(article_fields)
@@ -394,7 +393,10 @@ class ArticlesApi(Resource):
 
 
 class ArticleApi(Resource):
-    """ class docstring
+    """ 
+    Resoruce for 
+            "/api/news/news/<string:id>",
+            "/api/clubs/<string:club_id>/articles/<string:article_id>")
     """
 
     @marshal_with(article_spec_fields)
@@ -490,12 +492,13 @@ class ArticleApi(Resource):
 
 
 class ArticleDetailApi(Resource):
-    """ class docstring
+    """ 
+    Resoruce for /api/news/news/<string:id>/detail",
+
     """
 
     def get(self, article_id):
-        """ method docstring
-        """
+
         # id=int(id)
         article = Article.query.filter(
             Article.article_id == article_id).first()
@@ -506,12 +509,12 @@ class ArticleDetailApi(Resource):
 
 
 class CategorysApi(Resource):
-    """ class docstring
+    """
+    Resource for /api/article/categorys
     """
 
     def get(self):
-        """ method docstring
-        """
+
         categorys = Category.query.all()
         datas = list()
         for category in categorys:
@@ -522,8 +525,7 @@ class CategorysApi(Resource):
         return datas
 
     def post(self):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
@@ -542,7 +544,8 @@ class CategorysApi(Resource):
 
 
 class CategoryApi(Resource):
-    """ class docstring
+    """ 
+    Resoruce for '/api/article/categorys/id'
     """
 
     def get(self, cat_id):
@@ -556,8 +559,7 @@ class CategoryApi(Resource):
         return data
 
     def post(self, cat_id):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "PUT":
@@ -590,12 +592,12 @@ class CategoryApi(Resource):
 
 
 class TagsApi(Resource):
-    """ class docstring
+    """ 
+    rest resoruce for /api/article/tags
     """
 
     def get(self):
-        """ method docstring
-        """
+
         tags = Tag.query.all()
         datas = list()
         for tag in tags:
@@ -606,8 +608,7 @@ class TagsApi(Resource):
         return datas
 
     def post(self):
-        """ method docstring
-        """
+
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
@@ -626,6 +627,10 @@ class TagsApi(Resource):
 
 
 class TagApi(Resource):
+    """
+    rest resoruce for /api/article/tags/id
+
+    """
 
     def get(self, id):
 
