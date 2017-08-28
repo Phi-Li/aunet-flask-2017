@@ -211,6 +211,7 @@ GET /api/clubs/<string:club_id>/articles
             title: str,
             outline: str,
             status: boolean,(审核是否成功)
+            img_url: str(展示的图片)
         }]
     }
 
@@ -281,7 +282,7 @@ DELETE /api/clubs/<string:club_id>/articles/<string:article_id>
 
     # slideshow
 
-GET /api/news/slider-shows
+GET /api/news/slide-shows
 
     ->
 
@@ -302,7 +303,7 @@ GET /api/news/slider-shows
         }]
     }
 
-POST /api/news/slider-shows
+POST /api/news/slide-shows
 
     {
         title: str,
@@ -311,7 +312,7 @@ POST /api/news/slider-shows
         link: str,
     }
 
-PUT /api/news/slider-shows/id:str
+PUT /api/news/slide-shows/id:str
 
     {
         title: str,

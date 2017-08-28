@@ -36,7 +36,7 @@ user_parser.add_argument(
     'phone', type=str, location="json", help="phone is needed", required=True)
 user_parser.add_argument('role_name', type=str, required=True,
                          location="json", action="append", help="role_name is needed")
-user_parser.add_argument('clubs', type=str, required=True,
+user_parser.add_argument('clubs', type=str,
                          location="json", action="append", help="clubs that user manage")
 
 # parser for UserSpec
@@ -48,8 +48,8 @@ user_spec_parser.add_argument(
     'role_name', type=str, location="json", action="append")
 user_spec_parser.add_argument('user_name', type=str, location="json")
 user_spec_parser.add_argument('status', type=bool, location="json")
-user_parser.add_argument('clubs', type=str,
-                         location="json", action="append", help="clubs that user manage")
+user_spec_parser.add_argument('clubs', type=str,
+                              location="json", action="append", help="clubs that user manage")
 
 # parser for NodeSpec
 node_spec_parser = reqparse.RequestParser()
@@ -78,14 +78,14 @@ def build_user_data(user):
     """ function docstring
     """
     log = LoginLog.query.filter(LoginLog.user_name == user.user_name).order_by(
-        LoginLog.id.desc()).first()
+        LoginLog.log_id.desc()).first()
     data = dict()
     if log != None:
-        data['loginIp'] = log.loginIp
-        data['loginTime'] = log.loginTime.timestamp()
+        data['login_ip'] = log.loginIp
+        data['login_time'] = log.loginTime.timestamp()
     else:
-        data['loginIp'] = None
-        data['loginTime'] = None
+        data['login_ip'] = None
+        data['login_time'] = None
     data['id'] = user.user_id
     data['user_name'] = user.user_name
     data['status'] = user.status
@@ -144,9 +144,9 @@ class UsersApi(Resource):
     def get(self):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看用户')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看用户")
+        # permission = Permission(ActionNeed(('查看用户')))
+        # if permission.can() is not True:
+        #     abort_if_unauthorized("查看用户")
         datas = list()
         users = User.query.all()
         for user in users:
@@ -182,7 +182,7 @@ class UsersApi(Resource):
 
             try:
                 html = render_template(
-                    "Admin/user_info.html", user_name=user_name, password=password, flag="创建账号")
+                    "admin/user_info.html", user_name=user_name, password=password, flag="创建账号")
                 send_email("社团网账号信息", [email], html)
                 user = User(user_name, password, email, phone)
 
@@ -191,10 +191,11 @@ class UsersApi(Resource):
                     abort_if_not_exist(role, "role")
                     user.roles.append(role)
 
-                for name in club_name:
-                    club = Club.query.filter(Club.name == name).first()
-                    abort_if_not_exist(role, "role")
-                    user.clubs.append(club)
+                if club_name != None:
+                    for name in club_name:
+                        club = Club.query.filter(Club.name == name).first()
+                        abort_if_not_exist(role, "role")
+                        user.clubs.append(club)
 
                 aun_db.session.add(user)
                 aun_db.session.commit()
@@ -243,6 +244,7 @@ class UserApi(Resource):
             if user != current_user and permission.can() is not True:
                 abort_if_unauthorized("修改用户")  # 用户默认能修改自己的信息
             args = user_spec_parser.parse_args()
+            print(args)
             # userId=args['userId']
             status = args['status']
             email = args['email']
@@ -265,7 +267,7 @@ class UserApi(Resource):
             if password != None:
                 try:
                     html = render_template(
-                        "Admin/user_info.html", user_name=user.user_name, password=password, flag="修改密码")
+                        "admin/user_info.html", user_name=user.user_name, password=password, flag="修改密码")
                     send_email("社团网账号信息", [user.email], html)
                     user.password = generate_password_hash(password)
                 except:
@@ -338,9 +340,9 @@ class NodeApi(Resource):
     def get(self, node_id):
         """ method docstring
         """
-        permission = Permission(ActionNeed(('查看权限节点')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看权限节点")
+        # permission = Permission(ActionNeed(('查看权限节点')))
+        # if permission.can() is not True:
+        #     abort_if_unauthorized("查看权限节点")
         node = Node.query.filter(Node.node_id == node_id).first()
         abort_if_not_exist(node, "node")
         return node

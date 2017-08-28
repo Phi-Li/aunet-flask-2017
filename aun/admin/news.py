@@ -102,7 +102,7 @@ class CategoryItem(fields.Raw):
 
 
 class TagItem(fields.Raw):
-    """ 
+    """
     Return :
         return all the tags
     """
@@ -115,8 +115,8 @@ class TagItem(fields.Raw):
 
 
 class PostTimeItem(fields.Raw):
-    """ 
-    return the timestamp 
+    """
+    return the timestamp
     """
 
     def format(self, post_time):
@@ -127,7 +127,7 @@ class PostTimeItem(fields.Raw):
 
 
 class ImgToDataurl(fields.Raw):
-    """ 
+    """
     return the image url
     """
 
@@ -152,7 +152,8 @@ article_data = {
     "title": fields.String(attribute="title"),
     "outline": fields.String(attribute="outline"),
     "status": fields.Integer(attribute="status"),
-    "author": fields.String
+    "author": fields.String,
+    "img_url": fields.String
 }
 # Multiple articles' return fields
 article_fields = {
@@ -160,7 +161,7 @@ article_fields = {
     "data": fields.Nested(article_data)
 }
 # single article's return field
-article_spec_parser = {
+article_spec_fields = {
     "id": fields.Integer(attribute="article_id"),
     "category": CategoryItem,
     "tags": TagItem,
@@ -173,7 +174,7 @@ article_spec_parser = {
 }
 
 slideshow_data = {
-    "id": fields.Integer,
+    "id": fields.Integer(attribute="slide_id"),
     "post_time": PostTimeItem(attribute="post_time"),
     "img_url": ImgToDataurl(attribute="img_url"),
     "outline": fields.String,
@@ -201,7 +202,7 @@ class SlideshowsApi(Resource):
         limit = paging_args["limit"]
         offset = paging_args["offset"]
 
-        slideshows = SlideShow.query.all()
+        slide_shows = SlideShow.query.all()
         total = len(slide_shows)
         slideshows_data = slide_shows[offset * limit: (offset+1) * limit]
 
@@ -244,7 +245,7 @@ class SlideshowApi(Resource):
     """ class docstring
     """
 
-    @marshal_with(slideshow_fields)
+    @marshal_with(slideshow_data)
     def get(self, slideshow_id):
         """ method docstring
         """
@@ -306,14 +307,14 @@ class ArticlesApi(Resource):
 
     @marshal_with(article_fields)
     def get(self, club_id=0):
-        """ 
+        """
             Return:
-                if club_id !=0 then return this club's atrical 
+                if club_id !=0 then return this club's atrical
         """
         if club_id != 0:
             club = Club.query.filter(
                 Club.club_id == club_id).first()
-            abort_if_not_exist(club)
+            abort_if_not_exist(club, "club")
             article = club.articles
         else:
             article_temp = Article.query.all()
@@ -339,7 +340,7 @@ class ArticlesApi(Resource):
         return data
 
     def post(self, club_id=0):
-        """ 
+        """
         """
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
@@ -348,10 +349,10 @@ class ArticlesApi(Resource):
             if club_id != 0:
                 club = Club.query.filter(
                     Club.club_id == club_id).first()
-                abort_if_not_exist(club)
+                abort_if_not_exist(club, "club")
 
                 permission = Permission(ActionNeed('添加文章'))
-                if permission.can()is not True and current_user.clubs[0] != club:
+                if permission.can()is not True and club not in current_user.clubs:
                     abort_if_unauthorized("添加文章")
             else:
                 permission = Permission(ActionNeed('添加文章'))
@@ -375,7 +376,7 @@ class ArticlesApi(Resource):
             aun_db.session.add(article)
             aun_db.session.commit()
 
-            article.addCategory(category)
+            article.add_category(category)
             for tag in tags:
                 t = Tag.query.filter_by(name=tag).first()
                 abort_if_not_exist(t, "tag")
@@ -396,16 +397,16 @@ class ArticleApi(Resource):
     """ class docstring
     """
 
-    @marshal_with(article_spec_parser)
+    @marshal_with(article_spec_fields)
     def get(self, article_id, club_id=0):
-        """ 
+        """
         Return :
             if club_id !=0 then return this club' some article
         """
         if club_id != 0:
             club = Club.query.filter(
                 Club.club_id == club_id).first()
-            abort_if_not_exist(club)
+            abort_if_not_exist(club, "club")
             articles = club.articles
             article = Article.query.filter(
                 Article.article_id == article_id).first()
@@ -419,7 +420,7 @@ class ArticleApi(Resource):
             return article
 
     def post(self, article_id, club_id=0):
-        """ 
+        """
         if club_id != 0 then handle some club' s some article
         """
         article = Article.query.filter(
@@ -456,7 +457,7 @@ class ArticleApi(Resource):
             # tags = json.dumps(tags)
             if category != None:
                 article.category = []
-                article.addCategory(category)
+                article.add_category(category)
             if detail != None:
                 article.detail = detail
                 soup, img_url_first = handle_html(detail)
@@ -472,7 +473,7 @@ class ArticleApi(Resource):
             if tags != None:
                 article.tags = []
                 for tag in tags:
-                    article.addTag(tag)
+                    article.add_tag(tag)
 
             aun_db.session.add(article)
             aun_db.session.commit()
@@ -547,7 +548,7 @@ class CategoryApi(Resource):
     def get(self, cat_id):
         """ method docstring
         """
-        category = Category.query.filter_by(id=cat_id).first()
+        category = Category.query.filter_by(cat_id=cat_id).first()
         abort_if_not_exist(category, "category")
         data = dict()
         data['name'] = category.name
@@ -574,6 +575,7 @@ class CategoryApi(Resource):
                 category.name = name
             aun_db.session.add(category)
             aun_db.session.commit()
+
         elif request_method == "DELETE":
             permission = Permission(ActionNeed('删除文章栏目'))
             if permission.can()is not True:
@@ -609,9 +611,9 @@ class TagsApi(Resource):
         request_arg = request_method_parser.parse_args()
         request_method = request_arg['request_method']
         if request_method == "POST":
-            permission = Permission(ActionNeed('修改文章标签'))
+            permission = Permission(ActionNeed('添加文章标签'))
             if permission.can()is not True:
-                abort_if_unauthorized("修改文章标签")
+                abort_if_unauthorized("添加文章标签")
             args = parser.parse_args()
             name = args['name']
             t = Tag.query.filter(Tag.name == name).first()

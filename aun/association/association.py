@@ -6,10 +6,12 @@
 from flask_restful import reqparse, Resource, fields, marshal_with, abort
 from flask_principal import Permission, ActionNeed
 from flask_login import current_user
+from flask import current_app
 
-from aun.common import abort_if_unauthorized, dataurl_to_img, abort_if_exist
+from aun.common import abort_if_unauthorized, dataurl_to_img, abort_if_not_exist
 from aun.association.models import Club
 from aun import aun_db
+
 
 request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
@@ -50,6 +52,7 @@ class ClubsApi(Resource):
             if permission.can() is not True:
                 abort_if_unauthorized("添加社团")
             club_args = club_parser.parse_args()
+            print(club_args)
             name = club_args["name"]
             brief_introduction = club_args["brief_introduction"]
             category = club_args["category"]
@@ -60,6 +63,7 @@ class ClubsApi(Resource):
             except:
                 pass
             club = Club(name, brief_introduction, category, picture)
+
             aun_db.session.add(club)
             aun_db.session.commit()
         else:

@@ -50,7 +50,7 @@ def handle_html(html):
         i = Image.open(img_buf)
         filename = str(int(random.uniform(1, 1000)+time.time()))+".png"
         path = os.path.join(
-            aun_app.config['BASEDIR'], 'aunet/static/Uploads/News', filename)
+            aun_app.config['BASEDIR'], 'aunet/static/upload/article', filename)
         i.save(path, quality="192")
         with open(path, "rb") as f:
             data = f.read()

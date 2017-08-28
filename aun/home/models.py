@@ -78,10 +78,10 @@ class Article(aun_db.Model):
         self.outline = article_outline
         self.img_url = article_img_url
         self.status = True
-        if current_user is None:
+        if current_user.is_anonymous is True:
             self.author = "匿名"
         else:
-            self.author = current_user.userName
+            self.author = current_user.user_name
 
     def __str__(self):
         return "Title:%s" % self.title

@@ -23,8 +23,7 @@ class Club(aun_db.Model):
     __tablename__ = "club"
     club_id = aun_db.Column(aun_db.Integer, primary_key=True)
     name = aun_db.Column(aun_db.String(30), unique=True)
-    brief_introduction = aun_db.Column(
-        aun_db.Text)  # used in club space
+    brief_introduction = aun_db.Column(aun_db.Text)  # used in club space
     detailed_introduction = aun_db.Column(
         aun_db.Text)  # used in club union page
     category = aun_db.Column(aun_db.String(20))
@@ -33,11 +32,11 @@ class Club(aun_db.Model):
         "Article", secondary=club_article, backref=aun_db.backref('club', lazy="dynamic"))
     # if Article.club == [] then this article is Club article
 
-    def __init__(self, name, instrodiction, category, picture):
-        self.name = name,
-        self.instrodiction = instrodiction
-        self.picture = picture
+    def __init__(self, name, brief_introduction, category, picture):
+        self.name = name
+        self.brief_introduction = brief_introduction
         self.category = category
+        self.picture = picture
 
     def add_article(self, article):
         """
