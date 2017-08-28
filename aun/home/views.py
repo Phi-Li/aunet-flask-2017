@@ -1,27 +1,24 @@
 # -*-coding:utf-8 -*-
 
-""" module docstring
+""" 
+home 
 """
 
 
-from flask import render_template, request
+from flask import render_template, request, current_app
+import os
 
 from aun.home import home
 from aun.home.models import Article, Category, SlideShow, article_category
 
 
-@home.route('/', methods=["POST", "GET"])
-@home.route('/index', methods=["POST", "GET"])
-def index():
+@home.route("/", methods=["GET"])
+@home.route("/<path:path>", methods=["GET"])
+def get_app(path=None):
     """ 
-    index page
+    get index page
     """
-    return render_template("home/index.html")
-
-
-@home.route('/news', methods=["POST", "GET"])
-def index_article():
-    """ 
-    news page
-    """
-    return render_template("home/news/index.html")
+    basedir = current_app.config['BASEDIR']
+    path = os.path.join(basedir, 'aun/templates/home/index.html')
+    with open(path, 'r', encoding='utf-8') as response:
+        return response.read()

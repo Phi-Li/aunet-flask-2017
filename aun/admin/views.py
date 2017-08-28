@@ -66,31 +66,7 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-@home.route("/templates/Admin/<string:path>", methods=['GET', "POST"])
-def get_admin_html(path):
-    """ function docstring
-    """
-    basedir = current_app.config['BASEDIR']
-    path = os.path.join(basedir, 'aunet/templates/admin/', path)
-    try:
-        with open(path, 'r', encoding='utf-8') as response:
-            return response.read()
-    except:
-        return "not found", 404
-
-
-@home.route("/dashboard", methods=["GET"])
-@home.route("/dashboard/<path:path>", methods=["GET"])
-def get_app(path=None):
-    """ function docstring
-    """
-    basedir = current_app.config['BASEDIR']
-    path = os.path.join(basedir, 'aunet/templates/admin/app.html')
-    with open(path, 'r', encoding='utf-8') as response:
-        return response.read()
-
-
-@home.route("/api/templates/<path:path>", methods=["GET"])
+@home.route("/api/templates/<string:path>", methods=["GET"])
 def get_template(path):
     """
     Args: 

@@ -196,13 +196,7 @@ GET /api/clubs/<string:club_id>/articles
    
     ->
 
-    {
-        paging: {
-            limit: int
-            offset: int
-            total: int
-        }
-        data:[{
+[{
             id: int,
             author: str,
             category: str,
@@ -213,7 +207,6 @@ GET /api/clubs/<string:club_id>/articles
             status: boolean,(审核是否成功)
             img_url: str(展示的图片)
         }]
-    }
 
 POST /api/news/news # 新闻文章
 POST /api/clubs/<string:club_id>/articles 　#社团空间文章
@@ -285,14 +278,7 @@ DELETE /api/clubs/<string:club_id>/articles/<string:article_id>
 GET /api/news/slide-shows
 
     ->
-
-    {
-        paging: {
-            limit: int
-            offset: int
-            total: int
-        }
-        data: [{
+    [{
             id: int,
             post_time: UTC timestamp sec,
             title: str,
@@ -301,7 +287,6 @@ GET /api/news/slide-shows
             status: bool,
             link: str,
         }]
-    }
 
 POST /api/news/slide-shows
 

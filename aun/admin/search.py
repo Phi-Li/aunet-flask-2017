@@ -5,7 +5,7 @@ from datetime import datetime
 from flask_restful import reqparse, Resource,  marshal_with
 
 from aun.home.models import Article
-from aun.admin.news import article_fields
+from aun.admin.news import article_data
 
 
 article_parser = reqparse.RequestParser()
@@ -26,7 +26,7 @@ class SearchArticleApi(Resource):
     rest resource for /api/search/article
     """
 
-    @marshal_with(article_fields)
+    @marshal_with(article_data)
     def get(self):
 
         data = list()

@@ -137,11 +137,11 @@ class ImgToDataurl(fields.Raw):
 
 # work with marshal_with() to change a class into json
 # used in pagnation
-paging = {
-    "limit": fields.Integer,
-    "offset": fields.Integer,
-    "total": fields.Integer
-}
+# paging = {
+#     "limit": fields.Integer,
+#     "offset": fields.Integer,
+#     "total": fields.Integer
+# }
 
 
 article_data = {
@@ -156,10 +156,10 @@ article_data = {
     "img_url": fields.String
 }
 # Multiple articles' return fields
-article_fields = {
-    "paging": fields.Nested(paging),
-    "data": fields.Nested(article_data)
-}
+# article_fields = {
+#     "paging": fields.Nested(paging),
+#     "data": fields.Nested(article_data)
+# }
 # single article's return field
 article_spec_fields = {
     "id": fields.Integer(attribute="article_id"),
@@ -183,10 +183,10 @@ slideshow_data = {
     "title": fields.String
 }
 # multiple slideshows' return fields
-slideshow_fields = {
-    "paging": fields.Nested(paging),
-    "data": fields.Nested(slideshow_data)
-}
+# slideshow_fields = {
+#     "paging": fields.Nested(paging),
+#     "data": fields.Nested(slideshow_data)
+# }
 
 
 class SlideshowsApi(Resource):
@@ -194,26 +194,11 @@ class SlideshowsApi(Resource):
     Resource for '/api/news/slide-shows'
     """
 
-    @marshal_with(slideshow_fields)
+    @marshal_with(slideshow_data)
     def get(self):
 
-        paging_args = paging_parser.parse_args()
-        limit = paging_args["limit"]
-        offset = paging_args["offset"]
-
         slide_shows = SlideShow.query.all()
-        total = len(slide_shows)
-        slideshows_data = slide_shows[offset * limit: (offset+1) * limit]
-
-        data = {
-            "paging": {
-                "offset": offset,
-                "limit": limit,
-                "total": total
-            },
-            "data": slideshows_data
-        }
-        return data
+        return slide_shows
 
     def post(self):
 
@@ -304,7 +289,7 @@ class ArticlesApi(Resource):
              /api/clubs/<string:club_id>/articles)
     """
 
-    @marshal_with(article_fields)
+    @marshal_with(article_data)
     def get(self, club_id=0):
         """
             Return:
@@ -319,24 +304,10 @@ class ArticlesApi(Resource):
             article_temp = Article.query.all()
             article = []  # only show article that doesn't belong to club
             for n in article_temp:
-                if n.clubs == []:
+                if n.club == []:
                     article.append(n)
 
-        paging_args = paging_parser.parse_args()
-        limit = paging_args["limit"]
-        offset = paging_args["offset"]
-
-        total = len(article)
-        article_data = article[offset * limit: (offset+1) * limit]
-        data = {
-            "paging": {
-                "offset": offset,
-                "limit": limit,
-                "total": total
-            },
-            "data": article_data
-        }
-        return data
+        return article
 
     def post(self, club_id=0):
         """
