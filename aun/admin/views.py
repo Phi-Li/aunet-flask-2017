@@ -99,7 +99,7 @@ aun_api.add_resource(
 aun_api.add_resource(ArticlesApi, "/api/news/news",
                      "/api/clubs/<string:club_id>/articles")
 # gai
-aun_api.add_resource(ArticleApi, "/api/news/news/<string:id>",
+aun_api.add_resource(ArticleApi, "/api/news/news/<string:article_id>",
                      "/api/clubs/<string:club_id>/articles/<string:article_id>")
 aun_api.add_resource(
     ArticleDetailApi, "/api/news/news/<string:id>/detail")
