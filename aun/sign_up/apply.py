@@ -4,6 +4,9 @@ apply to join AU related
 
 from flask_restful import reqparse, abort, Resource, fields, marshal_with
 from flask_principal import Permission, ActionNeed
+from docxtpl import DocxTemplate
+from flask import current_app, send_from_directory
+import os
 
 from aun.sign_up.models import Applicant
 from aun.common import request_method_parser, abort_if_not_exist, abort_if_unauthorized
@@ -113,4 +116,18 @@ class ApplicantsDownloadApi(Resource):
         Return 
             a docx that including all applicants
         """
-        pass
+        applicants = Applicant.query.all()
+        context = {"applicants": applicants}
+
+        file_dir = os.path.join(
+            current_app.config['BASEDIR'], 'aun/static/upload/signup')
+
+        path = os.path.join(file_dir, "signup_tpl.docx")
+        new_path = os.path.join(
+            file_dir, "signup.docx")
+
+        tpl = DocxTemplate(path)
+        tpl.render(context)
+        tpl.save(new_path)
+
+        return send_from_directory(file_dir, "signup.docx", as_attachment=True)

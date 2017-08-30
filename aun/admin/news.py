@@ -153,7 +153,8 @@ article_data = {
     "outline": fields.String(attribute="outline"),
     "status": fields.Integer(attribute="status"),
     "author": fields.String,
-    "img_url": fields.String
+    "img_url": fields.String,
+
 }
 # Multiple articles' return fields
 # article_fields = {
@@ -301,10 +302,13 @@ class ArticlesApi(Resource):
             abort_if_not_exist(club, "club")
             article = club.articles
         else:
-            article_temp = Article.query.all()
+            article_temp = Article.query.filter().all()
             article = []  # only show article that doesn't belong to club
             for n in article_temp:
-                if n.club == []:
+                clubs = []
+                for c in n.club:
+                    clubs.append(c.name)
+                if len(clubs) == 0:
                     article.append(n)
 
         return article
