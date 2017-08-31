@@ -58,6 +58,18 @@ nav .tabs .tab.active {
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
+.tag {
+	background: #07d;
+	color: white;
+	margin-left: -30px;
+	padding: 5px 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	height: 20px;
+	width: 5em;
+	border-radius: 0 10px 10px 0;
+}
+
 footer {
 	background-color: black;
 	color: white;

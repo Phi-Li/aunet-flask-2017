@@ -29,7 +29,7 @@
 					</a>
 					<div class="tabs">
 						<a :class="{'active': currentView.startsWith('clubs') }" class="tab" href="/clubs">社团</a>
-						<a :class="{'active': currentView === 'about'}" class="tab" href="/about">社联</a>
+						<a :class="{'active': currentView === 'about' || currentView === 'signup' }" class="tab" href="/about">社联</a>
 						<a :class="{'active': currentView === 'assets'}" class="tab" href="/assets">资料</a>
 						<a :class="{'active': currentView === 'news'}" class="tab" href="/news">新闻</a>
 						<a :class="{'active': currentView === 'service'}" class="tab" href="/service">社团服务</a>
@@ -75,13 +75,13 @@
 				<!-- 新闻列表 -->
 				<div class="card">
 					<span v-if="news.length === 0">没有新闻</span>
-					<a v-for="i of news" v-if="(new Date() - i.post_time)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
+					<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
 						<div class="">
 							<h3>{{ i.title }}</h3>
 							<div class="">
 								{{ i.outline }}
 							</div>
-							{{ i.post_time }}
+							{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay() }}日
 						</div>
 						<hr>
 					</a>
@@ -117,20 +117,19 @@
 		<main v-if="currentView === 'clubs'" style="position: relative;">
 			<!-- 衬底 -->
 			<div style="width: 100%; height: 64px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-
 			</div>
 
 			<div class="uk-container uk-container-center">
 				<!-- 筛选 -->
 				<div class="uk-flex uk-flex-space-between uk-flex-middle">
 					<div class="filters">
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">技能培养类</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">科技创新类</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">理论研究类</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">体育休闲类</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">文艺表演类</a>
-						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">艺术创作类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">技能培养类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">科技创新类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">理论研究类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">体育休闲类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">文艺表演类</a>
+						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">艺术创作类</a>
 					</div>
 					<div class="search">
 						<input type="text" name="" value="" placeholder="搜索">
@@ -155,11 +154,34 @@
 
 		<!-- 具体的社团 -->
 		<main v-if="currentView === 'clubs-club'">
+			<!-- 衬底 -->
+			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+			</div>
 			<div class="uk-container uk-container-center">
-				<img src="{{ club.picture }}" alt="">
-				<h2>{{ club.name }}</h2>
-				<div class="">
-					{{ club.brief_introduction }}
+				<div class="card" style="position: relative; margin-top: 50px; overflow: visible;">
+					<div style="width: 100px; height: 100px; background: url({{ club.picture }}) black; background-size: cover; border-radius: 50px; overflow: hidden; margin-right: auto; margin-left: auto; margin-top: -80px;">
+						<!-- <img src="" alt="" style="height: 50px;"> -->
+					</div>
+					<h1 class="uk-text-center">{{ club.name }}</h1>
+					<div class="">
+						<div class="tag">
+							社团简介
+						</div>
+						{{ club.brief_introduction }}
+						<div class="tag">
+							文章列表
+						</div>
+						<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
+							<div class="">
+								<h3>{{ i.title }}</h3>
+								<div class="">
+									{{ i.outline }}
+								</div>
+								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay() }}日
+								<hr>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 		</main>
@@ -168,12 +190,17 @@
 		<main v-if="currentView === 'about'" style="position: relative;">
 			<!-- 衬底 -->
 			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-
 			</div>
 			<div class="uk-container uk-container-center">
-				<!-- tabs -->
-				<div class="filters" style="white-space: initial;">
-					<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
+				<div class="uk-flex uk-flex-left uk-flex-middle">
+					<!-- tabs -->
+					<div class="filters" style="white-space: initial;">
+						<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
+					</div>
+					<!-- signup link -->
+					<div class="" style="min-width: 3em;">
+						<a href="/signup" style="color: white;">报名</a>
+					</div>
 				</div>
 				<div class="card" style="position: relative; ">
 					<a onclick="history.back()" style="position: absolute; ">返回</a>
@@ -189,7 +216,6 @@
 		<main v-if="currentView === 'assets'">
 			<!-- 衬底 -->
 			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-
 			</div>
 			<div class="uk-container uk-container-center">
 				<div class="search uk-flex uk-flex-center uk-flex-middle">
@@ -219,6 +245,13 @@
 
 		<!-- 报名 -->
 		<main v-if="currentView === 'signup'">
+			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+			</div>
+			<div class="uk-container uk-container-center">
+				<div class="card">
+
+				</div>
+			</div>
 
 		</main>
 
@@ -330,6 +363,7 @@
 			});
 
 			page("/@:clubName", function(ctx, next) { // 社团空间
+				app.getNews();
 				app.getClubs().always(function() {
 					app.currentView = "clubs-club";
 				}).done(function() {
