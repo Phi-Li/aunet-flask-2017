@@ -4,70 +4,10 @@
 		<meta charset="utf-8">
 		<title></title>
 		<link rel="stylesheet" href="/static/home/css/uikit.min.css">
+		<link rel="stylesheet" href="/static/home/css/home.css">
 		<script type="text/javascript" src="/static/home/js/jquery.min.js"></script>
 		<script type="text/javascript" src="/static/home/js/page.js"></script>
 		<script type="text/javascript" src="/static/home/js/vue.min.js"></script>
-		<style media="screen">
-			a {
-				color: inherit;
-			}
-
-			a:hover {
-				text-decoration: none;
-				color: inherit;
-			}
-
-			nav {
-				background: #07d;
-				color: white;
-			}
-
-			nav .tabs .tab {
-				line-height: 64px;
-				margin-right: 20px;
-				color: rgba(255, 255, 255, 0.7);
-			}
-
-			nav .tabs .tab.active {
-				border-bottom: 3px solid white;
-				color: white;
-			}
-
-			.filters {
-				color: white;
-			}
-
-			.filters .filter {
-				margin-right: 20px;
-				overflow: hidden;
-				line-height: 64px;
-				padding: 6px 10px;
-			}
-
-			.filters .filter.active {
-				border-radius: 50px;
-				background: white;
-				color: #07d;
-			}
-
-			.card {
-				background-color: white;
-				overflow-x: hidden;
-				border-radius: 5px;
-				padding: 30px;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-			}
-
-			footer {
-				background-color: black;
-				color: white;
-				padding: 30px;
-			}
-
-			.search {
-				min-height: 64px;
-			}
-		</style>
 	</head>
 	<body>
 		<!-- 导航栏 -->
@@ -88,7 +28,7 @@
 						</div>
 					</a>
 					<div class="tabs">
-						<a :class="{'active': currentView === 'clubs'}" class="tab" href="/clubs">社团</a>
+						<a :class="{'active': currentView.startsWith('clubs') }" class="tab" href="/clubs">社团</a>
 						<a :class="{'active': currentView === 'about'}" class="tab" href="/about">社联</a>
 						<a :class="{'active': currentView === 'assets'}" class="tab" href="/assets">资料</a>
 						<a :class="{'active': currentView === 'news'}" class="tab" href="/news">新闻</a>
@@ -152,23 +92,25 @@
 		<!-- 具体的新闻 -->
 		<main v-if="currentView === 'news-post'" style="position: relative;">
 			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-
-			<div class="card" style="position: relative">
-				<a onclick="history.back()" style="position: absolute; padding: 30px;">返回</a>
-				<h2>{{ post.title }}</h2>
-				<div class="uk-flex uk-flex-left">
-					<div class="" style="margin-right: 4em;">
-						时间 {{ post.post_time }}
+			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;"></div>
+			<div class="uk-container uk-container-center">
+				<div class="card" style="position: relative; ">
+					<a onclick="history.back()" style="position: absolute; ">返回</a>
+					<h2 class="uk-text-center">{{ post.title }}</h2>
+					<div class="uk-flex uk-flex-left" style="padding: 0 40px;">
+						<div class="" style="margin-right: 4em;">
+							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay() }}日
+						</div>
+						<div class="">
+							类型 {{ post.tags }}
+						</div>
 					</div>
-					<div class="">
-						类型 {{ post.tags }}
+					<div class="" style="padding: 40px 40px 0 40px;">
+						{{{ post.detail }}}
 					</div>
-				</div>
-				<div class="">
-					{{ post.detail }}
 				</div>
 			</div>
+
 		</main>
 
 		<!-- 社团列表 -->
@@ -178,8 +120,8 @@
 
 			</div>
 
-			<!-- 筛选 -->
 			<div class="uk-container uk-container-center">
+				<!-- 筛选 -->
 				<div class="uk-flex uk-flex-space-between uk-flex-middle">
 					<div class="filters">
 						<a class="filter" :class="{'active': typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
@@ -195,11 +137,16 @@
 						<a href="#">搜索</a>
 					</div>
 				</div>
-				<div class="uk-grid">
-					<a v-for="i of clubs" href="/@{{i.name}}">
-						<div class="club uk-width-1-4">
-							<img src="{{ i.picture }}" alt="">
-							{{ i.name }}
+				<!-- 照片墙 -->
+				<div class="uk-grid" style="padding: 40px 0;">
+					<a v-for="i of clubs" href="/@{{i.name}}" class="uk-width-1-4">
+						<div class="club">
+							<div class="">
+								<img src="{{ i.picture }}" alt="" style="height: 150px; ">
+							</div>
+							<div class="uk-text-center" style="padding-top: 5px; margin-bottom: -5px;">
+								{{ i.name }}
+							</div>
 						</div>
 					</a>
 				</div>
@@ -218,8 +165,24 @@
 		</main>
 
 		<!-- 社联介绍 -->
-		<main v-if="currentView === 'about'">
+		<main v-if="currentView === 'about'" style="position: relative;">
+			<!-- 衬底 -->
+			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
 
+			</div>
+			<div class="uk-container uk-container-center">
+				<!-- tabs -->
+				<div class="filters" style="white-space: initial;">
+					<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
+				</div>
+				<div class="card" style="position: relative; ">
+					<a onclick="history.back()" style="position: absolute; ">返回</a>
+					<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
+					<div class="" style="padding: 40px 40px 0 40px;">
+						关于{{ ABOUT.tab }}的介绍。
+					</div>
+				</div>
+			</div>
 		</main>
 
 		<!-- 资料站 -->
@@ -307,6 +270,10 @@
 					},
 					CLUBS: {
 						typeFilter: "",
+					},
+					ABOUT: {
+						tabs: ["学生社团联合会", "财务部", "社联外联企划部", "秘书部", "人力资源部", "社团部", "行政检查部", "外联部", "公共关系部", "媒体部", "宣传部", "思存工作室", "新媒体工作室", "文艺拓展部"],
+						tab: "学生社团联合会",
 					}
 				},
 				methods: {
