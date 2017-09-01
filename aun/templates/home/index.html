@@ -1,417 +1,475 @@
 <!DOCTYPE html>
 <html id="app">
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<link rel="stylesheet" href="/static/home/css/uikit.min.css">
-		<link rel="stylesheet" href="/static/home/css/home.css">
-		<script type="text/javascript" src="/static/home/js/jquery.min.js"></script>
-		<script type="text/javascript" src="/static/home/js/page.js"></script>
-		<script type="text/javascript" src="/static/home/js/vue.min.js"></script>
-	</head>
-	<body>
-		<!-- 导航栏 -->
-		<nav>
-			<div class="uk-container uk-container-center">
-				<div class="uk-flex uk-flex-space-between uk-flex-middle">
-					<a href="/">
-						<div class="logo uk-flex uk-flex-middle">
-							<img src="" alt="logo">
-							<div>
-								<div class="">
-									华中科技大学
-								</div>
-								<div class="">
-									学生社团联合会
-								</div>
-							</div>
-						</div>
-					</a>
-					<div class="tabs">
-						<a :class="{'active': currentView.startsWith('clubs') }" class="tab" href="/clubs">社团</a>
-						<a :class="{'active': currentView === 'about' || currentView === 'signup' }" class="tab" href="/about">社联</a>
-						<a :class="{'active': currentView === 'assets'}" class="tab" href="/assets">资料</a>
-						<a :class="{'active': currentView === 'news'}" class="tab" href="/news">新闻</a>
-						<a :class="{'active': currentView === 'service'}" class="tab" href="/service">社团服务</a>
+
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="/static/home/css/uikit.min.css">
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.7.1/slick/slick.css" />
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.7.1/slick/slick-theme.css" />
+	<link rel="stylesheet" href="/static/home/css/home.css">
+</head>
+
+<body>
+	<!-- 导航栏 -->
+	<nav id="global-nav">
+		<div class="nav-content">
+			<div class="nav-container nav-list">
+				<div class="nav-container">
+					<a href="/" class="logo"></a>
+				</div>
+				<div class="nav-container tab-group">
+					<a :class="{'active': currentView.startsWith('clubs') }" class="tab" href="/clubs">社团</a>
+					<a :class="{'active': currentView === 'about' || currentView === 'signup' }" class="tab" href="/about">社联</a>
+					<a :class="{'active': currentView === 'assets'}" class="tab" href="/assets">资料</a>
+					<a :class="{'active': currentView === 'news'}" class="tab" href="/news">新闻</a>
+					<a :class="{'active': currentView === 'service'}" class="tab" href="/service">社团服务</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<!-- 首页 -->
+	<main v-if="currentView === 'home'">
+		<div class="homePageBack">
+			<div class="slogan">
+				激情澎湃 社团地带
+			</div>
+
+			<div class="carousel-container">
+				<div id="carousel" ref="carousel">
+					<div>
+						<div class="slide-placeholder">1</div>
+					</div>
+					<div>
+						<div class="slide-placeholder">2</div>
+					</div>
+					<div>
+						<div class="slide-placeholder">3</div>
+					</div>
+					<div>
+						<div class="slide-placeholder">4</div>
+					</div>
+					<div>
+						<div class="slide-placeholder">5</div>
+					</div>
+					<div>
+						<div class="slide-placeholder">6</div>
 					</div>
 				</div>
 			</div>
-		</nav>
+		</div>
 
-		<!-- 首页 -->
-		<main v-if="currentView === 'home'">
-			首页
-		</main>
-
-		<!-- 新闻列表 -->
-		<main v-if="currentView === 'news'" class="news" style="position: relative;">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		<div class="clubsArea">
+			<div class="tag">
 
 			</div>
+			<div class="cards">
+				<div class="card">
 
-			<!-- 筛选 -->
-			<div class="uk-container uk-container-center">
-				<div class="uk-flex uk-flex-space-between uk-flex-middle">
-					<div class="uk-flex uk-flex-left">
-						<div class="filters">
-							<a class="filter" :class="{'active': NEWS.timeFilter === 1/0}" v-on:click="NEWS.timeFilter=1/0">全部</a>
-							<a class="filter" :class="{'active': NEWS.timeFilter === 30*24*3600}" v-on:click="NEWS.timeFilter=30*24*3600">一个月内</a>
-							<a class="filter" :class="{'active': NEWS.timeFilter === 3*30*24*3600}" v-on:click="NEWS.timeFilter=3*30*24*3600">三个月内</a>
-							<a class="filter" :class="{'active': NEWS.timeFilter === 365*24*3600}" v-on:click="NEWS.timeFilter=365*24*3600">一年内</a>
+				</div>
+
+				<div class="card">
+				</div>
+
+				<div class="card">
+
+				</div>
+			</div>
+		</div>
+
+		<div class="newsArea">
+			<div class="tag">
+			</div>
+
+		</div>
+
+		<div class="serviceArea">
+
+		</div>
+
+		<div class="file">
+
+		</div>
+	</main>
+
+	<!-- 新闻列表 -->
+	<main v-if="currentView === 'news'" class="news" style="position: relative;">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+
+		</div>
+
+		<!-- 筛选 -->
+		<div class="uk-container uk-container-center">
+			<div class="uk-flex uk-flex-space-between uk-flex-middle">
+				<div class="uk-flex uk-flex-left">
+					<div class="filters">
+						<a class="filter" :class="{'active': NEWS.timeFilter === 1/0}" v-on:click="NEWS.timeFilter=1/0">全部</a>
+						<a class="filter" :class="{'active': NEWS.timeFilter === 30*24*3600}" v-on:click="NEWS.timeFilter=30*24*3600">一个月内</a>
+						<a class="filter" :class="{'active': NEWS.timeFilter === 3*30*24*3600}" v-on:click="NEWS.timeFilter=3*30*24*3600">三个月内</a>
+						<a class="filter" :class="{'active': NEWS.timeFilter === 365*24*3600}" v-on:click="NEWS.timeFilter=365*24*3600">一年内</a>
+					</div>
+					<div class="filters">
+						<a class="filter" :class="{'active': NEWS.typeFilter === ''}" v-on:click="NEWS.typeFilter=''">全部</a>
+						<a class="filter" :class="{'active': NEWS.typeFilter === 'news'}" v-on:click="NEWS.typeFilter='news'">新闻</a>
+						<a class="filter" :class="{'active': NEWS.typeFilter === 'notification'}" v-on:click="NEWS.typeFilter='notification'">通知</a>
+					</div>
+				</div>
+				<div class="">
+					<input type="text" name="" value="" placeholder="搜索">
+					<a href="#">搜索</a>
+				</div>
+			</div>
+
+			<!-- 新闻列表 -->
+			<div class="card">
+				<span v-if="news.length === 0">没有新闻</span>
+				<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
+					<div class="">
+						<h3>{{ i.title }}</h3>
+						<div class="">
+							{{ i.outline }}
 						</div>
-						<div class="filters">
-							<a class="filter" :class="{'active': NEWS.typeFilter === ''}" v-on:click="NEWS.typeFilter=''">全部</a>
-							<a class="filter" :class="{'active': NEWS.typeFilter === 'news'}" v-on:click="NEWS.typeFilter='news'">新闻</a>
-							<a class="filter" :class="{'active': NEWS.typeFilter === 'notification'}" v-on:click="NEWS.typeFilter='notification'">通知</a>
-						</div>
+						{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
+						}}日
+					</div>
+					<hr>
+				</a>
+			</div>
+		</div>
+	</main>
+
+	<!-- 具体的新闻 -->
+	<main v-if="currentView === 'news-post'" style="position: relative;">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;"></div>
+		<div class="uk-container uk-container-center">
+			<div class="card" style="position: relative; ">
+				<a onclick="history.back()" style="position: absolute; ">返回</a>
+				<h2 class="uk-text-center">{{ post.title }}</h2>
+				<div class="uk-flex uk-flex-left" style="padding: 0 40px;">
+					<div class="" style="margin-right: 4em;">
+						时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()
+						}}日
 					</div>
 					<div class="">
-						<input type="text" name="" value="" placeholder="搜索">
-						<a href="#">搜索</a>
+						类型 {{ post.tags }}
 					</div>
 				</div>
+				<div class="" style="padding: 40px 40px 0 40px;">
+					{{{ post.detail }}}
+				</div>
+			</div>
+		</div>
 
-				<!-- 新闻列表 -->
-				<div class="card">
-					<span v-if="news.length === 0">没有新闻</span>
+	</main>
+
+	<!-- 社团列表 -->
+	<main v-if="currentView === 'clubs'" style="position: relative;">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 64px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		</div>
+
+		<div class="uk-container uk-container-center">
+			<!-- 筛选 -->
+			<div class="uk-flex uk-flex-space-between uk-flex-middle">
+				<div class="filters">
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">技能培养类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">科技创新类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">理论研究类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">体育休闲类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">文艺表演类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">艺术创作类</a>
+				</div>
+				<div class="search">
+					<input type="text" name="" value="" placeholder="搜索">
+					<a href="#">搜索</a>
+				</div>
+			</div>
+			<!-- 照片墙 -->
+			<div class="uk-grid" style="padding: 40px 0;">
+				<a v-for="i of clubs" href="/@{{i.name}}" class="uk-width-1-4">
+					<div class="club">
+						<div class="">
+							<img src="{{ i.picture }}" alt="" style="height: 150px; ">
+						</div>
+						<div class="uk-text-center" style="padding-top: 5px; margin-bottom: -5px;">
+							{{ i.name }}
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</main>
+
+	<!-- 具体的社团 -->
+	<main v-if="currentView === 'clubs-club'">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		</div>
+		<div class="uk-container uk-container-center">
+			<div class="card" style="position: relative; margin-top: 50px; overflow: visible;">
+				<div style="width: 100px; height: 100px; background: url({{ club.picture }}) black; background-size: cover; border-radius: 50px; overflow: hidden; margin-right: auto; margin-left: auto; margin-top: -80px;">
+					<!-- <img src="" alt="" style="height: 50px;"> -->
+				</div>
+				<h1 class="uk-text-center">{{ club.name }}</h1>
+				<div class="">
+					<div class="tag">
+						社团简介
+					</div>
+					{{ club.brief_introduction }}
+					<div class="tag">
+						文章列表
+					</div>
 					<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
 						<div class="">
 							<h3>{{ i.title }}</h3>
 							<div class="">
 								{{ i.outline }}
 							</div>
-							{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay() }}日
-						</div>
-						<hr>
-					</a>
-				</div>
-			</div>
-		</main>
-
-		<!-- 具体的新闻 -->
-		<main v-if="currentView === 'news-post'" style="position: relative;">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;"></div>
-			<div class="uk-container uk-container-center">
-				<div class="card" style="position: relative; ">
-					<a onclick="history.back()" style="position: absolute; ">返回</a>
-					<h2 class="uk-text-center">{{ post.title }}</h2>
-					<div class="uk-flex uk-flex-left" style="padding: 0 40px;">
-						<div class="" style="margin-right: 4em;">
-							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay() }}日
-						</div>
-						<div class="">
-							类型 {{ post.tags }}
-						</div>
-					</div>
-					<div class="" style="padding: 40px 40px 0 40px;">
-						{{{ post.detail }}}
-					</div>
-				</div>
-			</div>
-
-		</main>
-
-		<!-- 社团列表 -->
-		<main v-if="currentView === 'clubs'" style="position: relative;">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 64px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-			</div>
-
-			<div class="uk-container uk-container-center">
-				<!-- 筛选 -->
-				<div class="uk-flex uk-flex-space-between uk-flex-middle">
-					<div class="filters">
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">技能培养类</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">科技创新类</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">理论研究类</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">体育休闲类</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">文艺表演类</a>
-						<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">艺术创作类</a>
-					</div>
-					<div class="search">
-						<input type="text" name="" value="" placeholder="搜索">
-						<a href="#">搜索</a>
-					</div>
-				</div>
-				<!-- 照片墙 -->
-				<div class="uk-grid" style="padding: 40px 0;">
-					<a v-for="i of clubs" href="/@{{i.name}}" class="uk-width-1-4">
-						<div class="club">
-							<div class="">
-								<img src="{{ i.picture }}" alt="" style="height: 150px; ">
-							</div>
-							<div class="uk-text-center" style="padding-top: 5px; margin-bottom: -5px;">
-								{{ i.name }}
-							</div>
+							{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
+							}}日
+							<hr>
 						</div>
 					</a>
 				</div>
 			</div>
-		</main>
+		</div>
+	</main>
 
-		<!-- 具体的社团 -->
-		<main v-if="currentView === 'clubs-club'">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-			</div>
-			<div class="uk-container uk-container-center">
-				<div class="card" style="position: relative; margin-top: 50px; overflow: visible;">
-					<div style="width: 100px; height: 100px; background: url({{ club.picture }}) black; background-size: cover; border-radius: 50px; overflow: hidden; margin-right: auto; margin-left: auto; margin-top: -80px;">
-						<!-- <img src="" alt="" style="height: 50px;"> -->
-					</div>
-					<h1 class="uk-text-center">{{ club.name }}</h1>
-					<div class="">
-						<div class="tag">
-							社团简介
-						</div>
-						{{ club.brief_introduction }}
-						<div class="tag">
-							文章列表
-						</div>
-						<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
-							<div class="">
-								<h3>{{ i.title }}</h3>
-								<div class="">
-									{{ i.outline }}
-								</div>
-								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay() }}日
-								<hr>
-							</div>
-						</a>
-					</div>
+	<!-- 社联介绍 -->
+	<main v-if="currentView === 'about'" style="position: relative;">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		</div>
+		<div class="uk-container uk-container-center">
+			<div class="uk-flex uk-flex-left uk-flex-middle">
+				<!-- tabs -->
+				<div class="filters" style="white-space: initial;">
+					<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
+				</div>
+				<!-- signup link -->
+				<div class="" style="min-width: 3em;">
+					<a href="/signup" style="color: white;">报名</a>
 				</div>
 			</div>
-		</main>
-
-		<!-- 社联介绍 -->
-		<main v-if="currentView === 'about'" style="position: relative;">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-			</div>
-			<div class="uk-container uk-container-center">
-				<div class="uk-flex uk-flex-left uk-flex-middle">
-					<!-- tabs -->
-					<div class="filters" style="white-space: initial;">
-						<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
-					</div>
-					<!-- signup link -->
-					<div class="" style="min-width: 3em;">
-						<a href="/signup" style="color: white;">报名</a>
-					</div>
-				</div>
-				<div class="card" style="position: relative; ">
-					<a onclick="history.back()" style="position: absolute; ">返回</a>
-					<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
-					<div class="" style="padding: 40px 40px 0 40px;">
-						关于{{ ABOUT.tab }}的介绍。
-					</div>
+			<div class="card" style="position: relative; ">
+				<a onclick="history.back()" style="position: absolute; ">返回</a>
+				<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
+				<div class="" style="padding: 40px 40px 0 40px;">
+					关于{{ ABOUT.tab }}的介绍。
 				</div>
 			</div>
-		</main>
+		</div>
+	</main>
 
-		<!-- 资料站 -->
-		<main v-if="currentView === 'assets'">
-			<!-- 衬底 -->
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+	<!-- 资料站 -->
+	<main v-if="currentView === 'assets'">
+		<!-- 衬底 -->
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		</div>
+		<div class="uk-container uk-container-center">
+			<div class="search uk-flex uk-flex-center uk-flex-middle">
+				<input type="text" name="" value="" placeholder="搜索">
+				<a href="#">搜索</a>
 			</div>
-			<div class="uk-container uk-container-center">
-				<div class="search uk-flex uk-flex-center uk-flex-middle">
-					<input type="text" name="" value="" placeholder="搜索">
-					<a href="#">搜索</a>
+			<div class="card">
+				<table class="uk-table">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>文件名</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="i of assets">
+							<td>{{ $index }}</td>
+							<td>{{ i.file_name }}</td>
+							<td><a href="/api/data-station/{{ i.id }}/download">下载</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
+
+	<!-- 报名 -->
+	<main v-if="currentView === 'signup'">
+		<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
+		</div>
+		<div class="uk-container uk-container-center">
+			<div class="card">
+
+			</div>
+		</div>
+
+	</main>
+
+	<!-- 底栏 -->
+	<footer>
+		<div class="uk-container uk-container-center">
+			<div class="uk-flex uk-flex-center uk-flex-top">
+				<div class="">
+					<span>友情链接</span>
+					<ul class="uk-list">
+						<li><a href="#">华中科技大学官方网站</a></li>
+						<li><a href="#">华中科技大学hub系统</a></li>
+						<li><a href="#">学工在线</a></li>
+						<li><a href="#">校团委</a></li>
+						<li><a href="#">第二课堂</a></li>
+					</ul>
 				</div>
-				<div class="card">
-					<table class="uk-table">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>文件名</th>
-								<th>操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="i of assets">
-								<td>{{ $index }}</td>
-								<td>{{ i.file_name }}</td>
-								<td><a href="/api/data-station/{{ i.id }}/download">下载</a></td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="">
+					<span>官方微博</span>
+					<ul class="uk-list">
+						<li><img src="" alt=""></li>
+					</ul>
 				</div>
-			</div>
-		</main>
-
-		<!-- 报名 -->
-		<main v-if="currentView === 'signup'">
-			<div style="width: 100%; height: 200px; position: absolute; top: 0; left: 0; background-color: #07d; z-index: -1;">
-			</div>
-			<div class="uk-container uk-container-center">
-				<div class="card">
-
+				<div class="">
+					<span>官方微信</span>
+					<ul class="uk-list">
+						<li><img src="" alt=""></li>
+					</ul>
 				</div>
+
 			</div>
+		</div>
 
-		</main>
+	</footer>
 
-		<!-- 底栏 -->
-		<footer>
-			<div class="uk-container uk-container-center">
-				<div class="uk-flex uk-flex-center uk-flex-top">
-					<div class="">
-						<span>友情链接</span>
-						<ul class="uk-list">
-							<li><a href="#">华中科技大学官方网站</a></li>
-							<li><a href="#">华中科技大学hub系统</a></li>
-							<li><a href="#">学工在线</a></li>
-							<li><a href="#">校团委</a></li>
-							<li><a href="#">第二课堂</a></li>
-						</ul>
-					</div>
-					<div class="">
-						<span>官方微博</span>
-						<ul class="uk-list">
-							<li><img src="" alt=""></li>
-						</ul>
-					</div>
-					<div class="">
-						<span>官方微信</span>
-						<ul class="uk-list">
-							<li><img src="" alt=""></li>
-						</ul>
-					</div>
-
-				</div>
-			</div>
-
-		</footer>
-
-		<script type="text/javascript">
-			app = new Vue({
-				el: "#app",
-				data: {
-					currentView: "",
-					news: [], // 新闻列表
-					post: {}, // 当前新闻
-					clubs: [], // 社团列表
-					club: {}, // 当前社团
-					assets: [],
-					NEWS: {
-						timeFilter: 1/0,
-						typeFilter: "",
-					},
-					CLUBS: {
-						typeFilter: "",
-					},
-					ABOUT: {
-						tabs: ["学生社团联合会", "财务部", "社联外联企划部", "秘书部", "人力资源部", "社团部", "行政检查部", "外联部", "公共关系部", "媒体部", "宣传部", "思存工作室", "新媒体工作室", "文艺拓展部"],
-						tab: "学生社团联合会",
-					}
+	<script type="text/javascript" src="/static/home/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/home/js/page.js"></script>
+	<script type="text/javascript" src="/static/home/js/vue.min.js"></script>
+	<script type="text/javascript" src="//cdn.jsdelivr.net/gh/kenwheeler/slick@1.7.1/slick/slick.min.js"></script>
+	<script type="text/javascript">
+		app = new Vue({
+			el: "#app",
+			data: {
+				currentView: "",
+				news: [], // 新闻列表
+				post: {}, // 当前新闻
+				clubs: [], // 社团列表
+				club: {}, // 当前社团
+				assets: [],
+				NEWS: {
+					timeFilter: 1 / 0,
+					typeFilter: "",
 				},
-				methods: {
-					getNews: function() { // 取得所有新闻列表
-						return($.ajax({
-							url: "/api/news/news",
-							dataType: "text",
-						}).done(function(data) {
-							app.news = JSON.parse(data);
-						}));
-					},
-					getPost: function(postId) { // 取得具体一篇新闻
-						return($.ajax({
-							url: "/api/news/news/" + postId,
-							dataType: "text",
-						}).done(function(data) {
-							app.post = JSON.parse(data);
-						}));
-					},
-					getClubs: function() {
-						return($.ajax({
-							url: "/api/clubs",
-							dataType: "text",
-						}).done(function(data) {
-							app.clubs = JSON.parse(data);
-						}))
-					},
-					getAssets: function() {
-						return($.ajax({
-							url: "/api/data-station?status=2&is_important=2",
-							dataType: "text",
-						}).done(function(data) {
-							app.assets = JSON.parse(data);
-						}));
-					},
-
+				CLUBS: {
+					typeFilter: "",
+				},
+				ABOUT: {
+					tabs: ["学生社团联合会", "财务部", "社联外联企划部", "秘书部", "人力资源部", "社团部", "行政检查部", "外联部", "公共关系部", "媒体部", "宣传部", "思存工作室", "新媒体工作室", "文艺拓展部"],
+					tab: "学生社团联合会",
 				}
+			},
+			methods: {
+				getNews: function () { // 取得所有新闻列表
+					return ($.ajax({
+						url: "/api/news/news",
+						dataType: "text",
+					}).done(function (data) {
+						app.news = JSON.parse(data);
+					}));
+				},
+				getPost: function (postId) { // 取得具体一篇新闻
+					return ($.ajax({
+						url: "/api/news/news/" + postId,
+						dataType: "text",
+					}).done(function (data) {
+						app.post = JSON.parse(data);
+					}));
+				},
+				getClubs: function () {
+					return ($.ajax({
+						url: "/api/clubs",
+						dataType: "text",
+					}).done(function (data) {
+						app.clubs = JSON.parse(data);
+					}))
+				},
+				getAssets: function () {
+					return ($.ajax({
+						url: "/api/data-station?status=2&is_important=2",
+						dataType: "text",
+					}).done(function (data) {
+						app.assets = JSON.parse(data);
+					}));
+				},
+
+			}
+		});
+
+		page("/", function (ctx, next) { // 首页
+		 	app.currentView = "home";
+		});
+
+		page("/news", function (ctx, next) { // 新闻
+			app.getNews().always(function () {
+				app.currentView = "news";
 			});
+		});
 
-			page("/", function(ctx, next) { // 首页
-				app.currentView = "home";
+		page("/news/:postId", function (ctx, next) { // 具体新闻
+			app.getPost(ctx.params.postId).always(function () {
+				app.currentView = "news-post";
 			});
+		});
 
-			page("/news", function(ctx, next) { // 新闻
-				app.getNews().always(function() {
-					app.currentView = "news";
-				});
+		page("/@:clubName", function (ctx, next) { // 社团空间
+			app.getNews();
+			app.getClubs().always(function () {
+				app.currentView = "clubs-club";
+			}).done(function () {
+				app.club = app.clubs.filter(function (i) {
+					if (i.name === ctx.params.clubName) {
+						return (true);
+					} else {
+						return (false);
+					}
+				})[0];
+			})
+			// app.getClub(ctx.params.club.id).always(function() {
+			// 	app.currentView = "clubs-club";
+			//
+			// })
+		});
+
+		page("/clubs", function (ctx, next) { // 所有社团
+			app.getClubs().always(function () {
+				app.currentView = "clubs";
 			});
+		});
 
-			page("/news/:postId", function(ctx, next) { // 具体新闻
-				app.getPost(ctx.params.postId).always(function() {
-					app.currentView = "news-post";
-				});
+		page("/about", function (ctx, next) { // 社联介绍
+			app.currentView = "about";
+		});
+
+		page("/assets", function (ctx, next) { // 资料站
+			app.getAssets().always(function () {
+				app.currentView = "assets";
 			});
+		});
 
-			page("/@:clubName", function(ctx, next) { // 社团空间
-				app.getNews();
-				app.getClubs().always(function() {
-					app.currentView = "clubs-club";
-				}).done(function() {
-					app.club = app.clubs.filter(function(i) {
-						if(i.name === ctx.params.clubName) {
-							return(true);
-						} else {
-							return(false);
-						}
-					})[0];
-				})
-				// app.getClub(ctx.params.club.id).always(function() {
-				// 	app.currentView = "clubs-club";
-				//
-				// })
-			});
+		page("/signup", function (ctx, next) { // 报名
+			app.currentView = "signup";
+		});
 
-			page("/clubs", function(ctx, next) { // 所有社团
-				app.getClubs().always(function() {
-					app.currentView = "clubs";
-				});
-			});
+		page("*", function (ctx, next) { // 404
+			if (app.currentView === "") { // 地址栏url错误
 
-			page("/about", function(ctx, next) { // 社联介绍
-				app.currentView = "about";
-			});
+			} else { // 页面上url错误
 
-			page("/assets", function(ctx, next) { // 资料站
-				app.getAssets().always(function() {
-					app.currentView = "assets";
-				});
-			});
+			}
+		});
 
-			page("/signup", function(ctx, next) { // 报名
-				app.currentView = "signup";
-			});
+		$(document).ready(function () {
+			page.start();
+		});
+	</script>
+</body>
 
-			page("*", function(ctx, next) { // 404
-				if(app.currentView === "") { // 地址栏url错误
-
-				} else { // 页面上url错误
-
-				}
-			});
-
-			$(document).ready(function() {
-				page.start();
-			});
-		</script>
-	</body>
 </html>

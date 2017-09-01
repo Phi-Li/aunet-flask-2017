@@ -1,24 +1,72 @@
-a {
-	color: inherit;
+#global-nav .nav-container {
+	display: flex;
 }
 
-a:hover {
+#global-nav .nav-list {
+	justify-content: space-between;
+	padding: 0 10% 0 5%;
+}
+
+#global-nav a.logo {
+	display: block;
+	width: 226px;
+	height: 54px;
+	align-self: center;
+	background-size: 226px 54px;
+	background-repeat: no-repeat;
+	background-image: url(/static/resource/logo.png);
+	background-position: center center;
+}
+
+#global-nav .tab-group {
+	justify-content: space-between;
+}
+
+#global-nav .tab {
+	display: block;
+	padding: 0 25px;
+	line-height: 80px;
+	color:#b0fbc5;
+	letter-spacing: 0.2em;
+}
+
+#global-nav .tab:hover {
 	text-decoration: none;
-	color: inherit;
+	background: rgba(255, 255, 255, 0.24);
+}
+
+#carousel .slide-placeholder {
+	background: #fff;
+	color: #3498db;
+	font-size: 100px;
+	line-height: 300px;
+	text-align: center;
 }
 
 nav {
-	background: #07d;
-	color: white;
+	position: absolute;
+	background:transparent;
+	width: 100%;
 }
 
-nav .tabs .tab {
-	line-height: 64px;
-	margin-right: 20px;
-	color: rgba(255, 255, 255, 0.7);
+
+main .homePageBack{
+	width: 100%;
+	height: 500px;
+	background: -webkit-radial-gradient(top right,#61ce9a,#309b92 75%);
+	background: -moz-radial-gradient(top right,#61ce9a,#309b92 75%);
+	background: radial-gradient(top right,#61ce9a,#309b92 75%);
 }
 
-nav .tabs .tab.active {
+main .slogan{
+	text-align: center;
+	color: #b0fbc5;
+	font-family:;
+	font-size: 2em;
+	padding-top: 112px;
+}
+
+nav .tab-group .tab.active {
 	border-bottom: 3px solid white;
 	color: white;
 }
@@ -26,7 +74,7 @@ nav .tabs .tab.active {
 .filters {
 	color: white;
 	overflow-x: auto;
-	/*flex-wrap: nowrap;*/
+	flex-wrap: nowrap;
 	white-space: nowrap;
 	padding: 20px 0;
 }
@@ -34,7 +82,7 @@ nav .tabs .tab.active {
 .filters .filter {
 	margin-right: 20px;
 	overflow: hidden;
-	/*line-height: 64px;*/
+	line-height: 64px;
 	padding: 6px 10px;
 	display: inline-block;
 }
@@ -78,4 +126,4 @@ footer {
 
 .search {
 	min-height: 64px;
-}
+} 
