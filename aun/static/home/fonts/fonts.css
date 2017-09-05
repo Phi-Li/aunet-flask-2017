@@ -1,0 +1,17 @@
+@font-face {
+	font-family: "Hanyi Runyuan Thin";
+	src: url("/static/home/fonts/HYRunYuan-35W.otf") format("opentype");
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: "Hanyi Runyuan Medium";
+	src: url("/static/home/fonts/HYRunYuan-65W.otf") format("opentype");
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: "Hanyi Runyuan Bold";
+	src: url("/static/home/fonts/HYRunYuan-75W.otf") format("opentype");
+	font-display: fallback;
+}
