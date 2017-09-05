@@ -1,22 +1,22 @@
-<!DOCTYPE html>
+admin<!DOCTYPE html>
 <html id="app">
 <head>
     <title>设置</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/static/Admin/css/uikit.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/Admin/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/Admin/css/main.css">
-    <link rel="stylesheet" type="text/css" href="/static/Admin/css/simditor.css" />
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/uikit.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/simditor.css" />
 
-    <script src="/static/Admin/js/jquery.min.js"></script>
-    <script src="/static/Admin/js/vue.min.js"></script>
-    <script src="/static/Admin/js/page.js"></script>
+    <script src="/static/admin/js/jquery.min.js"></script>
+    <script src="/static/admin/js/vue.min.js"></script>
+    <script src="/static/admin/js/page.js"></script>
 
-    <script src="/static/Admin/js/module.js"></script>
-    <script src="/static/Admin/js/hotkeys.js"></script>
-    <script src="/static/Admin/js/uploader.js"></script>
-    <script src="/static/Admin/js/simditor.js"></script>
+    <script src="/static/admin/js/module.js"></script>
+    <script src="/static/admin/js/hotkeys.js"></script>
+    <script src="/static/admin/js/uploader.js"></script>
+    <script src="/static/admin/js/simditor.js"></script>
     <!--Benjamin Shi, 2016-->
 </head>
 <body>
@@ -50,7 +50,7 @@
             <div class="modal-dialog-wrapper">
                 <h2 class="uk-h3 uk-text-bold uk-text-center">登录</h2>
                 <p class="uk-text-center">登录到学生社团联合会后台</p>
-                <input type="text" class="uk-width-1-1" placeholder="用户名" autofocus="" v-model="LOGIN.userName" />
+                <input type="text" class="uk-width-1-1" placeholder="用户名" autofocus="" v-model="LOGIN.user_name" />
                 <input type="password" class="uk-width-1-1" placeholder="密码" v-model="LOGIN.password" v-on:change="state.loggingInError = false" v-on:keyup.enter="login()"/>
                 <p class="uk-text-danger" v-show="state.loggingInError">用户名或密码不正确。</p>
             </div>
@@ -67,7 +67,7 @@
                     <ul class="menu-items">
                         <li class="menu-items-item" v-on:click="page('/dashboard/profile')" v-bind:class="{'active': view[0] === 'profile'}">
                             <h1 class="menu-subtitle uk-padding-remove">登录为</h1>
-                            <h2 class="uk-h2 uk-margin-remove" style="line-height: 2;">{{ session.userName }}</h2>
+                            <h2 class="uk-h2 uk-margin-remove" style="line-height: 2;">{{ session.user_name }}</h2>
                         </li>
                     </ul>
                 </div>
@@ -113,7 +113,7 @@
                 <div class="menu-block">
                     <h2 class="menu-subtitle">其他</h2>
                     <ul class="menu-items">
-                        <li class="menu-items-item" onclick="window.open('/Material')">物资系统</li>
+                        <li class="menu-items-item" onclick="window.open('/material')">物资系统</li>
                     </ul>
                 </div>
             </div>
@@ -148,7 +148,7 @@
     };
 
     Vue.component("PROFILE", function(resolve, reject) {
-        $.ajax("/templates/Admin/profile.html").done(function(data) {
+        $.ajax("/templates/admin/profile.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -159,7 +159,7 @@
                 },
                 methods: {
                     logout: function() {
-                        requestJSON("/api/Login", "delete").complete(function() {
+                        requestJSON("/api/login", "delete").complete(function() {
                             location.href = "/admin/logout"; // 直接跳转到/admin/logout
                         });
                     },
@@ -181,7 +181,7 @@
     });
 
     Vue.component("POSTS", function(resolve, reject) {
-        $.ajax("/templates/Admin/posts.html").done(function(data) {
+        $.ajax("/templates/admin/posts.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -347,7 +347,7 @@
     });
 
     Vue.component("USERS", function(resolve, reject) {
-        $.ajax("/templates/Admin/users.html").done(function(data) {
+        $.ajax("/templates/admin/users.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -396,7 +396,7 @@
                     },
                     createUser: function() {
                         var n = {
-                            userName: "",
+                            user_name: "",
                             email: "",
                             roles: [],
                             status: true,
@@ -408,9 +408,9 @@
                         user.roles.splice(user.roles.indexOf(role), 1);
                         this.markDirtyUser(user);
                     },
-                    addRoleOfUser: function(user, roleName) {
+                    addRoleOfUser: function(user, role_name) {
                         var role = app.roles.filter(function(x) {
-                            if(x.roleName === roleName) {
+                            if(x.role_name === role_name) {
                                 return true;
                             } else {
                                 return false;
@@ -422,7 +422,7 @@
 
                     // role
                     commitRole: function(role) {
-                        if(role.roleName) { // name填写了才会commit
+                        if(role.role_name) { // name填写了才会commit
                             if("id" in role) { // 已有角色
                                 var p = updateRole(role);
                             } else { // 新建角色
@@ -436,9 +436,9 @@
                         this.commitRole(role);
                     },
 
-                    addNodeOfRole: function(role, nodeName) {
+                    addNodeOfRole: function(role, node_name) {
                         var node = app.nodes.filter(function(x) {
-                            if(x.nodeName === nodeName) {
+                            if(x.node_name === node_name) {
                                 return true;
                             } else {
                                 return false;
@@ -453,7 +453,7 @@
                             app.roles.splice(app.roles.indexOf(role), 1);
                             return;
                         }
-                        if(confirm("真的要删除角色'" + role.roleName + "'吗？")) {
+                        if(confirm("真的要删除角色'" + role.role_name + "'吗？")) {
                             deleteRole(role).always(retrieveRoles);
                         }
                     },
@@ -465,7 +465,7 @@
 
                     createRole: function() {
                         var n = {
-                            roleName: "",
+                            role_name: "",
                             nodes: [],
                             status: true,
                         };
@@ -478,7 +478,7 @@
 
                     // node
                     commitNode: function(node) {
-                        if(node.nodeName) { // name填写了
+                        if(node.node_name) { // name填写了
                             if("id" in node) { // 已有角色
                                  // 所有字段都填写了
                                 var p = updateNode(node);
@@ -499,7 +499,7 @@
                     },
 
                     deleteNode: function(node) {
-                        if(confirm("真的要删除节点'" + node.nodeName + "'吗？")) {
+                        if(confirm("真的要删除节点'" + node.node_name + "'吗？")) {
                             deleteNode(node).always(retrieveNodes);
                         }
                     },
@@ -510,7 +510,7 @@
 
                     createNode: function() {
                         var n = {
-                            nodeName: "",
+                            node_name: "",
                             status: true,
                             level: 0,
                         };
@@ -528,7 +528,7 @@
     });
 
     Vue.component("SITE", function(resolve, reject) {
-        $.ajax("/templates/Admin/site.html").done(function(data) {
+        $.ajax("/templates/admin/site.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -552,11 +552,11 @@
                         $.when(a, b, c).always(function() {
                             app.SITE.dirty = [];
                             app.SITE.new = [];
-                            app.SITE.deleted = []; // New, dirty and deleted are mutually exclusive. 
-                            retrieveSlideshows();                            
+                            app.SITE.deleted = []; // New, dirty and deleted are mutually exclusive.
+                            retrieveSlideshows();
                         });
                     },
-                    markDirty: function(i) { // Check if item is dirty and mark it dirty. An item shall not be both new and dirty. 
+                    markDirty: function(i) { // Check if item is dirty and mark it dirty. An item shall not be both new and dirty.
                         if((app.SITE.dirty.indexOf(i) === -1) && (app.SITE.new.indexOf(i) === -1)) {
                             app.SITE.dirty.push(i);
                         }
@@ -564,7 +564,7 @@
                     createSlideshow: function() {
                         var n = {
                             title: "",
-                            imgUrl: "",
+                            img_url: "",
                             outline: "",
                             link: "",
                         };
@@ -581,12 +581,12 @@
                     fileUploaded: function(i, ev) {
                         this.markDirty(i); // mark this slideshow dirty anyway(even if it is new since markDirty() will check out for it)
                         if(ev.target.files.length === 0) { // no file has been chosen
-                            i.imgUrl = "";
+                            i.img_url = "";
                         }
                         var reader = new FileReader();
                         reader.onload = function(ev) {
                             console.log(ev);
-                            i.imgUrl = ev.target.result;
+                            i.img_url = ev.target.result;
                         };
                         reader.readAsDataURL(ev.target.files[0]);
                     }
@@ -599,7 +599,7 @@
 
     $(document).ready(function() {
         restoreSession = function() { // 恢复登录状态，免去输入密码
-            return requestJSON("/api/Login").done(function(data) {
+            return requestJSON("/api/login").done(function(data) {
                 app.session = data;
                 app.state.loggingIn = false;
             }).fail(function(status, xhr) {
@@ -608,7 +608,7 @@
         };
 
         login = function() { // 登录
-            return requestJSON("/api/Login", "post", app.LOGIN).done(function(data) {
+            return requestJSON("/api/login", "post", app.LOGIN).done(function(data) {
 
                 restoreSession();
             }).fail(function(status, xhr) {
@@ -617,51 +617,51 @@
         };
 
         logout = function() {
-            return requestJSON("/api/Login", "delete");
+            return requestJSON("/api/login", "delete");
         };
 
         // slideshow
 
         retrieveSlideshows = function() {
-            return requestJSON("/api/News/SliderShow").done(function(data) {
+            return requestJSON("/api/news/slideshow").done(function(data) {
                 app.slideshows = data;
             })
         };
 
         createSlideshow = function(slideshow) {
-            return requestJSON("/api/News/SliderShow", "post", slideshow);
+            return requestJSON("/api/news/slideshow", "post", slideshow);
         };
 
         updateSlideshow = function(slideshow) {
-            return requestJSON("/api/News/SliderShow/" + slideshow.id, "put", slideshow);
+            return requestJSON("/api/news/slideshow/" + slideshow.id, "put", slideshow);
         };
 
         deleteSlideshow = function(slideshow) {
-            return requestJSON("/api/News/SliderShow/" + slideshow.id, "delete");
+            return requestJSON("/api/news/slideshow/" + slideshow.id, "delete");
         };
 
         // tags
 
         retrieveTags = function() {
-            return requestJSON("/api/News/Tags").done(function(data) {
+            return requestJSON("/api/article/tags").done(function(data) {
                 app.tags = data;
             });
         };
 
         createTag = function(tag) {
-            return requestJSON("/api/News/Tags", "post", tag);
+            return requestJSON("/api/article/tags", "post", tag);
         };
 
         updateTag = function(tag) {
-            return requestJSON("/api/News/Tags/" + tag.id, "put", tag);
+            return requestJSON("/api/article/tags/" + tag.id, "put", tag);
         };
 
         deleteTag = function(tag) {
-            return requestJSON("/api/News/Tags/" + tag.id, "delete");
+            return requestJSON("/api/article/tags/" + tag.id, "delete");
         };
 
         // columns
-        columnBaseURL = "/api/News/Categorys";
+        columnBaseURL = "/api/article/categories";
         retrieveColumns = function() {
             return requestJSON(columnBaseURL).done(function(data) {
                 app.columns = data;
@@ -681,7 +681,7 @@
         };
 
         // posts
-        postBaseURL = "/api/News/News";
+        postBaseURL = "/api/news/news";
         retrievePosts = function() {
             return requestJSON(postBaseURL).done(function(data) {
                 app.posts = [];
@@ -693,7 +693,7 @@
                         outline: i.outline,
                         column: i.category,
                         tags: i.tags,
-                        lastModificationTime: i.postTime,
+                        post_time: i.post_time,
                         editable: i.editable,
                     })
                 }
@@ -709,7 +709,7 @@
                     outline: data.outline,
                     column: data.category,
                     tags: data.tags,
-                    lastModificationTime: data.postTime,
+                    post_time: data.post_time,
                     content: data.detail,
                     editable: data.editable
                 };
@@ -740,7 +740,7 @@
 
 
         // Users
-        userBaseURL = "/api/User/Users"
+        userBaseURL = "/api/user/users"
 
         retrieveUsers = function() {
             return requestJSON(userBaseURL).done(function(data) {
@@ -756,12 +756,12 @@
 
         createUser = function(user) {
             return requestJSON(userBaseURL, "post", {
-                userName: user.userName,
-                passWord: user.passWord,
+                user_name: user.user_name,
+                password: user.password,
                 email: user.email,
                 phone: user.phone,
-                roleName: $.map(user.roles, function(x) {
-                    return(x.roleName);
+                role_name: $.map(user.roles, function(x) {
+                    return(x.role_name);
                 }),
                 status: user.status,
             });
@@ -769,12 +769,12 @@
 
         updateUser = function(user) {
             return requestJSON(userBaseURL + "/" + user.id, "put", {
-                userName: user.userName,
-                passWord: user.passWord,
+                user_name: user.user_name,
+                password: user.password,
                 email: user.email,
                 phone: user.phone,
-                roleName: $.map(user.roles, function(x) {
-                    return(x.roleName);
+                role_name: $.map(user.roles, function(x) {
+                    return(x.role_name);
                 }),
                 status: user.status,
             });
@@ -786,7 +786,7 @@
 
         // Nodes
 
-        nodeBaseURL = "/api/User/Nodes"
+        nodeBaseURL = "/api/user/nodes"
 
         retrieveNodes = function() {
             return requestJSON(nodeBaseURL).done(function(data) {
@@ -808,7 +808,7 @@
 
         // Roles
 
-        roleBaseURL = "/api/User/Roles"
+        roleBaseURL = "/api/user/roles"
 
         retrieveRoles = function() {
             return requestJSON(roleBaseURL).done(function(data) {
@@ -818,9 +818,9 @@
 
         createRole = function(role) {
             return requestJSON(roleBaseURL, "post", {
-                roleName: role.roleName,
-                nodeName: $.map(role.nodes, function(x) {
-                    return(x.nodeName); // 文档如是说
+                role_name: role.role_name,
+                node_name: $.map(role.nodes, function(x) {
+                    return(x.node_name); // 文档如是说
                 }),
                 status: role.status,
             });
@@ -828,9 +828,9 @@
 
         updateRole = function(role) {
             return requestJSON(roleBaseURL + "/" + role.id, "put", {
-                roleName: role.roleName,
-                nodeName: $.map(role.nodes, function(x) {
-                    return(x.nodeName); // 文档如是说
+                role_name: role.role_name,
+                node_name: $.map(role.nodes, function(x) {
+                    return(x.node_name); // 文档如是说
                 }),
                 status: role.status,
             });
@@ -882,7 +882,7 @@
                 post: {
                     column: "",
                     tags: [],
-                    lastModificationTime: 0,
+                    post_time: 0,
                     title: "",
                     content: "",
 
@@ -902,7 +902,7 @@
 
                 // view labels and properties
                 LOGIN: {
-                    userName: "",
+                    user_name: "",
                     password: "",
                 },
                 HEADER: {
@@ -923,7 +923,7 @@
                 },
                 POSTS: {
                     tag: "",
-                    orderBy: "lastModificationTime",
+                    orderBy: "post_time",
                     order: 1, // 1(true) for small to big; 0(false) for big to small
                     filterByColumn: "",
                     filterByTags: [],
@@ -974,7 +974,7 @@
                     editor.setValue(app.post.content);
                 },
                 localSave: function() { // 保存草稿至LocalStorage
-                    app.post.lastModificationTime = Date.now() / 1000; // python校准
+                    app.post.post_time = Date.now() / 1000; // python校准
                     app.post.content = editor.getValue();
                     localStorage["/posts/compose"] = JSON.stringify(app.post);
                 },
@@ -1001,7 +1001,7 @@
                         tags: [],
                         title: "",
                         content: "",
-                        lastModificationTime: app.post.lastModificationTime,
+                        post_time: app.post.post_time,
                     };
                     editor.setValue("");
                 },
@@ -1020,13 +1020,13 @@
                         this.clearEdit();
                     }
                 },
-                
+
             },
             ready: function() {
                 restoreSession();
             },
         });
-    
+
         baseViewURL = "/dashboard";
 
         page("*", function(ctx, next) {
