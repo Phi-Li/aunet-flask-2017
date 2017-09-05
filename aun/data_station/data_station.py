@@ -59,8 +59,17 @@ class DataStationsApi(Resource):
         status = file_filter["status"]
         is_important = file_filter["is_important"]
 
-        files = DataStation.query.filter(
-            DataStation.status == status, DataStation.is_important == is_important).all()
+        if status == 2 and is_important == 2:
+            files = DataStation.query.all()
+        elif status == 2:
+            files = DataStation.query.filter(
+                DataStation.is_important == is_important).all()
+        elif is_important == 2:
+            files = DataStation.query.filter(
+                DataStation.status == status).all()
+        else:
+            files = DataStation.query.filter(
+                DataStation.status == status, DataStation.is_important == is_important).all()
 
         return files
 
@@ -77,8 +86,8 @@ class DataStationsApi(Resource):
             file = file_arg["file"]
 
             file_name = file.filename
-            # uploader = current_user.user_name
-            uploader = "匿名"
+            uploader = current_user.user_name
+            # uploader = "匿名"
 
             file_dir = os.path.join(
                 current_app.config["BASEDIR"], "aun/static/upload/data_station")
