@@ -146,9 +146,9 @@ class UsersApi(Resource):
 
     def get(self):
 
-        permission = Permission(ActionNeed(('查看用户')))
-        if permission.can() is not True:
-            abort_if_unauthorized("查看用户")
+        #permission = Permission(ActionNeed(('查看用户')))
+        #if permission.can() is not True:
+         #   abort_if_unauthorized("查看用户")
         datas = list()
         users = User.query.all()
         for user in users:

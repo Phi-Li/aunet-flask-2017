@@ -78,7 +78,7 @@ def get_dashboard(path=None):
         return response.read()
 
 
-@home.route("/api/templates/<string:path>", methods=["GET"])
+@home.route("/api/templates/<path:path>", methods=["GET"])
 def get_template(path):
     """
     Args: 
@@ -87,7 +87,8 @@ def get_template(path):
     Return:
         return the template file
     """
-    path = os.path.join(basedir, 'aunet/templates/', path)
+    basedir = current_app.config['BASEDIR']
+    path = os.path.join(basedir, 'aun/templates/', path)
     try:
         with open(path, 'r', encoding='utf-8') as response:
             return response.read()

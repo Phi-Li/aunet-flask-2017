@@ -18,7 +18,7 @@ from aun.admin.users import build_user_data
 
 # Request parsers
 login_parser = reqparse.RequestParser()
-login_parser.add_argument('userName', type=str, location="json", required=True)
+login_parser.add_argument('user_name', type=str, location="json", required=True)
 login_parser.add_argument('password', type=str, location="json", required=True)
 
 request_method_parser = reqparse.RequestParser()

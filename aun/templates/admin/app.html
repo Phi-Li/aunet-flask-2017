@@ -74,8 +74,11 @@ admin<!DOCTYPE html>
                 <div class="menu-block">
                     <h2 class="menu-subtitle">页面</h2>
                     <ul class="menu-items">
-                        <li class="menu-items-item" v-bind:class="{'active': view[0] === 'site'}" v-on:click="page('/dashboard/site')">
+                        <li class="menu-items-item" v-bind:class="{'active': view[0] === 'site' && view[1] === 'slideshow'}" v-on:click="page('/dashboard/site/slideshow')">
                             首页管理
+                        </li>
+                        <li class="menu-items-item" v-bind:class="{'active': view[0] === 'site' && view[1] === 'club'}" v-on:click="page('/dashboard/site/club')">
+                            我的社团
                         </li>
                     </ul>
                 </div>
@@ -134,10 +137,10 @@ admin<!DOCTYPE html>
                 dataType: "json",
             });
         } // 简单GET
-        if(obj === undefined) { // 因为学校运维问题，用requestMethod表示HTTP request method.
+        if(obj === undefined) { // 因为学校运维问题，用request_method表示HTTP request method.
             var obj = {};
         }
-        obj["requestMethod"] = method.toUpperCase();
+        obj["request_method"] = method.toUpperCase();
         return $.ajax({
             url: url,
             type: "post",
@@ -148,7 +151,7 @@ admin<!DOCTYPE html>
     };
 
     Vue.component("PROFILE", function(resolve, reject) {
-        $.ajax("/templates/admin/profile.html").done(function(data) {
+        $.ajax("/api/templates/admin/profile.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -181,7 +184,7 @@ admin<!DOCTYPE html>
     });
 
     Vue.component("POSTS", function(resolve, reject) {
-        $.ajax("/templates/admin/posts.html").done(function(data) {
+        $.ajax("/api/templates/admin/posts.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -347,7 +350,7 @@ admin<!DOCTYPE html>
     });
 
     Vue.component("USERS", function(resolve, reject) {
-        $.ajax("/templates/admin/users.html").done(function(data) {
+        $.ajax("/api/templates/admin/users.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -528,7 +531,7 @@ admin<!DOCTYPE html>
     });
 
     Vue.component("SITE", function(resolve, reject) {
-        $.ajax("/templates/admin/site.html").done(function(data) {
+        $.ajax("/api/templates/admin/site.html").done(function(data) {
             resolve({
                 template: data,
                 data: function() {
@@ -1043,8 +1046,8 @@ admin<!DOCTYPE html>
             app.HEADER.CONTENT.heading = "我";
         });
 
-        page(baseViewURL + "/site", function(ctx, next) {
-            app.view = ["site"];
+        page(baseViewURL + "/site/:v", function(ctx, next) {
+            app.view = ["site", ctx.params.v];
             app.HEADER.CONTENT.heading = "首页管理";
         });
 
