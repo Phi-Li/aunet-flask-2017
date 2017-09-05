@@ -81,7 +81,7 @@ def get_dashboard(path=None):
 @home.route("/api/templates/<path:path>", methods=["GET"])
 def get_template(path):
     """
-    Args: 
+    Args:
         path: the path of the template file needed. "admin/app.html"
 
     Return:
@@ -124,5 +124,5 @@ aun_api.add_resource(CategoryApi, "/api/article/categories/<string:cat_id>")
 
 
 # Search 模块
-aun_api.add_resource(SearchArticleApi, "/api/search/article")
+aun_api.add_resource(SearchArticleApi, "/api/search/articles")
 aun_api.add_resource(LoginApi, "/api/login")

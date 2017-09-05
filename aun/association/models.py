@@ -10,7 +10,7 @@ club_article = aun_db.Table('club_article',  # 角色权限关联表
                             aun_db.Column(
                                 'club_id', aun_db.Integer, aun_db.ForeignKey('club.club_id')),
                             aun_db.Column(
-                                'article_id', aun_db.Integer, aun_db.ForeignKey('article.article_id')),
+                                'article_id', aun_db.Integer, aun_db.ForeignKey('article.id')),
                             aun_db.Column(
                                 'created_at', aun_db.DateTime, default=datetime.now)
                             )

@@ -145,7 +145,7 @@ class ImgToDataurl(fields.Raw):
 
 
 article_data = {
-    "id": fields.Integer(attribute="article_id"),
+    "id": fields.Integer(attribute="id"),
     "category": CategoryItem,
     "tags": TagItem,
     "post_time": PostTimeItem(attribute="post_time"),
@@ -163,7 +163,7 @@ article_data = {
 # }
 # single article's return field
 article_spec_fields = {
-    "id": fields.Integer(attribute="article_id"),
+    "id": fields.Integer(attribute="id"),
     "category": CategoryItem,
     "tags": TagItem,
     "post_time": PostTimeItem(attribute="post_time"),
@@ -191,7 +191,7 @@ slideshow_data = {
 
 
 class SlideshowsApi(Resource):
-    """ 
+    """
     Resource for '/api/news/slide-shows'
     """
 
@@ -227,7 +227,7 @@ class SlideshowsApi(Resource):
 
 
 class SlideshowApi(Resource):
-    """ 
+    """
     Resource for '/api/news/slide-shows/id'
     """
 
@@ -286,7 +286,7 @@ class SlideshowApi(Resource):
 
 
 class ArticlesApi(Resource):
-    """ 
+    """
     Resource for /api/news/news,
              /api/clubs/<string:club_id>/articles)
     """
@@ -327,7 +327,7 @@ class ArticlesApi(Resource):
                 abort_if_not_exist(club, "club")
 
                 permission = Permission(ActionNeed('添加文章'))
-                if permission.can()is not True and club not in current_user.clubs:
+                if permission.can()is not True or club not in current_user.clubs:
                     abort_if_unauthorized("添加文章")
             else:
                 permission = Permission(ActionNeed('添加文章'))
@@ -338,6 +338,7 @@ class ArticlesApi(Resource):
             detail = article_args['detail']
             title = article_args['title']
             tags = article_args['tags']
+            category = article_args['category']
             try:
                 tags = list(eval(tags[0]))
             except:
@@ -368,8 +369,8 @@ class ArticlesApi(Resource):
 
 
 class ArticleApi(Resource):
-    """ 
-    Resoruce for 
+    """
+    Resoruce for
             "/api/news/news/<string:id>",
             "/api/clubs/<string:club_id>/articles/<string:article_id>")
     """
@@ -386,14 +387,14 @@ class ArticleApi(Resource):
             abort_if_not_exist(club, "club")
             articles = club.articles
             article = Article.query.filter(
-                Article.article_id == article_id).first()
+                Article.id == article_id).first()
             if article in articles:
                 return article
             else:
                 abort_if_not_exist(article, "this article")
         else:
             article = Article.query.filter(
-                Article.article_id == article_id).first()
+                Article.id == article_id).first()
             return article
 
     def post(self, article_id, club_id=0):
@@ -401,7 +402,7 @@ class ArticleApi(Resource):
         if club_id != 0 then handle some club' s some article
         """
         article = Article.query.filter(
-            Article.article_id == article_id).first()
+            Article.id == article_id).first()
         abort_if_not_exist(article, "article")
 
         if club_id != 0:
@@ -467,7 +468,7 @@ class ArticleApi(Resource):
 
 
 class ArticleDetailApi(Resource):
-    """ 
+    """
     Resoruce for /api/news/news/<string:id>/detail",
 
     """
@@ -476,7 +477,7 @@ class ArticleDetailApi(Resource):
 
         # id=int(id)
         article = Article.query.filter(
-            Article.article_id == article_id).first()
+            Article.id == article_id).first()
         abort_if_not_exist(article, "article")
         data = dict()
         data['detail'] = article.detail
@@ -519,7 +520,7 @@ class CategorysApi(Resource):
 
 
 class CategoryApi(Resource):
-    """ 
+    """
     Resoruce for '/api/article/categorys/id'
     """
 
@@ -567,7 +568,7 @@ class CategoryApi(Resource):
 
 
 class TagsApi(Resource):
-    """ 
+    """
     rest resoruce for /api/article/tags
     """
 

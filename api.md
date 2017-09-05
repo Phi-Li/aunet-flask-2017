@@ -177,12 +177,8 @@ DELETE /api/user/roles/id
 
 ##4.搜索模块
 
-GET /api/Search/news?category=&tags=&start=&end=&sort
-
-    {
-        和 GET/api/news/news返回的数据格式一样
-    }注:tags可以多个,start-end为搜索的时间范围,为时间戳  sort=latest/oldest 反向或正向排序
-
+GET /api/search/articles?club_id=&keyword=
+club_id optional
 
 
 ##5. template
