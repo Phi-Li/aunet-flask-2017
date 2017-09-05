@@ -42,7 +42,7 @@ def create_app(config):
     from aun.material import material
     # 注册蓝图
     app.register_blueprint(home)
-    app.register_blueprint(aun_admin, url_prefix='/admin')
+    app.register_blueprint(aun_admin, url_prefix='/dashboard')
     app.register_blueprint(material)
 
     return app

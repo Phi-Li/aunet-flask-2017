@@ -66,9 +66,9 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-@aun_admin.route("/dashboard", methods=["GET"])
-@aun_admin.route("/dashboard/<path:path>", methods=["GET"])
-def get_dashboard(path):
+@aun_admin.route("/", methods=["GET"])
+@aun_admin.route("/<path:path>", methods=["GET"])
+def get_dashboard(path=None):
     """
     get dashboard index
     """
