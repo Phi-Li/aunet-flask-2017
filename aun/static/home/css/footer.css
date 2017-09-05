@@ -1,0 +1,30 @@
+#global-footer {
+	height: 200px;
+	margin-top: 160px;
+	background: #333333;
+	color: #7f7f7f;
+}
+
+#global-footer a {
+	text-decoration: none;
+}
+
+#global-footer ul {
+	list-style: none;
+}
+
+#global-footer nav.footer-directory {
+	display: flex;
+	justify-content: space-between;
+	width: 592px;
+	height: 170px;
+	margin: 0 auto;
+}
+
+#global-footer li.column-item {
+	display: block;
+}
+
+#global-footer .directory-middle-column, #global-footer .copyright {
+	text-align: center;
+}

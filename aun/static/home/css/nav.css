@@ -1,0 +1,61 @@
+nav#global-nav {
+	position: absolute;
+	background:transparent;
+	width: 100%;
+	/* min-width: 850px; */
+	z-index: 2;
+}
+
+nav#global-nav a {
+	text-decoration: none;
+}
+
+nav#global-nav ul {
+	list-style: none;
+}
+
+nav#global-nav .nav-container {
+display: flex;
+}	
+
+nav#global-nav .nav-list {
+	justify-content: space-between;
+	padding: 0 10%;
+}	
+
+nav#global-nav a.logo {
+	display: block;
+	width: 156px;
+	height: 40px;
+	align-self: center;
+	background-size: 156px 40px;
+	background-repeat: no-repeat;
+	background-image: url(/static/images/logo.png);
+	background-position: center center;
+}	
+
+nav#global-nav .tab-group {
+	justify-content: space-between;
+}	
+
+nav#global-nav .tab {
+	display: block;
+	padding: 0 25px;
+	height: 56px;
+	line-height: 50px;
+	color:#b0fbc5;
+	letter-spacing: 0.2em;
+}	
+
+nav#global-nav a.tab div {
+	height: 36px;
+}
+
+nav#global-nav a.tab:hover {
+	background: rgba(255, 255, 255, 0.24);
+}
+	
+nav#global-nav a.tab.active div {
+	border-bottom: 1px solid white;
+	color: white;
+}

@@ -1,0 +1,19 @@
+#carousel .slick-prev {
+	left: -45px;
+}	
+
+#carousel .slick-prev:before, #carousel .slick-next:before {
+	font-size: 40px;
+}	
+
+#carousel .slick-dots li.slick-active button:before {
+	color: #46b196;
+}
+
+#carousel .slide-placeholder {
+	background: #fff;
+	color: #b0fbc5;
+	font-size: 100px;
+	line-height: 450px;
+	text-align: center;
+}
