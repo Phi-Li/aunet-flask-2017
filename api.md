@@ -339,30 +339,30 @@ PUT /api/article/tags/id
     }
 DELETE /api/article/tags/id
 
-GET /api/article/categorys
+GET /api/article/categories
 
     [{
         id:int,
         name:str
     }]
-POST /api/article/categorys
+POST /api/article/categories
 
     {
         name:str
     }
-GET /api/article/categorys/id
+GET /api/article/categories/id
 
      {
         id:int,
         name:str
     }
-PUT /api/article/categorys/id
+PUT /api/article/categories/id
 
     {
         name
     }
 
-DELETE /api/article/categorys/id
+DELETE /api/article/categories/id
 #社团
 POST /api/clubs  
 
@@ -459,6 +459,7 @@ POST /api/data-station
 
     {
         file: (html中的file类型)
+        title: str
     }   
 
 GET /api/data-station?status=&is_important(status:0为未审核，１为通过，－１为未通过,2为全部, is_important:0为一般，　１为重要，２为所有)

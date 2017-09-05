@@ -19,6 +19,7 @@ from aun import aun_db
 file_parser = reqparse.RequestParser()
 file_parser.add_argument(
     "file", type=werkzeug.datastructures.FileStorage, required=True, location="files")
+file_parser.add_argument("title", type=str, required=True)
 
 file_filter_parser = reqparse.RequestParser()
 file_filter_parser.add_argument("status", type=int, required=True)
@@ -27,6 +28,7 @@ file_filter_parser.add_argument("is_important", type=int, required=True)
 # data staion parser for put method
 file_put_parser = reqparse.RequestParser()
 file_put_parser.add_argument("file_name", type=str)
+file_put_parser.add_argument("title", type=str)
 file_put_parser.add_argument(
     "file", type=werkzeug.datastructures.FileStorage, location="files")
 file_put_parser.add_argument("status", type=int)
@@ -43,6 +45,7 @@ class ToTimestamp(fields.Raw):
 
 file_field = {
     "id": fields.Integer(attribute="file_id"),
+    "title": fields.String,
     "file_name": fields.String,
     "uploader": fields.String,
     "download_times": fields.Integer,
@@ -84,6 +87,7 @@ class DataStationsApi(Resource):
 
             file_arg = file_parser.parse_args()
             file = file_arg["file"]
+            title = file_arg["title"]
 
             file_name = file.filename
             uploader = current_user.user_name
@@ -96,7 +100,7 @@ class DataStationsApi(Resource):
             file.save(file_path)
             file.close()
 
-            data = DataStation(file_name, uploader)
+            data = DataStation(file_name, uploader, title)
 
             aun_db.session.add(data)
             aun_db.session.commit()
@@ -132,6 +136,7 @@ class DataStationApi(Resource):
             file_name = args["file_name"]
             status = args["status"]
             is_important = args["is_important"]
+            title = args["title"]
 
             if file_name != None:
                 old_name = os.path.join(file_dir, file.file_name)
@@ -142,6 +147,8 @@ class DataStationApi(Resource):
                 os.rename()
             if status != None:
                 file.status = status
+            if title != None:
+                file.title = title
             if is_important != None:
                 file.is_important = is_important
             if file_content != None:

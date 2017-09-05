@@ -14,6 +14,7 @@ class DataStation(aun_db.Model):
 
     """
     file_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    title = aun_db.Column(aun_db.Text)
     file_name = aun_db.Column(aun_db.String(40), unique=True)
     uploader = aun_db.Column(aun_db.String(20))
     upload_time = aun_db.Column(aun_db.DateTime, default=datetime.now)
@@ -22,6 +23,7 @@ class DataStation(aun_db.Model):
     # is_important=1 用于首页重要文件展示
     is_important = aun_db.Column(aun_db.Boolean, default=False)
 
-    def __init__(self, file_name, uploader):
+    def __init__(self, file_name, uploader, title):
         self.file_name = file_name
         self.uploader = uploader
+        self.title = title
