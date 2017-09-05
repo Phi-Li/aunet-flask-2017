@@ -214,6 +214,7 @@ class SlideshowsApi(Resource):
             img_url = slideshow_args['img_url']
             try:
                 img_url = dataurl_to_img(img_url)
+                print(img_url)
             except:
                 pass
             outline = slideshow_args['outline']
@@ -334,7 +335,6 @@ class ArticlesApi(Resource):
                     abort_if_unauthorized("添加文章")
 
             article_args = article_parser.parse_args()
-            category = article_args['category']
             detail = article_args['detail']
             title = article_args['title']
             tags = article_args['tags']

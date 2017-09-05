@@ -26,7 +26,7 @@ request_method_parser = reqparse.RequestParser()
 request_method_parser.add_argument('request_method', type=str, location='json')
 
 
-@identity_loaded.connect_via(home)
+@identity_loaded.connect
 def on_identity_loaded(sender, identity):
 
     try:
@@ -34,13 +34,11 @@ def on_identity_loaded(sender, identity):
         identity.user = current_user
         # user has the permission of edit himself
 
-        identity.provides.add(EditUserPermission(current_user.id))
-
         # Add the UserNeed to the identity
-        if hasattr(current_user, 'id'):
-            identity.provides.add(UserNeed(current_user.id))
+        if hasattr(current_user, 'user_id'):
+            identity.provides.add(UserNeed(current_user.user_id))
             for role in current_user.roles:
-                identity.provides.add(RoleNeed(role.roleName))
+                identity.provides.add(RoleNeed(role.role_name))
 
         # Assuming the User model has a list of nodes, update the
         # identity with the nodes that the user provides
@@ -48,7 +46,7 @@ def on_identity_loaded(sender, identity):
             for role in current_user.roles:
                 for node in role.nodes:
                     if (node.status == 1) and (current_user.status == 1) and (role.status == 1):
-                        identity.provides.add(ActionNeed(node.nodeName))
+                        identity.provides.add(ActionNeed(node.node_name))
 
     except:
         pass
@@ -98,6 +96,7 @@ class LoginApi(Resource):
                 aun_db.session.commit()
                 identity_changed.send(
                     current_app._get_current_object(), identity=Identity(user.user_id))
+
         elif request_method == "DELETE":
             # Remove the user information from the session
             logout_user()
