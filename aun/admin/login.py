@@ -18,7 +18,8 @@ from aun.admin.users import build_user_data
 
 # Request parsers
 login_parser = reqparse.RequestParser()
-login_parser.add_argument('user_name', type=str, location="json", required=True)
+login_parser.add_argument('user_name', type=str,
+                          location="json", required=True)
 login_parser.add_argument('password', type=str, location="json", required=True)
 
 request_method_parser = reqparse.RequestParser()
@@ -27,8 +28,7 @@ request_method_parser.add_argument('request_method', type=str, location='json')
 
 @identity_loaded.connect_via(home)
 def on_identity_loaded(sender, identity):
-    """ function docstring
-    """
+
     try:
         # Set the identity user object
         identity.user = current_user
@@ -55,18 +55,17 @@ def on_identity_loaded(sender, identity):
 
 
 def abort_if_unauthorized(message):
-    """ function docstring
-    """
+
     abort(401, message="{} permission Unauthorized".format(message))
 
 
 class LoginApi(Resource):
-    """ class docstring
+    """
+    rest resource for api/login
     """
 
     def get(self):
-        """ method docstring
-        """
+
         user = current_user
         if user.is_anonymous is True:
             abort(401, message="unlogined")
@@ -78,8 +77,7 @@ class LoginApi(Resource):
         return data
 
     def post(self):
-        """ method docstring
-        """
+
         request_args = request_method_parser.parse_args()
         request_method = request_args['request_method']
         if request_method == "POST":
@@ -87,7 +85,7 @@ class LoginApi(Resource):
             user_name = login_args['user_name']
             password = login_args['password']
             user = User.query.filter(User.user_name == user_name).first()
-            if user:
+            if user is None:
                 abort(401, message="user_name error")
             elif user.verify_password(password) is not True:
                 abort(401, message="password error")
@@ -99,7 +97,7 @@ class LoginApi(Resource):
                 aun_db.session.add(log)
                 aun_db.session.commit()
                 identity_changed.send(
-                    current_app._get_current_object(), identity=Identity(user.id))
+                    current_app._get_current_object(), identity=Identity(user.user_id))
         elif request_method == "DELETE":
             # Remove the user information from the session
             logout_user()
