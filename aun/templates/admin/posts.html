@@ -3,7 +3,7 @@
         <div class="menu-block">
             <div class="uk-flex uk-flex-space-between">
                 <h2 class="menu-subtitle">
-                    筛选: 
+                    筛选:
                     <span class="badge" style="background-color: #4CAF50;">
                         <select v-model="POSTS.filterByColumn" v-on:change="onColumnSelected(POSTS.columnSelected)">
                             <option value="" selected>栏目</option>
@@ -22,9 +22,9 @@
                     </span>
                 </h2>
                 <h2 class="menu-subtitle">
-                    排序: 
+                    排序:
                     <select v-model="POSTS.orderBy">
-                        <option selected value="lastModificationTime">最后更新时间</option>
+                        <option selected value="post_time">最后更新时间</option>
                         <option value="creationTime">创建时间</option>
                         <option value="title">标题</option>
                     </select>
@@ -41,7 +41,7 @@
                             <span class="badge uk-margin-small" style="background-color: #4CAF50;">{{ i.column ? i.column : "未分类" }}</span>
                             <span v-for="tag in i.tags" class="badge uk-margin-small">{{ tag }}</span>
                         </div>
-                        <div>最后更新 {{ new Date(i.lastModificationTime * 1000) }}</div>
+                        <div>最后更新 {{ new Date(i.post_time * 1000) }}</div>
                     </div>
                     <div v-show="i.editable" style="min-width: 6em;">
                         <a class="uk-text-danger uk-display-inline-block uk-margin-right" v-on:click="deletePost(i)">删除</a>
@@ -67,7 +67,7 @@
         <div class="menu-block">
             <textarea id="textarea" v-html="post.content" data-autosave="posts-compose-content">
             </textarea>
-            <h2 class="menu-subtitle">已保存草稿于 {{ new Date(post.lastModificationTime * 1000) }}。<a class="uk-float-right" v-on:click="localSave">立即保存</a></h2>
+            <h2 class="menu-subtitle">已保存草稿于 {{ new Date(post.post_time * 1000) }}。<a class="uk-float-right" v-on:click="localSave">立即保存</a></h2>
         </div>
         <div class="menu-block">
             <h2 class="menu-subtitle">添加栏目</h2>
