@@ -158,7 +158,7 @@
 
 			<div class="club-list">
 				<!-- 照片墙 -->
-				<a v-for="i of clubs" href="/@{{i.name}}" class="club-item">
+				<a v-for="i of clubs" href="/association/@{{i.name}}" class="club-item">
 					<div class="">
 						<img src="{{ i.picture }}" alt="" style="height: 150px; ">
 					</div>
@@ -318,8 +318,8 @@
 						<tbody>
 							<tr v-for="i of assets">
 								<td>{{ $index }}</td>
-								<td>{{ i.file_name }}</td>
-								<td><a href="/api/data-station/{{ i.id }}/download">下载</a></td>
+								<td>{{ i.title }}</td>
+								<td><a href="/api/data-station/{{ i.id }}/download" target="_top">下载</a></td>
 							</tr>
 						</tbody>
 					</table>
