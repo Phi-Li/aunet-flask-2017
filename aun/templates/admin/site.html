@@ -18,14 +18,14 @@
             <li class="menu-items-item">
                 <div class="uk-grid">
                     <div class="uk-width-1-3 uk-text-center">
-                        <img v-bind:src="i.imgUrl" style="max-height: 250px;" />
+                        <img v-bind:src="i.img_url" style="max-height: 250px;" />
                     </div>
                     <div class="uk-width-2-3" v-if="state.edittingSlideshows">
                         <div class="uk-flex uk-flex-column">
                             <input type="text" placeholder="标题" class="uk-h2" v-model="i.title" v-on:change="markDirty(i)">
                             <textarea style="min-height: 100px;" placeholder="摘要" v-model="i.outline" v-on:change="markDirty(i)"></textarea>
                             <div class="uk-flex uk-flex-start">
-                                <input style="flex-grow: 1;" type="text" placeholder="图片地址" v-model="i.imgUrl" v-on:change="markDirty(i)">
+                                <input style="flex-grow: 1;" type="text" placeholder="图片地址" v-model="i.img_url" v-on:change="markDirty(i)">
                                 <input type="file" v-on:change="fileUploaded(i, $event)">
                             </div>
                             <input type="text" placeholder="链接" v-model="i.link" v-on:change="markDirty(i)">
@@ -42,7 +42,7 @@
                         <div class="uk-flex uk-flex-column">
                             <input type="text" class="uk-h2" v-model="i.title" disabled="">
                             <textarea style="min-height: 100px;" v-model="i.outline" disabled=""></textarea>
-                            <input type="text" v-model="i.imgUrl" disabled="">
+                            <input type="text" v-model="i.img_url" disabled="">
                             <input type="text" v-model="i.link" disabled="">
                             <input type="text" v-model="i.id" disabled="">
                         </div>
@@ -56,5 +56,5 @@
     </div>
 </div>
 <script>
-    
+
 </script>

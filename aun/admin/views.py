@@ -66,6 +66,18 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
+@aun_admin.route("/", methods=["GET"])
+@aun_admin.route("/<path:path>", methods=["GET"])
+def get_dashboard(path=None):
+    """
+    get dashboard index
+    """
+    basedir = current_app.config['BASEDIR']
+    path = os.path.join(basedir, 'aun/templates/admin/app.html')
+    with open(path, 'r', encoding='utf-8') as response:
+        return response.read()
+
+
 @home.route("/api/templates/<string:path>", methods=["GET"])
 def get_template(path):
     """
@@ -81,6 +93,7 @@ def get_template(path):
             return response.read()
     except:
         return "not found", 404
+
 
 # User 模块
 aun_api.add_resource(CurrentUserApi, "/api/user/current-user")
@@ -105,8 +118,8 @@ aun_api.add_resource(
     ArticleDetailApi, "/api/news/news/<string:id>/detail")
 aun_api.add_resource(TagsApi, "/api/article/tags")
 aun_api.add_resource(TagApi, "/api/article/tags/<string:id>")
-aun_api.add_resource(CategorysApi, "/api/article/categorys")
-aun_api.add_resource(CategoryApi, "/api/article/categorys/<string:cat_id>")
+aun_api.add_resource(CategorysApi, "/api/article/categories")
+aun_api.add_resource(CategoryApi, "/api/article/categories/<string:cat_id>")
 
 
 # Search 模块

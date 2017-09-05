@@ -2,13 +2,13 @@
     <div class="menu-block">
         <ul class="menu-items">
             <li class="menu-items-item" style="padding-top: 20px;">
-                <h1 class="uk-h2">{{ session.userName }} <i class="fa fa-pencil"></i></h1>
+                <h1 class="uk-h2">{{ session.user_name }} <i class="fa fa-pencil"></i></h1>
                 <div>
                     <span class="badge" v-for="i of session.roles">
                         {{ i.roleName }}
                     </span>
                 </div>
-                <p>最近登录时间 {{ new Date(session.loginTime*1000) }} 于 {{ session.loginIp }}</p>
+                <p>最近登录时间 {{ new Date(session.login_time*1000) }} 于 {{ session.login_ip }}</p>
             </li>
         </ul>
     </div>
@@ -36,8 +36,8 @@
     <div class="modal-dialog">
         <div class="modal-dialog-wrapper">
             <h2 class="uk-h3 uk-text-bold uk-text-center">修改密码</h2>
-            <p class="uk-text-center">输入 {{ session.userName }} 的新密码</p>
-            <input type="password" class="uk-width-1-1" placeholder="新密码" autofocus="" v-model="session.passWord"/>
+            <p class="uk-text-center">输入 {{ session.user_name }} 的新密码</p>
+            <input type="password" class="uk-width-1-1" placeholder="新密码" autofocus="" v-model="session.password"/>
         </div>
         <div class="uk-grid uk-grid-collapse uk-grid-width-1-2">
             <a v-on:click="changePassword()" class="modal-dialog-button">确认</a>
@@ -50,7 +50,7 @@
     <div class="modal-dialog">
         <div class="modal-dialog-wrapper">
             <h2 class="uk-h3 uk-text-bold uk-text-center">修改验证邮箱</h2>
-            <p class="uk-text-center">输入 {{ session.userName }} 的新邮箱</p>
+            <p class="uk-text-center">输入 {{ session.user_name }} 的新邮箱</p>
             <input type="email" class="uk-width-1-1" placeholder="新邮箱地址" autofocus="" v-model="session.email"/>
         </div>
         <div class="uk-grid uk-grid-collapse uk-grid-width-1-2">
