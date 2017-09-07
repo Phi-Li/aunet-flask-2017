@@ -606,7 +606,12 @@
                         reader.readAsDataURL(ev.target.files[0]);
                     },
                     commitClub: function() {
-                        updateClub(app.club);
+                        updateClub(app.club).done(function() {
+                            app.SITE.clubCommited = true;
+                            setTimeout(function() {
+                                app.SITE.clubCommited = false;
+                            }, 5000);
+                        });
                     }
                 }),
             });
@@ -958,6 +963,7 @@
                     new: [],
                     dirty: [],
                     deleted: [],
+                    clubCommited: false,
                 },
                 POSTS: {
                     tag: "",

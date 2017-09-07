@@ -78,7 +78,7 @@
                     </div>
                 </li>
                 <li class="menu-items-item uk-text-danger" v-on:click="commitClub(club)">
-                    完成修改
+                    完成修改 <span v-show="SITE.clubCommited" style="color: black;">已更新</span>
                 </li>
             </ul>
         </div>
