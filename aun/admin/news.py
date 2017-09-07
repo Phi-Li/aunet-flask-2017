@@ -132,7 +132,7 @@ class ImgToDataurl(fields.Raw):
     """
 
     def format(self, img_url):
-        return "/"+img_url
+        return img_url
 
 
 # work with marshal_with() to change a class into json
