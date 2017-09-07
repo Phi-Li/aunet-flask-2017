@@ -48,8 +48,8 @@
 
 				<div class="carousel-container">
 					<div id="carousel">
-						<div v-for="i of slideShows.concat(slideShows)">
-							<div class="slide-placeholder" style="background: url({{ i.img_url }}); background-size: cover;">{{ i.title }}</div>
+						<div v-for="i of slideShows">
+							<div class="slide-placeholder" style="background: url({{ i.img_url }}); background-size: cover;"><a href="//{{ i.link }}">{{ i.title }}</a></div>
 						</div>
 					</div>
 				</div>
@@ -60,23 +60,13 @@
 					<h2 class="heading-tag">社团风采</h2>
 
 					<div class="club-card-group">
-						<div class="club-card">
-							<div class="card-image">
+						<a style="display: block;" href="" class="club-card" v-for="i of getRandomFrom(clubs, 3)">
+							<div class="card-image" style="background: url({{ i.picture }}); background-size: cover;">
 								<div class="image-placeholder">1</div>
 							</div>
-						</div>
-
-						<div class="club-card">
-							<div class="card-image">
-								<div class="image-placeholder">2</div>
-							</div>
-						</div>
-
-						<div class="club-card">
-							<div class="card-image">
-								<div class="image-placeholder">3</div>
-							</div>
-						</div>
+							<div>{{ i.name }}</div>
+							<div>{{ i.brief_introduction }}</div>
+						</a>
 					</div>
 				</div>
 

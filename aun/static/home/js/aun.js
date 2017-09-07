@@ -61,7 +61,19 @@ app = new Vue({
                 app.assets = JSON.parse(data);
             }));
         },
-
+        getRandomFrom: function (seq, num) {
+            var shuffled = seq.slice(0);
+            var i = seq.length;
+            var min = i - num;
+            var temp, index;
+            while(i-- > min) {
+                index = Math.floor((i + 1) * Math.random());
+                temp = shuffled[index];
+                shuffled[index] = shuffled[i];
+                shuffled[i] = temp;
+            }
+            return shuffled.slice(min);
+        },
     }
 });
 
@@ -84,6 +96,7 @@ page("/", function (ctx, next) { // 首页
             app.getAssets();
         });
     });
+    app.getClubs();
 });
 
 page("/news", function (ctx, next) { // 新闻
@@ -98,7 +111,7 @@ page("/news/:postId", function (ctx, next) { // 具体新闻
     });
 });
 
-page("/@:clubName", function (ctx, next) { // 社团空间
+page("/association/@:clubName", function (ctx, next) { // 社团空间
     app.getNews();
     app.getClubs().always(function () {
         app.currentView = "clubs-club";
