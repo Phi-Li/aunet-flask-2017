@@ -84,7 +84,7 @@ def dataurl_to_img(img_url):
     path = os.path.join(
         aun_app.config['BASEDIR'], 'aun/static/upload/article', filename)
     img.save(path, quality="192")
-    return 'static/upload/article/'+filename
+    return '/static/upload/article/'+filename
 
 
 # parser to judge DELETE or POST or PUT http method
