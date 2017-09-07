@@ -35,6 +35,11 @@ class Config(object):
     # 设置session的过期时间
     PERMANENT_SESSION_LIFETIME = timedelta(hours=6)
 
+    # flask-msearch
+    MSEARCH_INDEX_NAME = 'whoosh_index'
+    MSEARCH_BACKEND = 'whoosh'
+    MSEARCH_ENABLE = True
+
 
 class ProductionConfig(Config):
     """

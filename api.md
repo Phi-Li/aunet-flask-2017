@@ -271,7 +271,7 @@ DELETE /api/clubs/<string:club_id>/articles/<string:article_id>
 
     # slideshow
 
-GET /api/news/slide-shows
+GET /api/news/slideshow
 
     ->
     [{
@@ -284,7 +284,7 @@ GET /api/news/slide-shows
             link: str,
         }]
 
-POST /api/news/slide-shows
+POST /api/news/slideshow
 
     {
         title: str,
@@ -293,7 +293,7 @@ POST /api/news/slide-shows
         link: str,
     }
 
-PUT /api/news/slide-shows/id:str
+PUT /api/news/slideshow/id:str
 
     {
         title: str,
@@ -305,7 +305,7 @@ PUT /api/news/slide-shows/id:str
 
     #optional keys
 
-DELETE /api/news/slide-shows/id:str
+DELETE /api/news/slideshow/id:str
 
     ->
 

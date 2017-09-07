@@ -23,7 +23,7 @@ app = new Vue({
     methods: {
         getSlideShows: function () {
             return ($.ajax({
-                url: "/api/news/slide-shows",
+                url: "/api/news/slideshow",
                 dataType: "text",
             }).done(function (data) {
                 app.slideShows = JSON.parse(data);
