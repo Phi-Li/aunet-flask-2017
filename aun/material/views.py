@@ -110,7 +110,7 @@ def download(file_type):
         doc = DocxTemplate(path.join(Docx_path, type+'.docx'))
         doc.render(context)
         temp_file = path.join(Upload_path, str(
-            current_user.id) + 'result.docx')
+            current_user.user_id) + 'result.docx')
         doc.save(temp_file)
         # 读取渲染后的文件并将之删除
         with open(temp_file, 'rb') as f:
@@ -208,7 +208,7 @@ def submit():
     # 发送邮件
     html = render_template(
         'material/mail/submit_success.html',
-        userName=current_user.userName, type=types[type][1])  #
+        userName=current_user.user_name, type=types[type][1])
     send_email("场地物资申请提交成功", [current_user.email], html)  # current_user.email
 
     flash("申请提交成功，等待审批！")
@@ -294,7 +294,7 @@ def approve():
     is_print = request.form.get('is_print')
     data.is_print = '否' if is_print is None else '是'
     data.pre_verify = request.form.get('pre_verify')
-    data.approve_time = strftime('%Y-%m-%d %H:%M:%S', localtime())
+    data.approve_time = datetime.now()  # strftime('%Y-%m-%d %H:%M:%S', localtime())
     aun_db.session.add(data)
     aun_db.session.commit()
     flash('审批操作成功！')
@@ -303,6 +303,7 @@ def approve():
     # 发送邮件
     if data.result == "1":
         result = "通过"
+        print(current_user.email)
         html = render_template(
             'material/mail/approve_status.html',
             userName=submit_user.user_name, submitTime=data.apply_time.strftime("%Y %b %d %H:%M"), type=types[type][1], result=result)
@@ -337,7 +338,7 @@ def mult_approve():
         data = types[type][0].query.filter_by(id=int(id)).first_or_404()
         data.is_print = is_print
         data.result = result
-        data.approve_time = strftime('%Y-%m-%d %H:%M:%S', localtime())
+        data.approve_time = datetime.now()  # strftime('%Y-%m-%d %H:%M:%S', localtime())
         aun_db.session.add(data)
         aun_db.session.commit()
 

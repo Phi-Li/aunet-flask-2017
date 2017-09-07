@@ -9,7 +9,7 @@ from aun import aun_mail
 from flask import current_app
 
 
-def send_async_email(msg):
+def send_async_email(msg, aun_app):
     with aun_app.app_context():
         aun_mail.send(msg)
 
@@ -27,5 +27,5 @@ def send_email(subject, recipients, text_body):
 
     message = Message(subject, sender=MAIL, recipients=recipients)
     message.html = text_body
-    thread = Thread(target=send_async_email, args=[message])
+    thread = Thread(target=send_async_email, args=[message, aun_app])
     thread.start()

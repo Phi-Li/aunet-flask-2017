@@ -8,7 +8,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 from aun import aun_db
 from aun.home.models import Article, Category, Tag, article_category, article_tag, SlideShow
-from aun.association.models import Club
+from aun.association.models import Club, club_article
 from aun.admin.models import User, Node, Role, user_role, role_node, user_club ,\
     LoginLog
 from aun.data_station.models import DataStation

@@ -66,7 +66,7 @@ def logout():
     return redirect(request.args.get('next') or '/')
 
 
-@home.route("/dashboard", methods=["GET"])
+@home.route("/dashboard/", methods=["GET"])
 @home.route("/dashboard/<path:path>", methods=["GET"])
 def get_dashboard(path=None):
     """
@@ -81,7 +81,7 @@ def get_dashboard(path=None):
 @home.route("/api/templates/<path:path>", methods=["GET"])
 def get_template(path):
     """
-    Args: 
+    Args:
         path: the path of the template file needed. "admin/app.html"
 
     Return:
@@ -107,9 +107,9 @@ aun_api.add_resource(RoleApi, "/api/user/roles/<string:role_id>")
 
 
 # Article 模块
-aun_api.add_resource(SlideshowsApi, "/api/news/slide-shows")
+aun_api.add_resource(SlideshowsApi, "/api/news/slideshow")
 aun_api.add_resource(
-    SlideshowApi, "/api/news/slide-shows/<string:slideshow_id>")
+    SlideshowApi, "/api/news/slideshow/<string:slideshow_id>")
 aun_api.add_resource(ArticlesApi, "/api/news/news",
                      "/api/clubs/<string:club_id>/articles")
 # gai
@@ -124,5 +124,5 @@ aun_api.add_resource(CategoryApi, "/api/article/categories/<string:cat_id>")
 
 
 # Search 模块
-aun_api.add_resource(SearchArticleApi, "/api/search/article")
+aun_api.add_resource(SearchArticleApi, "/api/search/articles")
 aun_api.add_resource(LoginApi, "/api/login")

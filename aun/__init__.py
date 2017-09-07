@@ -11,6 +11,9 @@ from flask_mail import Mail
 from flask_login import LoginManager
 from flask_principal import Principal
 from flask_restful import Api
+from flask_msearch import Search
+from jieba.analyse.analyzer import ChineseAnalyzer
+
 from config import DevelopmentConfig, ProductionConfig
 
 #     aun_app.config.from_object('secret_config')  # 导入secret配置
@@ -22,6 +25,7 @@ aun_mail = Mail()
 aun_login = LoginManager()
 aun_principals = Principal()
 aun_api = Api()
+aun_search = Search(analyzer=ChineseAnalyzer(), db=aun_db)
 
 
 def create_app(config):
@@ -36,6 +40,7 @@ def create_app(config):
     aun_login.init_app(app)
     aun_principals.init_app(app)
     aun_api.init_app(app)
+    aun_search.init_app(app)
 
     from aun.home import home
     from aun.admin import aun_admin

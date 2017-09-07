@@ -7,13 +7,6 @@ from flask import render_template
 from aun.home import home
 
 
-@home.route('/developing')
-def develop_next():
-    """ page developing
-    """
-    return render_template('public/fixed.html')
-
-
 @home.route('/<path:path>')
 def index_test(path):
     """

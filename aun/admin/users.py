@@ -146,9 +146,9 @@ class UsersApi(Resource):
 
     def get(self):
 
-        #permission = Permission(ActionNeed(('查看用户')))
-        # if permission.can() is not True:
-         #   abort_if_unauthorized("查看用户")
+        permission = Permission(ActionNeed(('查看用户')))
+        if permission.can() is not True:
+            abort_if_unauthorized("查看用户")
         datas = list()
         users = User.query.all()
         for user in users:
@@ -355,7 +355,7 @@ class NodeApi(Resource):
             if permission.can()is not True:
                 abort_if_unauthorized("修改节点")
 
-            node = Node.query.filter(Node.id == node_id).first()
+            node = Node.query.filter(Node.node_id == node_id).first()
             abort_if_not_exist(node, "node")
             args = node_spec_parser.parse_args()
             status = args['status']

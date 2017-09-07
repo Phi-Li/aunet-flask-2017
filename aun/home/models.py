@@ -11,7 +11,7 @@ from aun import aun_db
 
 article_category = aun_db.Table("article_category",
                                 aun_db.Column(
-                                    'article_id', aun_db.Integer, aun_db.ForeignKey("article.article_id")),
+                                    'article_id', aun_db.Integer, aun_db.ForeignKey("article.id")),
                                 aun_db.Column(
                                     'category_id', aun_db.Integer, aun_db.ForeignKey("category.cat_id")),
                                 aun_db.Column(
@@ -20,7 +20,7 @@ article_category = aun_db.Table("article_category",
 
 article_tag = aun_db.Table("article_tag",
                            aun_db.Column(
-                               "article_id", aun_db.Integer, aun_db.ForeignKey("article.article_id")),
+                               "article_id", aun_db.Integer, aun_db.ForeignKey("article.id")),
                            aun_db.Column(
                                "tag_id", aun_db.Integer, aun_db.ForeignKey("tag.tag_id")),
                            aun_db.Column(
@@ -33,7 +33,8 @@ class Article(aun_db.Model):
     article table including news and club article
     """
     __tablename__ = "article"
-    article_id = aun_db.Column(aun_db.Integer, primary_key=True)
+    __searchable__ = ['title', 'detail']
+    id = aun_db.Column(aun_db.Integer, primary_key=True)
     year = aun_db.Column(aun_db.Integer)
     month = aun_db.Column(aun_db.Integer)
     day = aun_db.Column(aun_db.Integer)
