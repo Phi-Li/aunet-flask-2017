@@ -10,10 +10,11 @@
 	color: #46b196;
 }
 
-#carousel .slide-placeholder {
-	background: #fff;
-	color: #b0fbc5;
-	font-size: 100px;
-	line-height: 450px;
-	text-align: center;
+#carousel .slick-dots li button:hover:before, .slick-dots li button:focus:before {
+	opacity: .5;
+}
+
+#carousel a.slide {
+	display: block;
+	height: 450px;
 }
