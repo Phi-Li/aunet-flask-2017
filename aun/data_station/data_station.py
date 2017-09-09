@@ -187,4 +187,4 @@ class DataDownloadApi(Resource):
         file_dir = os.path.join(
             current_app.config["BASEDIR"], "aun/static/upload/data_station")
 
-        return send_from_directory(file_dir, file.file_name, as_attachment=True)
+        return send_from_directory(file_dir, file.file_name)
