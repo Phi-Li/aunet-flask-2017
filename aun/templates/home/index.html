@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
 	<title>华中科技大学社团网</title>
 	<link rel="stylesheet" type="text/css" href="/static/home/fonts/fonts.css" />
+	<link rel="stylesheet" type="text/css" href="/static/home/css/uikit.min.css">
 	<link rel="stylesheet" type="text/css" href="/static/home/slick/slick.css" />
 	<link rel="stylesheet" type="text/css" href="/static/home/slick/slick-theme.css" />
 	<link rel="stylesheet" type="text/css" href="/static/home/css/nav.css">
@@ -48,7 +49,7 @@
 				<div class="carousel-container">
 					<div id="carousel">
 						<div v-for="i of slideShows">
-							<a class="slide" href="//{{ i.link }}" style="background: url({{ i.img_url }}), #eeeeee; background-size: cover;">{{ i.title }}</a>
+							<div class="slide-placeholder" style="background: url({{ i.img_url }}); background-size: cover;"><a href="//{{ i.link }}">{{ i.title }}</a></div>
 						</div>
 					</div>
 				</div>
@@ -60,9 +61,11 @@
 
 					<div class="club-card-group">
 						<a style="display: block;" href="/association/@{{ i.name }}" class="club-card" v-for="i of getRandomFrom(clubs, 3)">
-							<div class="card-image" style="background: url({{ i.picture }}), #eeeeee; background-size: cover;"></div>
-							<h3 class="club-name">{{ i.name }}</h3>
-							<div class="club-info">{{ i.brief_introduction }}</div>
+							<div class="card-image" style="background: url({{ i.picture }}); background-size: cover;">
+								<div class="image-placeholder">1</div>
+							</div>
+							<div>{{ i.name }}</div>
+							<div>{{ i.brief_introduction }}</div>
 						</a>
 					</div>
 				</div>
@@ -72,14 +75,9 @@
 
 					<div class="news-container">
 						<ul class="news-list">
-							<!-- <li class="news-item" v-for="i of news | limitBy 5"><a href="/news/{{ i.id }}">{{ i.title }}</a></li> -->
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="news-item" v-for="i of news | limitBy 5"><a href="/news/{{ i.id }}">{{ i.title }}</a></li>
 						</ul>
-						<img src="/static/images/icon_news.png" alt="news" style="width:256px;height:192px;">
+						<img src="/static/images/icon_news.png" alt="news">
 					</div>
 				</div>
 
@@ -110,12 +108,7 @@
 					<div class="docs-container">
 						<img src="/static/images/icon_doc.png" alt="official documents">
 						<ul class="doc-list">
-							<!-- <li class="doc-item" v-for="i of assets"><a href="/api/data-station/{{ i.id }}/download" target="_top">{{ i.title }}</a></li> -->
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="doc-item" v-for="i of assets"><a href="/api/data-station/{{ i.id }}/download" target="_top">{{ i.title }}</a></li>
 						</ul>
 					</div>
 
@@ -344,7 +337,7 @@
 		<div class="footer-content">
 			<nav class="footer-directory">
 				<div class="directory-column">
-					<h3 class="column-title">友情链接</h3>
+					<h2 class="column-title">友情链接</h2>
 					<ul class="column-list">
 						<li class="column-item"><a class="column-link" href="#">华中科技大学官方网站</a></li>
 						<li class="column-item"><a class="column-link" href="#">华中科技大学hub系统</a></li>
@@ -354,15 +347,15 @@
 					</ul>
 				</div>
 
-				<div class="directory-column-middle">
-					<h3 class="column-title">官方微博</h3>
+				<div class="directory-middle-column">
+					<h2 class="column-title">官方微博</h2>
 					<a href="https://weibo.com/hustauer">华中大社联AU<br>https://weibo.com/hustauer</a>
 				</div>
 
-				<div class="directory-column-right">
-					<h3 class="column-title">官方微信平台</h3>
+				<div class="directory-column">
+					<h2 class="column-title">官方微信平台</h2>
 					<ul class="">
-						<li><img src="/static/images/au_qr_code.png" alt="AU QR Code" width="430px" height="430px" style="width: 110px; height: 110px;"></li>
+						<li><img src="/static/images/au_qr_code.png" alt="AU QR Code" width="430px" height="430px" style="width: 200px; height: 200px;"></li>
 					</ul>
 				</div>
 			</nav>

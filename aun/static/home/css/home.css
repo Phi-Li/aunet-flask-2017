@@ -11,7 +11,7 @@ body {
 	padding: 0;
 	margin: 0;
 	font-family: "Helvetica Neue","Helvetica","Arial",sans-serif;
-	color: #2b2b2b;
+	color: #333;
 }	
 
 ul, ol, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, hgroup, p, blockquote, figure, form, fieldset, input, legend, pre, abbr, button {
@@ -67,9 +67,6 @@ body, input, textarea, select, button {
 	direction: ltr;
 }
 
-h1, h2, h3, h4 {
-	font-weight: normal;
-}
 
 h1 img,h2 img,h3 img,h4 img,h5 img,h6 img {
     display: block;
@@ -77,26 +74,26 @@ h1 img,h2 img,h3 img,h4 img,h5 img,h6 img {
 }
 
 
-/* h1+*, h2+*, h3+*, h4+*, h5+*, h6+* {
+h1+*, h2+*, h3+*, h4+*, h5+*, h6+* {
 	margin-top: .75em;
-} */
+}
 
 
 h1+h1, h1+h2, h1+h3, h1+h4, h1+h5, h1+h6, h2+h1, h2+h2, h2+h3, h2+h4, h2+h5, h2+h6, h3+h1, h3+h2, h3+h3, h3+h4, h3+h5, h3+h6, h4+h1, h4+h2, h4+h3, h4+h4, h4+h5, h4+h6, h5+h1, h5+h2, h5+h3, h5+h4, h5+h5, h5+h6, h6+h1, h6+h2, h6+h3, h6+h4, h6+h5, h6+h6 {
 	margin-top: 0;
 }
 
-/* p+h1,ul+h1,ol+h1,p+h2,ul+h2,ol+h2,p+h3,ul+h3,ol+h3,p+h4,ul+h4,ol+h4,p+h5,ul+h5,ol+h5,p+h6,ul+h6,ol+h6 {
+p+h1,ul+h1,ol+h1,p+h2,ul+h2,ol+h2,p+h3,ul+h3,ol+h3,p+h4,ul+h4,ol+h4,p+h5,ul+h5,ol+h5,p+h6,ul+h6,ol+h6 {
     margin-top: 1.4em
-} */
+}
 
-/* p+*, ul+*, ol+* {
+p+*, ul+*, ol+* {
 	margin-top: .7em;
-} */
+}
 
-/* ul, ol {
+ul, ol {
 	margin-left: 1.17647em;
-} */
+}
 
 ul ul,ul ol,ol ul,ol ol {
     margin-top: 0;
@@ -117,7 +114,7 @@ a:link,a:visited {
 }
 
 a:hover {
-    text-decoration: none
+    text-decoration: underline
 }
 
 a:active {
@@ -149,10 +146,6 @@ main ul {
 .main-container {
 	width: 960px;
 	margin: 0 auto;	
-}
-
-.main-container a {
-	color: #2b2b2b;
 }
 
 .heading-tag {
@@ -283,8 +276,6 @@ span.search-icon {
 	margin-top: 140px;
 }
 
-/* Home view > association gallery */
-
 #club-gallery .club-card-group {
 	display: flex;
 	justify-content: space-around;
@@ -300,51 +291,22 @@ span.search-icon {
 	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#club-gallery .card-image {
-	height: 150px;
-}
-
-#club-gallery h3 {
-	margin-top: 10px;
+#club-gallery .image-placeholder {
+	background: #fafafa;
+	color: #b0fbc5;
+	font-size: 50px;
+	line-height: 150px;
 	text-align: center;
 }
-
-#club-gallery .club-info {
-	margin-top: 30px;
-	font-size: 0.8em;
-}
-
-/* Home view > recent news */
 
 #recent-news .news-container, #official-docs .docs-container {
 	display: flex;
 	justify-content: space-around;
 }
 
-#recent-news .news-list, #official-docs .doc-list {
-	max-width: 330px;
-	font-size: 1.0em;
-}
-
-#recent-news li.news-item:not(:last-child), #official-docs li.doc-item:not(:last-child) {
-	margin-bottom: 40px;
-}
-
-#recent-news h3, #official-docs h3 {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-#recent-news img {
-	align-self: center;
-}
-
 #recent-news ul.news-list, #official-docs ul.doc-list {
 	color: black;
 }
-
-/* Home view > association services */
 
 nav.service-list {
 	display: flex;
@@ -361,15 +323,6 @@ a.service-link {
 	text-align: center;
 	background-position: center top;
 	background-repeat: no-repeat;
-}
-
-#club-services h3 {
-	font-size: 1.4em;
-}
-
-#club-services h4 {
-	margin-top: 12px;
-	font-size: 0.8em;
 }
 
 a.financial {

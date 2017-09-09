@@ -1,28 +1,16 @@
 #global-footer {
 	height: 200px;
-	padding-top: 8px;
 	margin-top: 160px;
 	background: #333333;
 	color: #7f7f7f;
 }
 
-#global-footer h3 {
-	margin-bottom: 12px;
-	font-size: 1em;
-}
-
 #global-footer a {
-	color: #7f7f7f;
-	font-size: 0.8em;
 	text-decoration: none;
 }
 
 #global-footer ul {
 	list-style: none;
-}
-
-#global-footer img {
-	border: 4px solid #7f7f7f;
 }
 
 #global-footer nav.footer-directory {
@@ -35,13 +23,8 @@
 
 #global-footer li.column-item {
 	display: block;
-	margin-bottom: 4px;
 }
 
-#global-footer .directory-column-middle, #global-footer .directory-column-right, #global-footer .copyright {
+#global-footer .directory-middle-column, #global-footer .copyright {
 	text-align: center;
-}
-
-#global-footer .directory-column-middle h3 {
-	margin-bottom: 40px;
 }
