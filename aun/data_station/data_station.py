@@ -13,7 +13,7 @@ import os
 import werkzeug
 
 from aun.data_station.models import DataStation
-from aun.common import request_method_parser, abort_if_not_exist, abort_if_unauthorized
+from aun.common import abort_if_not_exist, abort_if_unauthorized
 from aun import aun_db
 
 file_parser = reqparse.RequestParser()
@@ -33,6 +33,11 @@ file_put_parser.add_argument(
     "file", type=werkzeug.datastructures.FileStorage, location="files")
 file_put_parser.add_argument("status", type=int)
 file_put_parser.add_argument("is_important", type=int)
+
+
+# parser to judge DELETE or POST or PUT http method
+request_method_parser = reqparse.RequestParser()
+request_method_parser.add_argument('request_method', type=str)
 
 
 class ToTimestamp(fields.Raw):
@@ -183,8 +188,10 @@ class DataDownloadApi(Resource):
         abort_if_not_exist(file, "this file")
 
         file.download_times = file.download_times+1
+        aun_db.session.add(file)
+        aun_db.session.commit()
 
         file_dir = os.path.join(
             current_app.config["BASEDIR"], "aun/static/upload/data_station")
 
-        return send_from_directory(file_dir, file.file_name, as_attachment=True)
+        return send_from_directory(file_dir, file.file_name)
