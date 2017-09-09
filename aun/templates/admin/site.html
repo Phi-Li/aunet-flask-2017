@@ -67,7 +67,17 @@
                         </div>
                         <div class="uk-width-2-3">
                             <div class="uk-flex uk-flex-column">
-                                <input type="text" placeholder="社团名称" class="uk-h2" v-model="club.name">
+                                <div class="uk-flex uk-flex-space-between">
+                                    <input type="text" placeholder="社团名称" class="uk-h2" v-model="club.name" style="width: 100%;">
+                                    <select class="badge" v-model="club.category">
+                                        <option>技能培养类</option>
+                                        <option>科技创新类</option>
+                                        <option>理论研究类</option>
+                                        <option>体育休闲类</option>
+                                        <option>文艺表演类</option>
+                                        <option>艺术创作类</option>
+                                    </select>
+                                </div>
                                 <textarea style="min-height: 100px; resize: vertical;" placeholder="社团简介" v-model="club.brief_introduction"></textarea>
                                 <div class="uk-flex uk-flex-start">
                                     <input style="flex-grow: 1;" type="text" placeholder="上传图片或贴地址" v-model="club.picture">
@@ -79,6 +89,42 @@
                 </li>
                 <li class="menu-items-item uk-text-danger" v-on:click="commitClub(club)">
                     完成修改 <span v-show="SITE.clubCommited" style="color: black;">已更新</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div v-if="view[1] === 'assets'">
+        <div class="menu-block uk-container uk-container-center">
+            <h1 class="menu-subtitle">资料站管理</h1>
+            <ul class="menu-items">
+                <li class="menu-items-item" v-for="i of assets">
+                    <div class="uk-flex uk-flex-space-between">
+                        <div class="">
+                            {{ i.title }}
+                        </div>
+                        <div class="">
+                            <a href="/api/data-station/{{ i.id }}/download" target="_top">下载</a>
+                            <a href="#" class="uk-text-danger" v-on:click="deleteAsset(i)">删除</a>
+                        </div>
+                    </div>
+                </li>
+                <!-- <li class="menu-items-item uk-text-danger" v-on:click="commitClub(club)">
+                    完成修改 <span v-show="SITE.clubCommited" style="color: black;">已更新</span>
+                </li> -->
+            </ul>
+            <h1 class="menu-subtitle">上传新文件</h1>
+            <ul class="menu-items">
+                <li class="menu-items-item">
+                    <div class="uk-flex uk-flex-column">
+                        <form class="" action="/api/data-station" method="post" v-on:submit.prevent="1" enctype="multipart/form-data">
+                            <input type="text" placeholder="文件标题" style="width: 100%;" name="title" v-model="asset.title">
+                            <input type="file" placeholder="上传文件" name="file">
+                            <input type="hidden" name="request_method" value="POST">
+                        </form>
+                    </div>
+                </li>
+                <li class="menu-items-item uk-text-danger" v-on:click="createAsset()">
+                    上传
                 </li>
             </ul>
         </div>

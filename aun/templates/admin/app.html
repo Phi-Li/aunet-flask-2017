@@ -80,6 +80,9 @@
                         <li class="menu-items-item" v-bind:class="{'active': view[0] === 'site' && view[1] === 'club'}" v-on:click="page('/dashboard/site/club')">
                             我的社团
                         </li>
+                        <li class="menu-items-item" v-bind:class="{'active': view[0] === 'site' && view[1] === 'assets'}" v-on:click="page('/dashboard/site/assets')">
+                            资料站管理
+                        </li>
                     </ul>
                 </div>
                 <div class="menu-block">
@@ -540,6 +543,7 @@
                 ready: function() {
                     retrieveSlideshows();
                     retrieveClubs();
+                    retrieveAssets();
                 },
                 methods: $.extend(app.$options.methods, {
                     commitSlideshows: function() {
@@ -612,6 +616,15 @@
                                 app.SITE.clubCommited = false;
                             }, 5000);
                         });
+                    },
+                    deleteAsset: function(i) {
+                        deleteAsset(i).always(retrieveAssets);
+                    },
+                    createAsset: function() {
+                        createAsset().always(function() {
+                            retrieveAssets();
+                            $("form input").val("");
+                        });
                     }
                 }),
             });
@@ -681,6 +694,27 @@
 
         deleteSlideshow = function(club) {
             return requestJSON("/api/clubs" + club.id, "delete");
+        };
+
+        // assets
+        retrieveAssets = function() {
+            return $.ajax("/api/data-station?status=2&is_important=2").done(function(data) {
+                app.assets = data;
+            });
+        };
+
+        createAsset = function(form) {
+            return $.ajax({
+                url: "/api/data-station",
+                method: "post",
+                contentType: false,
+                processData: false,
+                data: new FormData(document.querySelector("form")),
+            });
+        };
+
+        deleteAsset = function(asset) {
+            return requestJSON("/api/data-station/" + asset.id, "delete");
         };
 
         // tags
@@ -936,6 +970,8 @@
                 // site
                 slideshows: [],
                 club:{},
+                assets: [],
+                asset: {},
 
                 // users
                 users: [],

@@ -60,7 +60,7 @@
 					<h2 class="heading-tag">社团风采</h2>
 
 					<div class="club-card-group">
-						<a style="display: block;" href="" class="club-card" v-for="i of getRandomFrom(clubs, 3)">
+						<a style="display: block;" href="/association/@{{ i.name }}" class="club-card" v-for="i of getRandomFrom(clubs, 3)">
 							<div class="card-image" style="background: url({{ i.picture }}); background-size: cover;">
 								<div class="image-placeholder">1</div>
 							</div>
@@ -90,7 +90,7 @@
 							<h4>社团财务状况的线上公开平台</h4>
 						</a>
 
-						<a class="service-link material" href="">
+						<a class="service-link material" href="/material" target="_top">
 							<h3>物资申请</h3>
 							<h4>社团场地物资申请的线上平台</h4>
 						</a>
@@ -108,7 +108,7 @@
 					<div class="docs-container">
 						<img src="/static/images/icon_doc.png" alt="official documents">
 						<ul class="doc-list">
-							<li class="doc-item"><a>news</a></li>
+							<li class="doc-item" v-for="i of assets"><a href="/api/data-station/{{ i.id }}/download" target="_top">{{ i.title }}</a></li>
 						</ul>
 					</div>
 
@@ -123,12 +123,12 @@
 			<div class="local-nav">
 				<div class="filters">
 					<a class="filter" :class="{'active': CLUBS.typeFilter === ''}" v-on:click="CLUBS.typeFilter=''">全部</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '技能培养'}" v-on:click="CLUBS.typeFilter='技能培养'">技能培养类</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '科技创新'}" v-on:click="CLUBS.typeFilter='科技创新'">科技创新类</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '理论研究'}" v-on:click="CLUBS.typeFilter='理论研究'">理论研究类</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '体育休闲'}" v-on:click="CLUBS.typeFilter='体育休闲'">体育休闲类</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '文艺表演'}" v-on:click="CLUBS.typeFilter='文艺表演'">文艺表演类</a>
-					<a class="filter" :class="{'active': CLUBS.typeFilter === '艺术创作'}" v-on:click="CLUBS.typeFilter='艺术创作'">艺术创作类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '技能培养类'}" v-on:click="CLUBS.typeFilter='技能培养类'">技能培养类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '科技创新类'}" v-on:click="CLUBS.typeFilter='科技创新类'">科技创新类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '理论研究类'}" v-on:click="CLUBS.typeFilter='理论研究类'">理论研究类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '体育休闲类'}" v-on:click="CLUBS.typeFilter='体育休闲类'">体育休闲类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '文艺表演类'}" v-on:click="CLUBS.typeFilter='文艺表演类'">文艺表演类</a>
+					<a class="filter" :class="{'active': CLUBS.typeFilter === '艺术创作类'}" v-on:click="CLUBS.typeFilter='艺术创作类'">艺术创作类</a>
 				</div>
 
 				<div class="search">
@@ -148,7 +148,7 @@
 
 			<div class="club-list">
 				<!-- 照片墙 -->
-				<a v-for="i of clubs" href="/association/@{{i.name}}" class="club-item">
+				<a v-for="i of clubs" v-if="i.category === CLUBS.typeFilter || CLUBS.typeFilter === ''" href="/association/@{{i.name}}" class="club-item">
 					<div class="">
 						<img src="{{ i.picture }}" alt="" style="height: 150px; ">
 					</div>
