@@ -2,7 +2,7 @@ nav#global-nav {
 	position: absolute;
 	background:transparent;
 	width: 100%;
-	/* min-width: 850px; */
+	min-width: 800px;
 	z-index: 2;
 }
 
