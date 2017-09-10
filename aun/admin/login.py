@@ -88,7 +88,6 @@ class LoginApi(Resource):
             elif user.verify_password(password) is not True:
                 abort(401, message="password error")
             else:
-                session.permanent = True
                 login_user(user)
                 ip = str(request.remote_addr)
                 log = LoginLog(current_user.user_name, ip)

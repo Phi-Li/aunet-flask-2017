@@ -24,16 +24,19 @@ class Config(object):
 
     # flask-mail SMTP server
     # MAIL_SERVER='smtp.qq.com'
-    MAIL_SERVER = 'smtp.exmail.qq.com'  # 邮箱服务器
-    MAIL_PORT = 465
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = 'aunet@auhust.net'  # 如果是qq邮箱则为qq号，136邮箱同理
-    MAIL_PASSWORD = '@4W<tS5.m]gQ'  # 客户端密码
+    # MAIL_SERVER = 'smtp.exmail.qq.com'  # 邮箱服务器
+    MAIL_SERVER = "hustau.cn"
+    # MAIL_PORT = 465
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    # MAIL_USE_SSL = True
+    # MAIL_USERNAME = 'aunet@auhust.net'  # 如果是qq邮箱则为qq号，136邮箱同理
+    MAIL_USERNAME = "sicun@hustau.cn"
+    MAIL_PASSWORD = 'sicun'  # 客户端密码
     # 发件人如('sicun','1412511544@qq.com')
-    MAIL = ('华中大社联社团网', 'aunet@auhust.net')
+    MAIL = ('华中大社联社团网', 'sicun@hustau.cn')
     # 设置session的过期时间
-    PERMANENT_SESSION_LIFETIME = timedelta(hours=6)
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=3)
 
     # flask-msearch
     MSEARCH_INDEX_NAME = 'whoosh_index'
