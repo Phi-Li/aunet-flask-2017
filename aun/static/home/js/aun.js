@@ -123,6 +123,12 @@ page("/association/@:clubName", function (ctx, next) { // 社团空间
                 return (false);
             }
         })[0];
+        $.ajax({
+            url: "/api/clubs/" + app.club.id + "/articles",
+            dataType: "text",
+        }).done(function(data) {
+            app.news = JSON.parse(data);
+        });
     })
     // app.getClub(ctx.params.club.id).always(function() {
     // 	app.currentView = "clubs-club";

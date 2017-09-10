@@ -73,11 +73,31 @@
 					<div class="news-container">
 						<ul class="news-list">
 							<!-- <li class="news-item" v-for="i of news | limitBy 5"><a href="/news/{{ i.id }}">{{ i.title }}</a></li> -->
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
 						</ul>
 						<img src="/static/images/icon_news.png" alt="news" style="width:256px;height:192px;">
 					</div>
@@ -111,11 +131,31 @@
 						<img src="/static/images/icon_doc.png" alt="official documents">
 						<ul class="doc-list">
 							<!-- <li class="doc-item" v-for="i of assets"><a href="/api/data-station/{{ i.id }}/download" target="_top">{{ i.title }}</a></li> -->
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
 						</ul>
 					</div>
 
@@ -175,27 +215,21 @@
 			</div>
 			<div class="main-container">
 				<div class="club-info">
-					<div style="background: url({{ club.picture }}) black;">
-						<!-- <img src="" alt="" style="height: 50px;"> -->
-					</div>
-					<h1 class="">{{ club.name }}</h1>
-					<div class="">
-						<div class="tag">
-							社团简介
-						</div>
+					<h1 class="">
+						<div class="club-image" style="background: url({{ club.picture }}), #eeeeee; background-size: cover;"></div>
+						{{ club.name }}
+					</h1>
+					<h2 class="heading-tag">社团简介</h2>
+					<div class="club-introduction">
 						{{ club.brief_introduction }}
-						<div class="tag">
-							文章列表
-						</div>
-						<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
-							<div class="">
-								<h3>{{ i.title }}</h3>
-								<div class="">
-									{{ i.outline }}
-								</div>
-								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
-								}}日
-								<hr>
+					</div>
+					<h2 class="heading-tag">文章列表</h2>
+					<div class="news-list">
+						<a v-for="i of news | limitBy 6" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
+							<h3>{{ i.title }}</h3>
+							<!-- {{ i.outline }} -->
+							<div class="time">
+								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()}}日
 							</div>
 						</a>
 					</div>
@@ -231,7 +265,7 @@
 
 	<!-- 新闻列表 -->
 	<template v-if="currentView === 'news'">
-		<main id="news-view" class="news">
+		<main id="news-list-view" class="news">
 			<div class="local-nav">
 				<div class="filters">
 					<a class="filter" :class="{'active': NEWS.timeFilter === 1/0}" v-on:click="NEWS.timeFilter=1/0">全部</a>
@@ -269,27 +303,22 @@
 
 	<!-- 具体的新闻 -->
 	<template v-if="currentView === 'news-post'">
-		<main>
+		<main id="news-view">
 			<div class="local-nav"></div>
 			<div class="main-container">
-				<div class="card">
-					<a href="/news">返回</a>
-					<h2 class="uk-text-center">{{ post.title }}</h2>
+				<div class="">
+					<!-- <a class="ret-btn" href="/news">返回</a> -->
+					<h1 class="">{{ post.title }}</h1>
 					<div>
-						<div class="">
-							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()
-							}}日
+						<div class="news-info">
+							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()}}日 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp类型 {{ post.tags }}
 						</div>
 						<div class="">
-							类型 {{ post.tags }}
-						</div>
-					</div>
-					<div class="">
-						{{{ post.detail }}}
+								{{{ post.detail }}}
+							</div>
 					</div>
 				</div>
 			</div>
-
 		</main>
 	</template>
 

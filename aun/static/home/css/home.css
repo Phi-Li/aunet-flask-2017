@@ -109,7 +109,7 @@ nav ul, nav ol {
 }
 
 a {
-    color: #0070c9
+    color: #2b2b2b;
 }
 
 a:link,a:visited {
@@ -151,10 +151,6 @@ main ul {
 	margin: 0 auto;	
 }
 
-.main-container a {
-	color: #2b2b2b;
-}
-
 .heading-tag {
 	color: white;
 	background: -webkit-linear-gradient(top right,#61ce9a,#309b92 75%);
@@ -162,7 +158,6 @@ main ul {
 	background: linear-gradient(top right,#61ce9a,#309b92 75%);
 	line-height: 35px;
 	width: 190px;
-	margin-bottom: 65px;
 	border-radius: 0 35px 35px 0;
 	text-align: center;
 }
@@ -195,6 +190,7 @@ main ul {
 	line-height: 25px;
 	padding: 0 10px;
 	color: white;
+	cursor: pointer;
 }
 
 .filter.active {
@@ -281,6 +277,7 @@ span.search-icon {
 
 #home-view h2.heading-tag {
 	margin-top: 140px;
+	margin-bottom: 65px;
 }
 
 /* Home view > association gallery */
@@ -413,21 +410,7 @@ a.download {
 
 /* Club view */
 
-#club-view .club-info {
-	position: relative;
-	top: -80px;
-	background: white;
-}
-
-/* AU view */
-
-#au-view .filters {
-	max-width: 960px;
-}
-
-/* News view */
-
-#news-view .main-container > div {
+#club-view .main-container > div, #news-view .main-container > div {
 	position: relative;
 	top: -80px;
 	background: white;
@@ -438,20 +421,99 @@ a.download {
 }
 
 @media (min-width: 600px) {
-#news-view .main-container > div {
-	-webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	-moz-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	/* transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); */
+	#club-view .main-container > div, #news-view .main-container > div {
+		-webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
+		-moz-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
+		box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
+		/* transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); */
+	}
+	
+	/* #news-view .news-container:hover {
+		-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		-moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	} */
+	}
+
+#club-view .club-info {
+	position: relative;
+	top: -80px;
+	background: white;
 }
 
-/* #news-view .news-container:hover {
-	-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	-moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-} */
+#club-view .club-image {
+	width: 100px;
+	height: 100px;
+	margin: 0 auto 15px auto;
+	border-radius: 100px;
 }
 
-#news-view a.news-link {
+#club-view h1 {
+	position: relative;
+	top: -50px;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#club-view h2.heading-tag {
+	margin: 25px 0;
+}
+
+#club-view .club-introduction {
+	margin: 0 125px;
+}
+
+#club-view .news-list {
+	padding: 0 125px 25px 125px;
+}
+
+#club-view a {
 	display: block;
+}
+
+#club-view h3 {
+	margin-top: 12px;
+}
+
+#club-view .time {
+	color: #929292;
+	font-size: 0.5em;
+}
+
+/* AU view */
+
+#au-view .filters {
+	max-width: 960px;
+}
+
+/* News list view */
+
+#news-list-view a.news-link {
+	display: block;
+}
+
+/* News view*/
+
+#news-view .main-container > div {
+	padding-top: 30px;
+}
+
+#news-view a.ret-btn {
+	margin-left: 15px;
+	position: absolute;
+}
+
+#news-view h1 {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+#news-view h1 + div {
+	padding: 0 120px 30px 120px;
+}
+
+#news-view .news-info {
+	margin-bottom: 30px;
+	color: #797979;
+	font-size: 0.5em;
 }
