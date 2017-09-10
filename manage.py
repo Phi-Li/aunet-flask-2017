@@ -23,19 +23,24 @@ migrate = Migrate(aun_app, aun_db)
 manager.add_command("db", MigrateCommand)  # 数据库我迁移命令
 
 
+def add_and_commit(*items):
+    for item in items:
+        aun_db.session.add(item)
+    aun_db.session.commit()
+
+
 @manager.option('-n', '--name', dest="name", help='Your name', default="admin")
 @manager.option('-p', '--password', dest='password', help="Your password", default="123456")
 @manager.option('-e', '--email', dest="email", help="your email", default=None)
 @manager.option('--phone', dest="phone", help="your phone", default=None)
 def create_super_user(name, password, email, phone):
-    """ 
-    create super user 
+    """
+    create super user
     """
     try:
         user = User(name, password, email, phone)
         user.add_role("超管")
-        aun_db.session.add(user)
-        aun_db.session.commit()
+        add_and_commit(user)
         print("successfully create a super user name:%s,password:%s,email:%s,phone:%s" % (
             name, password, email, phone))
     except:
@@ -44,7 +49,7 @@ def create_super_user(name, password, email, phone):
 
 @manager.command
 def create_super_role():
-    """ 
+    """
     create super role
     """
     try:
@@ -89,37 +94,10 @@ def create_super_role():
 
         node29 = Node("编辑社团介绍", 1)  # 用于社联页面，各社团介绍
 
-        aun_db.session.add(node1)
-        aun_db.session.add(node2)
-        aun_db.session.add(node3)
-        aun_db.session.add(node4)
-        aun_db.session.add(node5)
-        aun_db.session.add(node6)
-        aun_db.session.add(node7)
-        aun_db.session.add(node8)
-        aun_db.session.add(node9)
-        aun_db.session.add(node10)
-        aun_db.session.add(node11)
-        aun_db.session.add(node12)
-        aun_db.session.add(node13)
-        aun_db.session.add(node14)
-        aun_db.session.add(node15)
-        aun_db.session.add(node16)
-        aun_db.session.add(node17)
-        aun_db.session.add(node18)
-        aun_db.session.add(node19)
-        aun_db.session.add(node20)
-        aun_db.session.add(node21)
-        aun_db.session.add(node22)
-        aun_db.session.add(node23)
-        aun_db.session.add(node24)
-        aun_db.session.add(node25)
-        aun_db.session.add(node26)
-        aun_db.session.add(node27)
-        aun_db.session.add(node28)
-        aun_db.session.add(node29)
-        aun_db.session.add(role)
-        aun_db.session.commit()
+        add_and_commit(node1, node2, node3, node4, node5, node6, node7, node8,
+                       node9, node10, node11, node12, node13, node14, node15, node16,
+                       node17, node18, node19, node20, node21, node22, node23, node24,
+                       node25, node26, node27, node28, node29, role)
 
         role = Role.query.filter(Role.role_name == "超管").first()
         role.add_node("添加用户")
@@ -162,39 +140,68 @@ def create_super_role():
 
         role.add_node("编辑社团介绍")
 
-        aun_db.session.add(role)
-        aun_db.session.commit()
+        add_and_commit(role)
+
         print("successfully create a super role name:超管")
     except:
         print("you can only run it once or something wrong")
 
 
 @manager.command
-def create_necessary_items():
+def create_test_items():
     """
     create necessary items before web well worked
     """
     try:
-        c1 = Category("通知")
-        c2 = Category('预告')
-        c3 = Category('魅力社团')
-        c4 = Category('品牌活动')
-        c5 = Category('魅力华科')
-        c6 = Category("文章")
-        t1 = Tag("news")
+        # news and club article
+        cate = Category("news")
+        tag = Tag("news")
+        add_and_commit(cate, tag)
 
-        aun_db.session.add(c1)
-        aun_db.session.add(c2)
-        aun_db.session.add(c3)
-        aun_db.session.add(c4)
-        aun_db.session.add(c5)
-        aun_db.session.add(c6)
-        aun_db.session.add(t1)
+        news1 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+                        "static/images/sample_img_as.jpg")
+        news1.add_category("news")
+        news1.add_tag("news")
 
-        aun_db.session.commit()
+        news2 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+                        "static/images/sample_img_as.jpg")
+        news2.add_category("news")
+        news2.add_tag("news")
+
+        news3 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+                        "static/images/sample_img_as.jpg")
+        news3.add_category("news")
+        news3.add_tag("news")
+
+        article = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+                          "static/images/sample_img_as.jpg")
+        article.add_category("news")
+        article.add_tag("news")
+
+        add_and_commit(news1, news2, news3, article)
+        # slideshow
+        slideshow = SlideShow(
+            "test", "/static/images/sample_img_cro.png", "test", "http://www.google.com")
+        add_and_commit(slideshow)
+
+        # club
+        club = Club("思存", "思存", "思存", "/static/images/sample_img_as.jpg")
+        club.add_article(article)
+        club1 = Club("新媒体", "新媒体", "新媒体", "/static/images/sample_img_as.jpg")
+        club1.add_article(article)
+        add_and_commit(club, club1)
+
+        # add club for user
+        user = User.query.filter(User.user_name == "admin").first()
+        user.add_club("思存")
+        user.add_club("新媒体")
+        add_and_commit(user)
+
+        file = DataStation("线上报名导出表.docx", "admin", "test")
+        add_and_commit(file)
+
+        print("you have done a good job")
     except:
         print("something wrong")
-
-
 if __name__ == '__main__':
     manager.run()
