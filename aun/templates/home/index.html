@@ -288,9 +288,8 @@
 			</nav>
 
 			<div class="main-container">
-				<a onclick="history.back()" style="position: absolute; ">返回</a>
 				<div>
-					<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
+					<h2 class="">{{ ABOUT.tab }}</h2>
 					<div class="" style="padding: 40px 40px 0 40px;">
 						关于{{ ABOUT.tab }}的介绍。
 					</div>
@@ -304,6 +303,7 @@
 		<main id="news-list-view" class="news">
 			<div class="local-nav">
 				<div class="filters">
+					<div>时间&nbsp</div>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 1/0}" v-on:click="NEWS.timeFilter=1/0">全部</a>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 30*24*3600}" v-on:click="NEWS.timeFilter=30*24*3600">一个月内</a>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 3*30*24*3600}" v-on:click="NEWS.timeFilter=3*30*24*3600">三个月内</a>
@@ -311,6 +311,7 @@
 				</div>
 
 				<div class="filters">
+					<div>类型&nbsp</div>
 					<a class="filter" :class="{'active': NEWS.typeFilter === ''}" v-on:click="NEWS.typeFilter=''">全部</a>
 					<a class="filter" :class="{'active': NEWS.typeFilter === 'news'}" v-on:click="NEWS.typeFilter='news'">新闻</a>
 					<a class="filter" :class="{'active': NEWS.typeFilter === 'notification'}" v-on:click="NEWS.typeFilter='notification'">通知</a>
@@ -323,14 +324,14 @@
 
 					<div class="news-item" v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter">
 						<a class="news-link" href="/news/{{ i.id }}">
-							<h3>{{ i.title }}</h3>
-
-							<div class="">
-								{{ i.outline }}
-							</div>
-							{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
-							}}日
+							<h2>{{ i.title }}</h2>
 						</a>
+
+							<!-- <div class="">{{ i.outline }}</div> -->
+							<div class="time">
+								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
+								}}日
+							</div>
 					</div>
 				</div>
 			</div>
