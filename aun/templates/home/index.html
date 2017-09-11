@@ -243,21 +243,57 @@
 		<main id="au-view">
 			<!-- 衬底 -->
 			<nav class="local-nav">
-				<!-- tabs -->
-				<div class="filters">
-					<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
-				</div>
-				<!-- signup link -->
-				<div class="">
-					<a href="/signup" style="color: white;">报名</a>
+				<div>
+					<div class="nav-header">
+						<div>主席团直属</div>
+						<div>常务人事中心</div>
+						<div>社区服务中心</div>
+						<div>外联信息中心</div>
+						<div>传媒中心</div>
+						<div>文艺中心</div>
+					</div>
+					<div class="nav-tray">
+						<ul class="filters">
+							<li v-for="i of ABOUT.tabs.slice(0, 2)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="right:19px">
+							<li v-for="i of ABOUT.tabs.slice(2, 4)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="right:3px">
+							<li v-for="i of ABOUT.tabs.slice(4, 6)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:13px">
+							<li v-for="i of ABOUT.tabs.slice(6, 8)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:30px">
+							<li v-for="i of ABOUT.tabs.slice(8, 12)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:9px">
+							<li v-for="i of ABOUT.tabs.slice(12, 13)">
+								<a :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</nav>
 
-			<div class="card">
+			<div class="main-container">
 				<a onclick="history.back()" style="position: absolute; ">返回</a>
-				<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
-				<div class="" style="padding: 40px 40px 0 40px;">
-					关于{{ ABOUT.tab }}的介绍。
+				<div>
+					<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
+					<div class="" style="padding: 40px 40px 0 40px;">
+						关于{{ ABOUT.tab }}的介绍。
+					</div>
 				</div>
 			</div>
 		</main>
@@ -311,11 +347,12 @@
 					<h1 class="">{{ post.title }}</h1>
 					<div>
 						<div class="news-info">
-							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()}}日 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp类型 {{ post.tags }}
+							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()}}日
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp类型 {{ post.tags }}
 						</div>
 						<div class="">
-								{{{ post.detail }}}
-							</div>
+							{{{ post.detail }}}
+						</div>
 					</div>
 				</div>
 			</div>

@@ -170,8 +170,7 @@ main ul {
 	background: -webkit-radial-gradient(top right,#61ce9a,#309b92 75%);
 	background: -moz-radial-gradient(top right,#61ce9a,#309b92 75%);
 	background: radial-gradient(top right,#61ce9a,#309b92 75%);
-	z-index: -1;
-	transition: height 2000ms cubic-bezier(0.4, 0.0, 0.2, 1);	
+	transition: height 2000ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .filters {
@@ -410,7 +409,7 @@ a.download {
 
 /* Club view */
 
-#club-view .main-container > div, #news-view .main-container > div {
+#club-view .main-container > div, #news-view .main-container > div, #au-view .main-container > div {
 	position: relative;
 	top: -80px;
 	background: white;
@@ -421,10 +420,10 @@ a.download {
 }
 
 @media (min-width: 600px) {
-	#club-view .main-container > div, #news-view .main-container > div {
-		-webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-		-moz-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-		box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
+	#club-view .main-container > div, #news-view .main-container > div, #au-view .main-container > div, #au-view .local-nav > div {
+		-webkit-box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
+		-moz-box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
+		box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
 		/* transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); */
 	}
 	
@@ -482,8 +481,60 @@ a.download {
 
 /* AU view */
 
+#au-view .local-nav {
+	display: block;
+}
+
+#au-view .local-nav > div {
+	position: relative;
+	z-index: 1;
+	width: 650px;
+	margin: 0 auto;
+	background: #fff;
+	border-radius: 2px;
+}
+
+#au-view .nav-header {
+	display: flex;
+	justify-content: space-around;
+	height: 50px;
+	line-height: 50px;
+	color: #349e93;
+	font-size: 0.8em;
+}
+
+#au-view .nav-tray {
+	display: none;
+}
+
+#au-view .nav-header:hover + .nav-tray, #au-view .nav-tray:hover {
+	display: flex;
+	justify-content: space-around;
+}
+
+#au-view .nav-header > div {
+	cursor: pointer;
+}
+
 #au-view .filters {
-	max-width: 960px;
+	display: block;
+	position: relative;
+	font-size: 0.6em;
+}
+
+#au-view .filters a {
+	padding: 0 5px;	
+	color: #349e93;
+}
+
+#au-view a.active {
+	background: #349e93;
+	border-radius: 20px;
+	color: white;
+}
+
+#au-view .main-container > div {
+	top: -60px;
 }
 
 /* News list view */
