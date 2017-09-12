@@ -14,11 +14,6 @@ from flask_restful import Api
 from flask_msearch import Search
 from jieba.analyse.analyzer import ChineseAnalyzer
 
-from config import DevelopmentConfig, ProductionConfig
-
-#     aun_app.config.from_object('secret_config')  # 导入secret配置
-# except:
-#     pass
 
 aun_db = SQLAlchemy()
 aun_mail = Mail()
@@ -53,7 +48,6 @@ def create_app(config):
     return app
 
 
-# aun_app = create_app('config.DevelopmentConfig')
 # 实例化各扩展
 
 aun_login.login_view = ''  # TODO not determined

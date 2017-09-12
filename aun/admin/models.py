@@ -160,8 +160,8 @@ class User(aun_db.Model, UserMixin):
         each user can handle many club
         add a club to user accocount 
         """
-        club = club.query.filter(
-            club.name == name).first()
+        club = Club.query.filter(
+            Club.name == name).first()
         self.clubs.append(club)
 
     def __init__(self, user_name, password, email, phone):
