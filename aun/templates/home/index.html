@@ -362,7 +362,7 @@
 
 	<!-- 资料站 -->
 	<template v-if="currentView === 'assets'">
-		<main>
+		<main id="doc-list-view">
 			<div class="local-nav">
 			</div>
 			<div class="main-container">
@@ -370,18 +370,11 @@
 					<input type="text" name="" value="" placeholder="搜索">
 					<a href="#">搜索</a>
 				</div>
-				<div class="card">
+				<div class="">
 					<table class="">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>文件名</th>
-								<th>操作</th>
-							</tr>
-						</thead>
 						<tbody>
 							<tr v-for="i of assets">
-								<td>{{ $index }}</td>
+								<td>{{ $index + 1 }}</td>
 								<td>{{ i.title }}</td>
 								<td><a href="/api/data-station/{{ i.id }}/download" target="_top">下载</a></td>
 							</tr>
