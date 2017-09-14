@@ -105,3 +105,4 @@ ENV/
 .mypy_cache/
 
 test.db
+whoosh_index/
