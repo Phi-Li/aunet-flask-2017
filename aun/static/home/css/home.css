@@ -29,9 +29,9 @@ fieldset, iframe, img {
     border: 0
 }
 
-caption,th {
+/* caption,th {
     text-align: left
-}
+} */
 
 table {
     border-collapse: collapse;
@@ -109,7 +109,7 @@ nav ul, nav ol {
 }
 
 a {
-    color: #0070c9
+    color: #2b2b2b;
 }
 
 a:link,a:visited {
@@ -151,10 +151,6 @@ main ul {
 	margin: 0 auto;	
 }
 
-.main-container a {
-	color: #2b2b2b;
-}
-
 .heading-tag {
 	color: white;
 	background: -webkit-linear-gradient(top right,#61ce9a,#309b92 75%);
@@ -162,7 +158,6 @@ main ul {
 	background: linear-gradient(top right,#61ce9a,#309b92 75%);
 	line-height: 35px;
 	width: 190px;
-	margin-bottom: 65px;
 	border-radius: 0 35px 35px 0;
 	text-align: center;
 }
@@ -171,12 +166,11 @@ main ul {
 	display: flex;
 	width: 100%;
 	height: 300px;
-	padding: 150px calc(50% - 550px) 0 calc(50% - 550px);
+	padding: 150px calc(50% - 480px) 0 calc(50% - 480px);
 	background: -webkit-radial-gradient(top right,#61ce9a,#309b92 75%);
 	background: -moz-radial-gradient(top right,#61ce9a,#309b92 75%);
 	background: radial-gradient(top right,#61ce9a,#309b92 75%);
-	z-index: -1;
-	transition: height 2000ms cubic-bezier(0.4, 0.0, 0.2, 1);	
+	transition: height 2000ms cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .filters {
@@ -189,12 +183,13 @@ main ul {
 }
 
 .filter {
-	margin-right: 20px;
+	margin-left: 10px;
 	overflow: hidden;
 	height: 25px;
 	line-height: 25px;
 	padding: 0 10px;
 	color: white;
+	cursor: pointer;
 }
 
 .filter.active {
@@ -281,6 +276,7 @@ span.search-icon {
 
 #home-view h2.heading-tag {
 	margin-top: 140px;
+	margin-bottom: 65px;
 }
 
 /* Home view > association gallery */
@@ -390,6 +386,7 @@ a.download {
 
 #club-list-view .local-nav {
 	height: 216px;
+	padding: 150px calc(50% - 550px) 0 calc(50% - 550px);
 }
 
 #club-list-view .club-list {
@@ -413,21 +410,7 @@ a.download {
 
 /* Club view */
 
-#club-view .club-info {
-	position: relative;
-	top: -80px;
-	background: white;
-}
-
-/* AU view */
-
-#au-view .filters {
-	max-width: 960px;
-}
-
-/* News view */
-
-#news-view .main-container > div {
+#club-view .main-container > div, #news-view .main-container > div, #au-view .main-container > div, #au-view .local-nav > div, #news-list-view .main-container > div, #doc-list-view .main-container > div {
 	position: relative;
 	top: -80px;
 	background: white;
@@ -438,20 +421,208 @@ a.download {
 }
 
 @media (min-width: 600px) {
-#news-view .main-container > div {
-	-webkit-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	-moz-box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	box-shadow: 0 19px 38px rgba(0,0,0,0.24), 0 15px 12px rgba(0,0,0,0.12);
-	/* transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); */
+	#club-view .main-container > div, #news-view .main-container > div, #au-view .main-container > div, #au-view .local-nav > div, #news-list-view .main-container > div {
+		-webkit-box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
+		-moz-box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
+		box-shadow: 0 3px 12px rgba(0,0,0,0.24), 0 6px 12px rgba(0,0,0,0.12);
+		/* transition: box-shadow 0.2s cubic-bezier(0.4, 0.0, 0.2, 1); */
+	}
+	
+	/* #news-view .news-container:hover {
+		-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		-moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+		box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	} */
+	}
+
+#club-view .club-info {
+	position: relative;
+	top: -80px;
+	background: white;
 }
 
-/* #news-view .news-container:hover {
-	-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	-moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-} */
+#club-view .club-image {
+	width: 100px;
+	height: 100px;
+	margin: 0 auto 15px auto;
+	border-radius: 100px;
 }
 
-#news-view a.news-link {
+#club-view h1 {
+	position: relative;
+	top: -50px;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#club-view h2.heading-tag {
+	margin: 25px 0;
+}
+
+#club-view .club-introduction {
+	margin: 0 125px;
+}
+
+#club-view .news-list {
+	padding: 0 125px 25px 125px;
+}
+
+#club-view a {
 	display: block;
+}
+
+#club-view h3 {
+	margin-top: 12px;
+}
+
+#club-view .time {
+	color: #929292;
+	font-size: 0.5em;
+}
+
+/* AU view */
+
+#au-view .local-nav {
+	display: block;
+}
+
+#au-view .local-nav > div {
+	position: relative;
+	z-index: 1;
+	width: 650px;
+	margin: 0 auto;
+	background: #fff;
+	border-radius: 2px;
+}
+
+#au-view .nav-header {
+	display: flex;
+	justify-content: space-around;
+	height: 50px;
+	line-height: 50px;
+	color: #349e93;
+	font-size: 0.8em;
+}
+
+#au-view .nav-tray {
+	display: none;
+}
+
+#au-view .nav-header:hover + .nav-tray, #au-view .nav-tray:hover {
+	display: flex;
+	justify-content: space-around;
+}
+
+#au-view .nav-header > div {
+	cursor: pointer;
+}
+
+#au-view .filters {
+	display: block;
+	position: relative;
+	font-size: 0.6em;
+}
+
+#au-view .filters a {
+	padding: 0 5px;	
+	color: #349e93;
+}
+
+#au-view a.active {
+	background: #349e93;
+	border-radius: 20px;
+	color: white;
+}
+
+#au-view .main-container > div {
+	top: -60px;
+}
+
+/* News list view */
+
+#news-list-view .filters {
+	height: 25px;
+	line-height: 25px;
+}
+
+
+#news-list-view .filters:not(:first-child) {
+	padding-left: 20px;
+	border-left: 2px solid white;
+	margin-left: 10px;
+}
+
+#news-list-view .filters > div {
+	font-size: 1.1em;
+}
+
+#news-list-view a.news-link {
+	display: block;
+}
+
+#news-list-view h2 {
+	margin-top: 12px;
+}
+
+#news-list-view .time {
+	color: #929292;
+	font-size: 0.5em;
+}
+
+#news-list-view .main-container > div {
+	padding: 20px 35px 20px 35px;
+}
+
+/* News view*/
+
+#news-view .main-container > div {
+	padding-top: 30px;
+}
+
+#news-view a.ret-btn {
+	margin-left: 15px;
+	position: absolute;
+}
+
+#news-view h1 {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+#news-view h1 + div {
+	padding: 0 120px 30px 120px;
+}
+
+#news-view .news-info {
+	margin-bottom: 30px;
+	color: #797979;
+	font-size: 0.5em;
+}
+
+/* Doc list view */
+
+#doc-list-view .main-container > div {
+	padding: 40px 80px;
+}
+
+#doc-list-view table {
+	width: 100%;
+	font-size: 0.8em;
+	text-align: center;
+}
+
+#doc-list-view td:first-child {
+	color: #9f9f9f;
+}
+
+#doc-list-view tbody > tr {
+	line-height: 30px;
+}
+
+#doc-list-view tbody > tr:nth-child(odd) {
+	background: #f4f4f4;
+}
+
+#doc-list-view td:nth-child(2) {
+	text-align: left;
 }

@@ -16,8 +16,8 @@ app = new Vue({
             typeFilter: "",
         },
         ABOUT: {
-            tabs: ["学生社团联合会", "财务部", "社联外联企划部", "秘书部", "人力资源部", "社团部", "行政检查部", "外联部", "公共关系部", "媒体部", "宣传部", "思存工作室", "新媒体工作室", "文艺拓展部"],
-            tab: "学生社团联合会",
+            tabs: ["财务部", "社联外联企划部", "秘书部", "人力资源部", "社团部", "行政监察部", "外联部", "公共关系部", "媒体部", "宣传部", "思存工作室", "新媒体工作室", "文艺拓展部"],
+            tab: "",
         }
     },
     methods: {
@@ -123,6 +123,12 @@ page("/association/@:clubName", function (ctx, next) { // 社团空间
                 return (false);
             }
         })[0];
+        $.ajax({
+            url: "/api/clubs/" + app.club.id + "/articles",
+            dataType: "text",
+        }).done(function(data) {
+            app.news = JSON.parse(data);
+        });
     })
     // app.getClub(ctx.params.club.id).always(function() {
     // 	app.currentView = "clubs-club";
@@ -138,6 +144,12 @@ page("/clubs", function (ctx, next) { // 所有社团
 
 page("/about", function (ctx, next) { // 社联介绍
     app.currentView = "about";
+    app.ABOUT.tab = "";
+});
+
+page("/about/:sec", function (ctx, next) { // 社联介绍
+    app.currentView = "about";
+    app.ABOUT.tab = ctx.params.sec;
 });
 
 page("/assets", function (ctx, next) { // 资料站

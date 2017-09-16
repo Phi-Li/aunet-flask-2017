@@ -48,7 +48,7 @@
 				<div class="carousel-container">
 					<div id="carousel">
 						<div v-for="i of slideShows">
-							<a class="slide" href="//{{ i.link }}" style="background: url({{ i.img_url }}), #eeeeee; background-size: cover;">{{ i.title }}</a>
+							<a class="slide" href="//{{ i.link }}" style="background: url({{ i.img_url }}), #eeeeee; background-size: cover;"></a>
 						</div>
 					</div>
 				</div>
@@ -73,11 +73,31 @@
 					<div class="news-container">
 						<ul class="news-list">
 							<!-- <li class="news-item" v-for="i of news | limitBy 5"><a href="/news/{{ i.id }}">{{ i.title }}</a></li> -->
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="news-item"><a href=""><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="news-item">
+								<a href="">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
 						</ul>
 						<img src="/static/images/icon_news.png" alt="news" style="width:256px;height:192px;">
 					</div>
@@ -111,11 +131,31 @@
 						<img src="/static/images/icon_doc.png" alt="official documents">
 						<ul class="doc-list">
 							<!-- <li class="doc-item" v-for="i of assets"><a href="/api/data-station/{{ i.id }}/download" target="_top">{{ i.title }}</a></li> -->
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
-							<li class="doc-item"><a href="" target="_top"><h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3></a></li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
+							<li class="doc-item">
+								<a href="" target="_top">
+									<h3>思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存思存</h3>
+								</a>
+							</li>
 						</ul>
 					</div>
 
@@ -175,27 +215,21 @@
 			</div>
 			<div class="main-container">
 				<div class="club-info">
-					<div style="background: url({{ club.picture }}) black;">
-						<!-- <img src="" alt="" style="height: 50px;"> -->
-					</div>
-					<h1 class="">{{ club.name }}</h1>
-					<div class="">
-						<div class="tag">
-							社团简介
-						</div>
+					<h1 class="">
+						<div class="club-image" style="background: url({{ club.picture }}), #eeeeee; background-size: cover; background-position: 50% 50%;"></div>
+						{{ club.name }}
+					</h1>
+					<h2 class="heading-tag">社团简介</h2>
+					<div class="club-introduction">
 						{{ club.brief_introduction }}
-						<div class="tag">
-							文章列表
-						</div>
-						<a v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
-							<div class="">
-								<h3>{{ i.title }}</h3>
-								<div class="">
-									{{ i.outline }}
-								</div>
-								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
-								}}日
-								<hr>
+					</div>
+					<h2 class="heading-tag">文章列表</h2>
+					<div class="news-list">
+						<a v-for="i of news | limitBy 6" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter" href="/news/{{ i.id }}">
+							<h3>{{ i.title }}</h3>
+							<!-- {{ i.outline }} -->
+							<div class="time">
+								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()}}日
 							</div>
 						</a>
 					</div>
@@ -209,21 +243,167 @@
 		<main id="au-view">
 			<!-- 衬底 -->
 			<nav class="local-nav">
-				<!-- tabs -->
-				<div class="filters">
-					<a class="filter" :class="{'active': ABOUT.tab === i}" href="#{{ i }}" v-for="i of ABOUT.tabs" v-on:click="ABOUT.tab=i">{{ i }}</a>
-				</div>
-				<!-- signup link -->
-				<div class="">
-					<a href="/signup" style="color: white;">报名</a>
+				<div>
+					<div class="nav-header">
+						<div>主席团直属</div>
+						<div>常务人事中心</div>
+						<div>社区服务中心</div>
+						<div>外联信息中心</div>
+						<div>传媒中心</div>
+						<div>文艺中心</div>
+					</div>
+					<div class="nav-tray">
+						<ul class="filters">
+							<li v-for="i of ABOUT.tabs.slice(0, 2)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="right:19px">
+							<li v-for="i of ABOUT.tabs.slice(2, 4)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="right:3px">
+							<li v-for="i of ABOUT.tabs.slice(4, 6)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:13px">
+							<li v-for="i of ABOUT.tabs.slice(6, 8)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:30px">
+							<li v-for="i of ABOUT.tabs.slice(8, 12)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+						<ul class="filters" style="left:9px">
+							<li v-for="i of ABOUT.tabs.slice(12, 13)">
+								<a :class="{'active': ABOUT.tab === i}" href="/about/{{ i }}" v-on:click="ABOUT.tab=i">{{ i }}</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</nav>
 
-			<div class="card">
-				<a onclick="history.back()" style="position: absolute; ">返回</a>
-				<h2 class="uk-text-center">{{ ABOUT.tab }}</h2>
-				<div class="" style="padding: 40px 40px 0 40px;">
-					关于{{ ABOUT.tab }}的介绍。
+			<div class="main-container">
+				<div>
+					<div class="" style="padding: 40px;">
+						<template v-if="ABOUT.tab === ''">
+							<h2>华中科技大学学生社团联合会</h2>
+							华中科技大学学生社团联合会是在华中科技大学校党委的领导下，在校团委的直接指导下开展工作的全校性学生组织。社联一直以"增大学景，滋大学情，弘大学德，扬大学名"为不懈追求的目标；以"服务于社团，服务于会员"为恒久不变的宗旨。历年来，华中科技大学学生社团联合会协同各社团举办了诸多形式各样、精彩纷呈的活动，塑造了青春健康、昂扬向上的社团文化。每年的"社团成长季"、"社团文化节"，"校园文化节"，"社团进军营"、 "社团评估"、"社团年度评优答辩会"、"社团骨干培训"，"迎新晚会"，"百团大战"，"3·15会员权益日"、"社团活动竞标答辩会"，"表演队联合文艺晚会"、"社团助推""社团文化节策划大赛"、"社团助考"等一系列大型全校性的活动，受到了全校师生的广泛参与和一致好评。每年秋季学期，一年一度的华中科技大学社团文化节更是全校师生共同期待的文化盛宴，是社联携手全校所有社团举办的一次独具特色、继往开来的盛会，一直以来受到校党委、校团委的高度重视和全校各部门的大力支持，同时也逐渐受到社会各界的普遍关注。华中科技大学学生社团联合会在服务和支持学生社团活动开展，整合和创新校园文化活动内容，展示校园社团风采，提高社团会员的综合素质，打造新的社团品牌活动，创造有利于学生健康成长的校园氛围，丰富华中大校园文化方面发挥了极其重要的作用。
+						</template>
+						<template v-if="ABOUT.tab === '财务部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>统一执行社联的财务审核、分配、监督和管理工作</li>
+								<li>负责由校团委拨款举办的社团专项活动的财务工作</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '社联外联企划部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>为社团寻求或提供包括师资、活动赞助、长期商业合作在内的各种资源，包括学校社团外联活动的协助与监管</li>
+								<li>加强社联与社团之间的联系，利用社联的资源帮助社团发展</li>
+								<li>通过社团骨干培训体系，提升部员的整体素质，为社团培养管理型精英人才</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '秘书部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>负责主席团和各部门之间的交流，协调各部门工作及日常事务的处理</li>
+								<li>负责社联章程及制度的起草，监督其实施</li>
+								<li>内部物品管理，档案管理，会议组织及值班安排</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '人力资源部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>社联干部招聘、调整，社联干部工作绩效考核评优</li>
+								<li>对社联和社团干部进行培训；引导协会会长做好社团工作</li>
+								<li>管理组织内部人事信息，建设传承社联组织文化</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '社团部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>策划、组织、社团进军营、百团大战、协会洽谈会、社团助推计划等社联品牌活动</li>
+								<li>作为社团与社联、社团与社团间沟通合作的平台</li>
+								<li>负责对社团的统一通知、对社团资料的收集整理</li>
+								<li>与各个社团管理层沟通交流，审核并协助完善社团的活动策划，为社团活动提供支持并跟进监督</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '行政监察部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>承担社联主要的社团监管的各项工作，全面负责面向社团的各项行政和监察工作</li>
+								<li>行政组：负责校内所有申请成立的社团的审批和注册，对问题社团进行整顿和取缔</li>
+								<li>评分组：对所有校级社团进行日常考核，包括内建考核，活动考核等</li>
+								<li>常务组：负责部门对内事务和部门文化建设，负责开展社团会员维权工作</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '外联部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>沟通社联与校外企业，为社联活动提供赞助</li>
+								<li>与企业沟通并建立长期合作关系，引导社团社联走出校园</li>
+								<li>商业品牌的校园宣传与推广，协助举办大型活动</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '公共关系部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>建立并维持社联与武汉各大高校、社会团体之间的关系</li>
+								<li>联络校内各类组织，及时了解校园动态</li>
+								<li>为社联社团相关项目进行调研策划</li>
+								<li>负责日常管理并培训华中大社联礼仪队</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '媒体部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>逆光摄影工作室：摄影、摄像工作和创作</li>
+								<li>文编组：社联社团活动的文字报道和文学创作</li>
+								<li>网络组：更新人人网、微博网络平台的运营、社团网的网络宣传</li>
+								<li>主持人队：为社联社团活动、电视节目提供及培训主持人</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '宣传部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>活动宣传策划：在实际宣传中运用创意，制定并落实最优传播策略</li>
+								<li>艺术设计：设计海报、传单、杂志、社联文化产品等</li>
+								<li>人才培养：平面设计、摄影后期、宣传创意、文案策划等实践及各类设计软件培训</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '思存工作室'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>为社联内部网站以及社团网提供网站制作和服务器维护的技术支持</li>
+								<li>为社联和社团的各项活动提供硬件和软件方面的技术支持</li>
+								<li>社联内部的技术交流和前沿IT技术沟通培训平台</li>
+								<li>为社联开发互联网产品，进行互联网产品的设计</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '新媒体工作室'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>微信公众平台等社联自有媒体的日常维护，线上会员维权及意见的反馈</li>
+								<li>各社团微信公众平台的搭建</li>
+								<li>新媒体推广活动的策划及开展</li>
+								<li>微信公众平台二次开发及新媒体宣传模式的尝试和优化</li>
+							</ul>
+						</template>
+						<template v-if="ABOUT.tab === '文艺拓展部'">
+							<h2>{{ ABOUT.tab }}</h2>
+							<ul>
+								<li>经理人组：统筹管理表演队，负责表演队日常排练及演出事务</li>
+								<li>常务组：部门常务资料整理和更新，表演队评分，相关演出和部门活动的策划</li>
+								<li>拓展组：拓展推广表演队，收集整合校内演艺资源，与社联演艺活动有关的对外交流</li>
+							</ul>
+						</template>
+					</div>
 				</div>
 			</div>
 		</main>
@@ -231,9 +411,10 @@
 
 	<!-- 新闻列表 -->
 	<template v-if="currentView === 'news'">
-		<main id="news-view" class="news">
+		<main id="news-list-view" class="news">
 			<div class="local-nav">
 				<div class="filters">
+					<div>时间&nbsp</div>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 1/0}" v-on:click="NEWS.timeFilter=1/0">全部</a>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 30*24*3600}" v-on:click="NEWS.timeFilter=30*24*3600">一个月内</a>
 					<a class="filter" :class="{'active': NEWS.timeFilter === 3*30*24*3600}" v-on:click="NEWS.timeFilter=3*30*24*3600">三个月内</a>
@@ -241,6 +422,7 @@
 				</div>
 
 				<div class="filters">
+					<div>类型&nbsp</div>
 					<a class="filter" :class="{'active': NEWS.typeFilter === ''}" v-on:click="NEWS.typeFilter=''">全部</a>
 					<a class="filter" :class="{'active': NEWS.typeFilter === 'news'}" v-on:click="NEWS.typeFilter='news'">新闻</a>
 					<a class="filter" :class="{'active': NEWS.typeFilter === 'notification'}" v-on:click="NEWS.typeFilter='notification'">通知</a>
@@ -253,14 +435,14 @@
 
 					<div class="news-item" v-for="i of news" v-if="(new Date() - i.post_time*1000)/1000 < NEWS.timeFilter">
 						<a class="news-link" href="/news/{{ i.id }}">
-							<h3>{{ i.title }}</h3>
-
-							<div class="">
-								{{ i.outline }}
-							</div>
-							{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
-							}}日
+							<h2>{{ i.title }}</h2>
 						</a>
+
+							<!-- <div class="">{{ i.outline }}</div> -->
+							<div class="time">
+								{{ new Date(i.post_time*1000).getFullYear() }}年{{ new Date(i.post_time*1000).getMonth()+1 }}月{{ new Date(i.post_time*1000).getDay()
+								}}日
+							</div>
 					</div>
 				</div>
 			</div>
@@ -269,33 +451,29 @@
 
 	<!-- 具体的新闻 -->
 	<template v-if="currentView === 'news-post'">
-		<main>
+		<main id="news-view">
 			<div class="local-nav"></div>
 			<div class="main-container">
-				<div class="card">
-					<a href="/news">返回</a>
-					<h2 class="uk-text-center">{{ post.title }}</h2>
+				<div class="">
+					<!-- <a class="ret-btn" href="/news">返回</a> -->
+					<h1 class="">{{ post.title }}</h1>
 					<div>
-						<div class="">
-							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()
-							}}日
+						<div class="news-info">
+							时间 {{ new Date(post.post_time*1000).getFullYear() }}年{{ new Date(post.post_time*1000).getMonth()+1 }}月{{ new Date(post.post_time*1000).getDay()}}日
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp类型 {{ post.tags }}
 						</div>
 						<div class="">
-							类型 {{ post.tags }}
+							{{{ post.detail }}}
 						</div>
-					</div>
-					<div class="">
-						{{{ post.detail }}}
 					</div>
 				</div>
 			</div>
-
 		</main>
 	</template>
 
 	<!-- 资料站 -->
 	<template v-if="currentView === 'assets'">
-		<main>
+		<main id="doc-list-view">
 			<div class="local-nav">
 			</div>
 			<div class="main-container">
@@ -303,18 +481,11 @@
 					<input type="text" name="" value="" placeholder="搜索">
 					<a href="#">搜索</a>
 				</div>
-				<div class="card">
+				<div class="">
 					<table class="">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>文件名</th>
-								<th>操作</th>
-							</tr>
-						</thead>
 						<tbody>
 							<tr v-for="i of assets">
-								<td>{{ $index }}</td>
+								<td>{{ $index + 1 }}</td>
 								<td>{{ i.title }}</td>
 								<td><a href="/api/data-station/{{ i.id }}/download" target="_top">下载</a></td>
 							</tr>

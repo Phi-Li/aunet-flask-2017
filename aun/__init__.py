@@ -39,9 +39,11 @@ def create_app(config):
 
     from aun.home import home
     from aun.admin import aun_admin
+    from aun.material import material
     # 注册蓝图
     app.register_blueprint(home)
     app.register_blueprint(aun_admin, url_prefix='/admin')
+    app.register_blueprint(material)
 
     return app
 
