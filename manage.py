@@ -3,6 +3,8 @@
 """ management script of AUN
 """
 
+import traceback
+
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
@@ -153,48 +155,48 @@ def create_test_items():
     create necessary items before web well worked
     """
     try:
-        # news and club article
+    # news and club article
         cate = Category("news")
         tag = Tag("news")
         add_and_commit(cate, tag)
-
-        news1 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+        # index news
+        newses = list()
+        for i in range(8):
+            news = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
                         "static/images/sample_img_as.jpg")
-        news1.add_category("news")
-        news1.add_tag("news")
+            news.add_category("news")
+            news.add_tag("news")
+            newses.append(news)
+            add_and_commit(news)
+            
+        articles = list() #club article
+        for i in range(8):
+            article = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+                            "static/images/sample_img_as.jpg")
+            article.add_category("news")
+            article.add_tag("news")
+            articles.append(article)
+            add_and_commit(article)
 
-        news2 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
-                        "static/images/sample_img_as.jpg")
-        news2.add_category("news")
-        news2.add_tag("news")
-
-        news3 = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
-                        "static/images/sample_img_as.jpg")
-        news3.add_category("news")
-        news3.add_tag("news")
-
-        article = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
-                          "static/images/sample_img_as.jpg")
-        article.add_category("news")
-        article.add_tag("news")
-
-        add_and_commit(news1, news2, news3, article)
         # slideshow
         slideshow = SlideShow(
-            "test", "/static/images/sample_img_cro.png", "test", "http://www.google.com")
+            "", "/static/images/sample_img_cro.png", "", "http://www.google.com")
         add_and_commit(slideshow)
 
         # club
-        club = Club("思存", "思存", "思存", "/static/images/sample_img_as.jpg")
-        club.add_article(article)
-        club1 = Club("新媒体", "新媒体", "新媒体", "/static/images/sample_img_as.jpg")
-        club1.add_article(article)
-        add_and_commit(club, club1)
+        club = Club("566", "566", "566", "/static/images/sample_img_as.jpg")
+        club.articles = articles
+        club1 = Club("566轮滑", "566轮滑", "566轮滑", "/static/images/sample_img_as.jpg")
+        club1.articles = articles
+        club2 = Club("566轮滑社", "566轮滑社", "566轮滑社", "/static/images/sample_img_as.jpg")
+        club2.articles = articles
+        add_and_commit(club, club1, club2)
 
         # add club for user
         user = User.query.filter(User.user_name == "admin").first()
-        user.add_club("思存")
-        user.add_club("新媒体")
+        user.add_club("566")
+        user.add_club("566轮滑")
+        user.add_club("566轮滑社")
         add_and_commit(user)
 
         file = DataStation("线上报名导出表.docx", "admin", "test")
@@ -202,6 +204,7 @@ def create_test_items():
 
         print("you have done a good job")
     except:
+        traceback.print_exc()
         print("something wrong")
 if __name__ == '__main__':
     manager.run()
