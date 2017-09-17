@@ -162,7 +162,7 @@ def create_test_items():
         # index news
         newses = list()
         for i in range(8):
-            news = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+            news = Article("<p>\n 正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文\n <br/>\n</p>", "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题", "摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要",
                         "static/images/sample_img_as.jpg")
             news.add_category("news")
             news.add_tag("news")
@@ -171,7 +171,7 @@ def create_test_items():
             
         articles = list() #club article
         for i in range(8):
-            article = Article("<p>\n 测试\n <br/>\n</p>", "测试", "测试",
+            article = Article("<p>\n 正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文\n <br/>\n</p>", "标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题", "摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要摘要",
                             "static/images/sample_img_as.jpg")
             article.add_category("news")
             article.add_tag("news")
@@ -190,13 +190,16 @@ def create_test_items():
         club1.articles = articles
         club2 = Club("566轮滑社", "566轮滑社", "566轮滑社", "/static/images/sample_img_as.jpg")
         club2.articles = articles
-        add_and_commit(club, club1, club2)
+        club3 = Club("华科566轮滑社", "华科566轮滑社", "华科566轮滑社", "/static/images/sample_img_as.jpg")
+        club3.articles = articles
+        add_and_commit(club, club1, club2, club3)
 
         # add club for user
         user = User.query.filter(User.user_name == "admin").first()
         user.add_club("566")
         user.add_club("566轮滑")
         user.add_club("566轮滑社")
+        user.add_club("华科566轮滑社")
         add_and_commit(user)
 
         file = DataStation("线上报名导出表.docx", "admin", "test")
